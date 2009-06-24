@@ -25,7 +25,7 @@ class Database_MySQL_Result extends Database_Result {
 		}
 	}
 
-	public function as_array()
+	public function as_array($key = NULL, $value = NULL)
 	{
 		$array = array();
 
@@ -36,8 +36,24 @@ class Database_MySQL_Result extends Database_Result {
 
 			while ($row = mysql_fetch_assoc($this->_result))
 			{
-				// Add each row to the array
-				$array[] = $row;
+				if ($key !== NULL)
+				{
+					if ($value !== NULL)
+					{
+						// Return the result as a $key => $value list
+						$array[$row[$key]] = $row[$value];
+					}
+					else
+					{
+						// Return the result as a $key => $row list
+						$array[$row[$key]] = $row;
+					}
+				}
+				else
+				{
+					// Add each row to the array
+					$array[] = $row;
+				}
 			}
 		}
 

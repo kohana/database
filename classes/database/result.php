@@ -43,9 +43,11 @@ abstract class Database_Result implements Countable, Iterator, SeekableIterator,
 	/**
 	 * Return all of the rows in the result as an array.
 	 *
+	 * @param   string  column for an associative keys
+	 * @param   string  column for an associative values
 	 * @return  array
 	 */
-	abstract public function as_array();
+	abstract public function as_array($key = NULL, $value = NULL);
 
 	/**
 	 * Return the named column from the current row.
@@ -56,10 +58,14 @@ abstract class Database_Result implements Countable, Iterator, SeekableIterator,
 	 */
 	public function get($name, $default = NULL)
 	{
-		// Get the current row
-		$row = $this->current();
-
-		return array_key_exists($name, $row) ? $row[$name] : $default;
+		if ($row = $this->current() AND array_key_exists($name, $row))
+		{
+			return $row[$name];
+		}
+		else
+		{
+			return $default;
+		}
 	}
 
 	/**
