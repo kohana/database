@@ -97,12 +97,13 @@ class Database_Query_Builder_Select extends Database_Query_Builder_Where {
 	 * Adds "ON ..." conditions for the last created JOIN statement.
 	 * 
 	 * @param   mixed   column name or array($column, $alias) or object
+	 * @param   string  logic operator
 	 * @param   mixed   column name or array($column, $alias) or object
 	 * @return  $this
 	 */
-	public function on($c1, $c2)
+	public function on($c1, $op, $c2)
 	{
-		$this->_last_join->on($c1, $c2);
+		$this->_last_join->on($c1, $op, $c2);
 
 		return $this;
 	}

@@ -35,12 +35,13 @@ class Database_Query_Builder_Join extends Database_Query_Builder {
 	 * Adds a new condition for joining.
 	 *
 	 * @param   mixed   column name or array($column, $alias) or object
+	 * @param   string  logic operator
 	 * @param   mixed   column name or array($column, $alias) or object
 	 * @return  $this
 	 */
-	public function on($c1, $c2)
+	public function on($c1, $op, $c2)
 	{
-		$this->_on[] = array($c1, $c2);
+		$this->_on[] = array($c1, $op, $c2);
 
 		return $this;
 	}
@@ -51,14 +52,8 @@ class Database_Query_Builder_Join extends Database_Query_Builder {
 	 * @param   object  Database instance
 	 * @return  string
 	 */
-	public function compile($db = 'default')
+	public function compile(Database $db)
 	{
-		if ( ! is_object($db))
-		{
-			// Get the database instance
-			$db = Database::instance($db);
-		}
-
 		if ($this->_type)
 		{
 			$sql = strtoupper($this->_type).' JOIN';
@@ -75,7 +70,7 @@ class Database_Query_Builder_Join extends Database_Query_Builder {
 		foreach ($this->_on as $on)
 		{
 			// Quote each of the identifiers used for the condition
-			$conditions[] = $db->quote_identifier($on[0]).' = '.$db->quote_identifier($on[1]);
+			$conditions[] = $db->quote_identifier($on[0])." {$on[1]} ".$db->quote_identifier($on[2]);
 		}
 
 		// Concat the conditions "... AND ..."
