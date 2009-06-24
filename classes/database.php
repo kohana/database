@@ -235,13 +235,21 @@ abstract class Database {
 			return $this->quote_identifier($value).' AS '.$this->quote_identifier($alias);
 		}
 
-		if (strpos($value, '.') !== FALSE)
+		if (strpos($value, '"') !== FALSE)
 		{
-			// Dots are used to separate schema, table, and column names
-			$value = str_replace('.', "{$this->_identifier}.{$this->_identifier}", $value);
+			// Quote the column in FUNC("ident") identifiers
+			return preg_replace('/"(.+?)"/e', '$this->quote_identifier("$1")', $value);
 		}
+		else
+		{
+			if (strpos($value, '.') !== FALSE)
+			{
+				// Dots are used to separate schema, table, and column names
+				$value = str_replace('.', "{$this->_identifier}.{$this->_identifier}", $value);
+			}
 
-		return $this->_identifier.$value.$this->_identifier;
+			return $this->_identifier.$value.$this->_identifier;
+		}
 	}
 
 	/**
