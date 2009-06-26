@@ -12,6 +12,9 @@ class Database_Query {
 	// Query type
 	protected $_type;
 
+	// Cache lifetime
+	protected $_lifetime;
+
 	// SQL statement
 	protected $_sql;
 
@@ -58,6 +61,19 @@ class Database_Query {
 	public function type()
 	{
 		return $this->_type;
+	}
+
+	/**
+	 * Enables the query to be cached for a specified amount of time.
+	 *
+	 * @param   integer  number of seconds to cache
+	 * @return  $this
+	 */
+	public function cached($lifetime)
+	{
+		$this->_lifetime = (int) $lifetime;
+
+		return $this;
 	}
 
 	/**
@@ -144,8 +160,29 @@ class Database_Query {
 			$db = Database::instance($db);
 		}
 
-		// Compile the SQL and run the query
-		$result = $db->query($this->_type, $this->compile($db));
+		// Compile the SQL query
+		$sql = $this->compile($db);
+
+		if ( ! empty($this->_lifetime) AND $this->_type === Database::SELECT)
+		{
+			// Set the cache key based on the database instance name and SQL
+			$cache_key = 'Database::query("'.$db.'", "'.$sql.'")';
+
+			if ($result = Kohana::cache($cache_key, NULL, $this->_lifetime))
+			{
+				// Return a cached result
+				return new Database_Result_Cached($result, $sql);
+			}
+		}
+
+		// Execute the query
+		$result = $db->query($this->_type, $sql);
+
+		if (isset($cache_key))
+		{
+			// Cache the result array
+			Kohana::cache($cache_key, $result->as_array(), $this->_lifetime);
+		}
 
 		return $result;
 	}
