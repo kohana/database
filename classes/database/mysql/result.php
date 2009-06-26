@@ -11,10 +11,10 @@ class Database_MySQL_Result extends Database_Result {
 
 	public function __construct($result, $sql)
 	{
+		parent::__construct($result, $sql);
+
 		// Find the number of rows in the result
 		$this->_total_rows = mysql_num_rows($result);
-
-		parent::__construct($result, $sql);
 	}
 
 	public function __destruct()
