@@ -240,14 +240,14 @@ abstract class Database {
 			// Quote the column in FUNC("ident") identifiers
 			return preg_replace('/"(.+?)"/e', '$this->quote_identifier("$1")', $value);
 		}
+		elseif (strpos($value, '.') !== FALSE)
+		{
+			// Dots are used to separate schema, table, and column names
+			// Split each of the column parts and quote them separately
+			return implode('.', array_map(array($this, __FUNCTION__), explode('.', $value)));
+		}
 		else
 		{
-			if (strpos($value, '.') !== FALSE)
-			{
-				// Dots are used to separate schema, table, and column names
-				$value = str_replace('.', "{$this->_identifier}.{$this->_identifier}", $value);
-			}
-
 			return $this->_identifier.$value.$this->_identifier;
 		}
 	}
