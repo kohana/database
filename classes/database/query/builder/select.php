@@ -244,8 +244,6 @@ class Database_Query_Builder_Select extends Database_Query_Builder_Where {
 	 */
 	public function order_by($column, $direction = NULL)
 	{
-		$columns = func_get_args();
-
 		$this->_order_by[] = array($column, $direction);
 
 		return $this;
