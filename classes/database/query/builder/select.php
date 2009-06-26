@@ -319,7 +319,7 @@ class Database_Query_Builder_Select extends Database_Query_Builder_Where {
 		else
 		{
 			// Select all columns
-			$query = .implode(', ', array_map($quote_ident, $this->_select));
+			$query .= implode(', ', array_map($quote_ident, $this->_select));
 		}
 
 		if ( ! empty($this->_from))
