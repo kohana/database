@@ -5,6 +5,9 @@ class Database_Query_Builder_Select extends Database_Query_Builder_Where {
 	// SELECT ...
 	protected $_select = array();
 
+	// DISTINCT
+	protected $_distinct = FALSE;
+
 	// FROM ...
 	protected $_from = array();
 
@@ -45,6 +48,19 @@ class Database_Query_Builder_Select extends Database_Query_Builder_Where {
 
 		// Start the query with no actual SQL statement
 		parent::__construct(Database::SELECT, '');
+	}
+
+	/**
+	 * Enables or disables selecting only unique columns using "SELECT DISTINCT"
+	 *
+	 * @param   boolean  enable or disable distinct columns
+	 * @return  $this
+	 */
+	public function distinct($value)
+	{
+		$this->_distinct = (bool) $value;
+
+		return $this;
 	}
 
 	/**
@@ -95,7 +111,7 @@ class Database_Query_Builder_Select extends Database_Query_Builder_Where {
 
 	/**
 	 * Adds "ON ..." conditions for the last created JOIN statement.
-	 * 
+	 *
 	 * @param   mixed   column name or array($column, $alias) or object
 	 * @param   string  logic operator
 	 * @param   mixed   column name or array($column, $alias) or object
@@ -251,7 +267,7 @@ class Database_Query_Builder_Select extends Database_Query_Builder_Where {
 
 	/**
 	 * Return up to "LIMIT ..." results
-	 * 
+	 *
 	 * @param   integer  maximum results to return
 	 * @return  $this
 	 */
@@ -264,7 +280,7 @@ class Database_Query_Builder_Select extends Database_Query_Builder_Where {
 
 	/**
 	 * Start returning results after "OFFSET ..."
-	 * 
+	 *
 	 * @param   integer   starting result number
 	 * @return  $this
 	 */
@@ -286,15 +302,24 @@ class Database_Query_Builder_Select extends Database_Query_Builder_Where {
 		// Callback to quote identifiers
 		$quote_ident = array($db, 'quote_identifier');
 
+		// Start a selection query
+		$query = 'SELECT ';
+
+		if ($this->_distinct === TRUE)
+		{
+			// Select only unique results
+			$query .= 'DISTINCT ';
+		}
+
 		if (empty($this->_select))
 		{
 			// Select all columns
-			$query = 'SELECT * ';
+			$query .= '*';
 		}
 		else
 		{
-			// Select all unique columns
-			$query = 'SELECT '.implode(', ', array_map($quote_ident, $this->_select));
+			// Select all columns
+			$query = .implode(', ', array_map($quote_ident, $this->_select));
 		}
 
 		if ( ! empty($this->_from))
