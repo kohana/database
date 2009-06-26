@@ -3,7 +3,7 @@
 class Database_Query_Builder_Select extends Database_Query_Builder_Where {
 
 	// SELECT ...
-	protected $_select = array('*');
+	protected $_select = array();
 
 	// FROM ...
 	protected $_from = array();
@@ -58,7 +58,7 @@ class Database_Query_Builder_Select extends Database_Query_Builder_Where {
 	{
 		$columns = func_get_args();
 
-		$this->_columns = array_merge($this->_columns, $columns);
+		$this->_select = array_merge($this->_select, $columns);
 
 		return $this;
 	}
@@ -288,8 +288,16 @@ class Database_Query_Builder_Select extends Database_Query_Builder_Where {
 		// Callback to quote identifiers
 		$quote_ident = array($db, 'quote_identifier');
 
-		// Start a selection query
-		$query = 'SELECT '.implode(', ', array_map($quote_ident, $this->_select));
+		if (empty($this->_select))
+		{
+			// Select all columns
+			$query = 'SELECT * ';
+		}
+		else
+		{
+			// Select all unique columns
+			$query = 'SELECT '.implode(', ', array_map($quote_ident, $this->_select));
+		}
 
 		if ( ! empty($this->_from))
 		{
