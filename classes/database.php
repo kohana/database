@@ -139,7 +139,7 @@ abstract class Database {
 	 * @param   integer  Database::SELECT, Database::INSERT, etc
 	 * @param   string   SQL query
 	 * @return  object   Database_Result for SELECT queries
-	 * @return  mixed    the insert id for INSERT queries
+	 * @return  array    list (insert id, row count) for INSERT queries
 	 * @return  integer  number of affected rows for all other queries
 	 */
 	abstract public function query($type, $sql);

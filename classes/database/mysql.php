@@ -139,8 +139,11 @@ class Database_MySQL extends Database {
 		}
 		elseif ($type === Database::INSERT)
 		{
-			// Return the insert id of the row
-			return mysql_insert_id($this->_connection);
+			// Return a list of insert id and rows created
+			return array(
+				mysql_insert_id($this->_connection),
+				mysql_affected_rows($this->_connection),
+			);
 		}
 		else
 		{
