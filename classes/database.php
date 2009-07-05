@@ -145,6 +145,21 @@ abstract class Database {
 	abstract public function query($type, $sql);
 
 	/**
+	 * Count the number of records in a table.
+	 *
+	 * @param   string   table name
+	 * @return  integer
+	 */
+	public function count_records($table)
+	{
+		// Quote the table name
+		$table = $this->quote_identifier($table);
+
+		return $this->query(Database::SELECT, 'SELECT COUNT(*) AS total_row_count FROM '.$table)
+			->get('total_row_count');
+	}
+
+	/**
 	 * List all of the tables in the database. Optionally, a LIKE string can
 	 * be used to search for specific tables.
 	 *
