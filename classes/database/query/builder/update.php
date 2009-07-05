@@ -37,13 +37,29 @@ class Database_Query_Builder_Update extends Database_Query_Builder_Where {
 	}
 
 	/**
-	 * Set the value of a column.
+	 * Set the values to update with an associative array.
+	 *
+	 * @param   array   associative (column => value) list
+	 * @return  $this
+	 */
+	public function set(array $pairs)
+	{
+		foreach ($pairs as $column => $value)
+		{
+			$this->_set[] = array($column, $value);
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Set the value of a single column.
 	 *
 	 * @param   mixed  table name or array($table, $alias) or object
 	 * @param   mixed  column value
 	 * @return  $this
 	 */
-	public function set($column, $value)
+	public function set_single($column, $value)
 	{
 		$this->_set[] = array($column, $value);
 
