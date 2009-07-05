@@ -64,7 +64,10 @@ class Database_Query_Builder_Update extends Database_Query_Builder_Where {
 		$update = array();
 		foreach ($this->_set as $set)
 		{
-			$update[] = $db->quote_identifier($set[0]).' = '.$db->quote($set[1]);
+			// Split the set
+			list ($table, $value) = $set;
+
+			$update[] = $db->quote_identifier($table).' = '.$db->quote($value);
 		}
 
 		// Add the columns to update
@@ -78,5 +81,16 @@ class Database_Query_Builder_Update extends Database_Query_Builder_Where {
 
 		return $query;
 	}
+
+	public function reset()
+	{
+		$this->_table = NULL;
+
+		$this->_set   =
+		$this->_where = array();
+
+		return $this;
+	}
+
 
 } // End Database_Query_Builder_Update

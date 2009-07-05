@@ -78,7 +78,7 @@ abstract class Database_Query_Builder extends Database_Query {
 
 	/**
 	 * Compiles an array of ORDER BY statements into an SQL partial.
-	 * 
+	 *
 	 * @param   object  Database instance
 	 * @param   array   sorting columns
 	 * @return  string
@@ -101,5 +101,12 @@ abstract class Database_Query_Builder extends Database_Query {
 
 		return 'ORDER BY '.implode(', ', $sort);
 	}
+
+	/**
+	 * Reset the current builder status.
+	 *
+	 * @return  $this
+	 */
+	abstract public function reset();
 
 } // End Database_Query_Builder

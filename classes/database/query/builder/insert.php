@@ -6,7 +6,7 @@ class Database_Query_Builder_Insert extends Database_Query_Builder {
 	protected $_table;
 
 	// (...)
-	protected $_columns;
+	protected $_columns = array();
 
 	// VALUES (...)
 	protected $_values = array();
@@ -134,6 +134,16 @@ class Database_Query_Builder_Insert extends Database_Query_Builder {
 		}
 
 		return $query;
+	}
+
+	public function reset()
+	{
+		$this->_table = NULL;
+
+		$this->_columns =
+		$this->_values  = array();
+
+		return $this;
 	}
 
 } // End Database_Query_Builder_Insert

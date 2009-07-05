@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
-class Database_Query_Builder_Join extends Database_Query_Builder {
+abstract class Database_Query_Builder_Join extends Database_Query_Builder {
 
 	// Type of JOIN
 	protected $_type;
@@ -67,10 +67,13 @@ class Database_Query_Builder_Join extends Database_Query_Builder {
 		$sql .= ' '.$db->quote_identifier($this->_table).' ON ';
 
 		$conditions = array();
-		foreach ($this->_on as $on)
+		foreach ($this->_on as $condition)
 		{
+			// Split the condition
+			list($c1, $op, $c2) = $condition;
+
 			// Quote each of the identifiers used for the condition
-			$conditions[] = $db->quote_identifier($on[0])." {$on[1]} ".$db->quote_identifier($on[2]);
+			$conditions[] = $db->quote_identifier($c1).' '.strtoupper($op).' '.$db->quote_identifier($c2);
 		}
 
 		// Concat the conditions "... AND ..."

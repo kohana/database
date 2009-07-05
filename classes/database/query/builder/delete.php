@@ -53,4 +53,12 @@ class Database_Query_Builder_Delete extends Database_Query_Builder_Where {
 		return $query;
 	}
 
+	public function reset()
+	{
+		$this->_table = NULL;
+		$this->_where = array();
+
+		return $this;
+	}
+
 } // End Database_Query_Builder_Delete
