@@ -59,7 +59,7 @@ class Database_Query_Builder_Update extends Database_Query_Builder_Where {
 	 * @param   mixed  column value
 	 * @return  $this
 	 */
-	public function set_single($column, $value)
+	public function value($column, $value)
 	{
 		$this->_set[] = array($column, $value);
 
@@ -81,9 +81,12 @@ class Database_Query_Builder_Update extends Database_Query_Builder_Where {
 		foreach ($this->_set as $set)
 		{
 			// Split the set
-			list ($table, $value) = $set;
+			list ($column, $value) = $set;
 
-			$update[] = $db->quote_identifier($table).' = '.$db->quote($value);
+			// Quote the column name
+			$column = $db->quote_identifier($column);
+
+			$update[$column] = $column.' = '.$db->quote($value);
 		}
 
 		// Add the columns to update
