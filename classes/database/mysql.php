@@ -9,6 +9,9 @@
  */
 class Database_MySQL extends Database {
 
+	// Use SET NAMES to set the character set
+	protected static $_set_names;
+
 	// MySQL uses a backtick for identifiers
 	protected $_identifier = '`';
 
@@ -16,6 +19,13 @@ class Database_MySQL extends Database {
 	{
 		if ($this->_connection)
 			return;
+
+		if (Database_MySQL::$_set_names === NULL)
+		{
+			// Determine if we can use mysql_set_charset(), which is only
+			// available on PHP 5.2.3+ when compiled against MySQL 5.0+
+			Database_MySQL::$_set_names = ! function_exists('mysql_set_charset');
+		}
 
 		// Extract the connection parameters, adding required variabels
 		extract($this->_config['connection'] + array(
@@ -90,9 +100,19 @@ class Database_MySQL extends Database {
 		// Make sure the database is connected
 		$this->_connection or $this->connect();
 
-		if ( ! mysql_set_charset($charset, $this->_connection))
+		if (Database_MySQL::$_set_names === TRUE)
 		{
-			// Unable to set charset
+			// PHP is compiled against MySQL 4.x
+			$status = (bool) mysql_query('SET NAMES '.$this->quote($charset), $this->_connection);
+		}
+		else
+		{
+			// PHP is compiled against MySQL 5.x
+			$status = mysql_set_charset($charset, $this->_connection);
+		}
+
+		if ($status === FALSE)
+		{
 			throw new Database_Exception(':error',
 				array(':error' => mysql_error($this->_connection)),
 				mysql_errno($this->_connection));
