@@ -40,13 +40,18 @@ class Database_MySQL extends Database {
 		// Clear the connection parameters for security
 		unset($this->_config['connection']);
 
-		// Set the connection type
-		$connect = empty($persistent) ? 'mysql_connect' : 'mysql_pconnect';
-
 		try
 		{
-			// Connect to the database
-			$this->_connection = $connect($hostname, $username, $password);
+			if (empty($persistent))
+			{
+				// Create a connection and force it to be a new link
+				$this->_connection = mysql_connect($hostname, $username, $password, TRUE);
+			}
+			else
+			{
+				// Create a persistent connection
+				$this->_connection = mysql_pconnect($hostname, $username, $password);
+			}
 		}
 		catch (ErrorException $e)
 		{
