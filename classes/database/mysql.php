@@ -238,7 +238,8 @@ class Database_MySQL extends Database {
 				mysql_error($this->_connection));
 		}
 
-		return $value;
+		// SQL standard is to use single-quotes for all values
+		return "'$value'";
 	}
 
-} // End Database_Connection_MySQL
+} // End Database_MySQL

@@ -214,8 +214,7 @@ abstract class Database {
 			return (int) $value;
 		}
 
-		// SQL standard is to use single-quotes for all values
-		return '\''.$this->escape($value).'\'';
+		return $this->escape($value);
 	}
 
 	/**
