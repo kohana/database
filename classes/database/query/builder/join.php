@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
-abstract class Database_Query_Builder_Join extends Database_Query_Builder {
+class Database_Query_Builder_Join extends Database_Query_Builder {
 
 	// Type of JOIN
 	protected $_type;
@@ -91,6 +91,14 @@ abstract class Database_Query_Builder_Join extends Database_Query_Builder {
 		}
 
 		return $sql;
+	}
+
+	public function reset()
+	{
+		$this->_type =
+		$this->_table = NULL;
+
+		$this->_on = array();
 	}
 
 } // End Database_Query_Builder_Join
