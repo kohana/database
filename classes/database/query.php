@@ -48,8 +48,7 @@ class Database_Query {
 		}
 		catch (Exception $e)
 		{
-			// Return the exception message
-			return $e->getMessage().' in '.Kohana::debug_path($e->getFile()).' [ '.$e->getLine().' ]';
+			return Kohana::exception_text($e);
 		}
 	}
 
