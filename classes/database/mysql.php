@@ -29,6 +29,7 @@ class Database_MySQL extends Database {
 
 		// Extract the connection parameters, adding required variabels
 		extract($this->_config['connection'] + array(
+			'database'   => '',
 			'hostname'   => '',
 			'port'       => NULL,
 			'socket'     => NULL,
@@ -64,7 +65,7 @@ class Database_MySQL extends Database {
 				mysql_errno());
 		}
 
-		if ( ! mysql_select_db($this->_config['database'], $this->_connection))
+		if ( ! mysql_select_db($database, $this->_connection))
 		{
 			// Unable to select database
 			throw new Database_Exception(':error',

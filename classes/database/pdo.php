@@ -37,7 +37,7 @@ class Database_PDO extends Database {
 			$attrs[PDO::ATTR_PERSISTENT] = TRUE;
 		}
 
-		$this->_connection = new PDO($dsn.';dbname='.$this->_config['database'], $username, $password, $attrs);
+		$this->_connection = new PDO($dsn, $username, $password, $attrs);
 
 		if ( ! empty($this->_config['charset']))
 		{

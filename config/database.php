@@ -15,13 +15,14 @@ return array
 			 * string   username
 			 * string   password
 			 * boolean  persistent
+			 * string   database
 			 */
 			'hostname'   => 'localhost',
-			'username'   => 'root',
-			'password'   => 'r00tdb',
+			'username'   => FALSE,
+			'password'   => FALSE,
 			'persistent' => FALSE,
+			'database'   => 'kohana',
 		),
-		'database'   => 'kohana',
 		'charset'    => 'utf8',
 		'caching'    => FALSE,
 		'profiling'  => TRUE,
@@ -37,12 +38,11 @@ return array
 			 * string   password
 			 * boolean  persistent
 			 */
-			'dsn'        => 'mysql://host=localhost',
+			'dsn'        => 'mysql://host=localhost;dbname=kohana',
 			'username'   => 'root',
 			'password'   => 'r00tdb',
 			'persistent' => FALSE,
 		),
-		'database'   => 'kohana',
 		'charset'    => 'utf8',
 		'caching'    => FALSE,
 		'profiling'  => TRUE,
