@@ -147,7 +147,7 @@ abstract class Database {
 	/**
 	 * Count the number of records in a table.
 	 *
-	 * @param   string   table name
+	 * @param   mixed    table name string or array(query, alias)
 	 * @return  integer
 	 */
 	public function count_records($table)
