@@ -37,8 +37,9 @@ return array
 			 * string   username
 			 * string   password
 			 * boolean  persistent
+			 * string   identifier
 			 */
-			'dsn'        => 'mysql://host=localhost;dbname=kohana',
+			'dsn'        => 'mysql:host=localhost;dbname=kohana',
 			'username'   => 'root',
 			'password'   => 'r00tdb',
 			'persistent' => FALSE,
