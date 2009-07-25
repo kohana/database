@@ -198,11 +198,18 @@ abstract class Database {
 		{
 			if ($value instanceof Database_Query)
 			{
+				// Create a sub-query
 				return '('.$value->compile($this).')';
+			}
+			elseif ($value instanceof Database_Expression)
+			{
+				// Use a raw expression
+				return $value->value();
 			}
 			else
 			{
-				return (string) $value;
+				// Convert the object to a string
+				return $this->quote((string) $value);
 			}
 		}
 		elseif (is_array($value))
@@ -233,12 +240,18 @@ abstract class Database {
 		{
 			if ($value instanceof Database_Query)
 			{
-				// Compile the sub-query using the current database
+				// Create a sub-query
 				return '('.$value->compile($this).')';
+			}
+			elseif ($value instanceof Database_Expression)
+			{
+				// Use a raw expression
+				return $value->value();
 			}
 			else
 			{
-				return (string) $value;
+				// Convert the object to a string
+				return $this->quote_identifier((string) $value);
 			}
 		}
 		elseif (is_array($value))
