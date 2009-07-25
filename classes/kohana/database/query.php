@@ -7,7 +7,7 @@
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    http://kohanaphp.com/license.html
  */
-class Database_Query {
+class Kohana_Database_Query {
 
 	// Query type
 	protected $_type;

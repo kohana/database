@@ -7,7 +7,7 @@
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    http://kohanaphp.com/license.html
  */
-class Database_PDO extends Database {
+class Kohana_Database_PDO extends Database {
 
 	// PDO uses no quoting for identifiers
 	protected $_identifier = '';

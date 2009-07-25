@@ -1,6 +1,13 @@
 <?php defined('SYSPATH') or die('No direct script access.');
-
-abstract class Database_Query_Builder_Where extends Database_Query_Builder {
+/**
+ * Database query builder for WHERE statements.
+ *
+ * @package    Kohana
+ * @author     Kohana Team
+ * @copyright  (c) 2008-2009 Kohana Team
+ * @license    http://kohanaphp.com/license.html
+ */
+abstract class Kohana_Database_Query_Builder_Where extends Database_Query_Builder {
 
 	// WHERE ...
 	protected $_where = array();

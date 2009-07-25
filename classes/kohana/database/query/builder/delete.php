@@ -1,6 +1,13 @@
 <?php defined('SYSPATH') or die('No direct script access.');
-
-class Database_Query_Builder_Delete extends Database_Query_Builder_Where {
+/**
+ * Database query builder for DELETE statements.
+ *
+ * @package    Kohana
+ * @author     Kohana Team
+ * @copyright  (c) 2008-2009 Kohana Team
+ * @license    http://kohanaphp.com/license.html
+ */
+class Kohana_Database_Query_Builder_Delete extends Database_Query_Builder_Where {
 
 	// DELETE FROM ...
 	protected $_table;

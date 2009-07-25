@@ -7,7 +7,7 @@
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    http://kohanaphp.com/license.html
  */
-abstract class Database_Result implements Countable, Iterator, SeekableIterator, ArrayAccess {
+abstract class Kohana_Database_Result implements Countable, Iterator, SeekableIterator, ArrayAccess {
 
 	// Executed SQL for this result
 	protected $_query;

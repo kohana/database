@@ -1,6 +1,13 @@
 <?php defined('SYSPATH') or die('No direct script access.');
-
-class Database_Expression {
+/**
+ * Database expressions.
+ *
+ * @package    Kohana
+ * @author     Kohana Team
+ * @copyright  (c) 2009 Kohana Team
+ * @license    http://kohanaphp.com/license.html
+ */
+class Kohana_Database_Expression {
 
 	// Raw expression string
 	protected $_value;

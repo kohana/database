@@ -7,7 +7,7 @@
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    http://kohanaphp.com/license.html
  */
-class Database_MySQL_Result extends Database_Result {
+class Kohana_Database_MySQL_Result extends Database_Result {
 
 	public function __construct($result, $sql)
 	{

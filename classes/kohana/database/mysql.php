@@ -7,7 +7,7 @@
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    http://kohanaphp.com/license.html
  */
-class Database_MySQL extends Database {
+class Kohana_Database_MySQL extends Database {
 
 	// Use SET NAMES to set the character set
 	protected static $_set_names;

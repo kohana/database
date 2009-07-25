@@ -7,7 +7,7 @@
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    http://kohanaphp.com/license.html
  */
-abstract class Database {
+abstract class Kohana_Database {
 
 	// Query types
 	const SELECT =  1;

@@ -1,6 +1,13 @@
 <?php defined('SYSPATH') or die('No direct script access.');
-
-abstract class Database_Query_Builder extends Database_Query {
+/**
+ * Database query builder.
+ *
+ * @package    Kohana
+ * @author     Kohana Team
+ * @copyright  (c) 2008-2009 Kohana Team
+ * @license    http://kohanaphp.com/license.html
+ */
+abstract class Kohana_Database_Query_Builder extends Database_Query {
 
 	/**
 	 * Compiles an array of JOIN statements into an SQL partial.
