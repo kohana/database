@@ -15,13 +15,23 @@ class Database_Expression {
 	}
 
 	/**
-	 * Return the string value of the expression.
+	 * Get the expression value as a string.
+	 *
+	 * @return  string
+	 */
+	public function value()
+	{
+		return (string) $this->_value;
+	}
+
+	/**
+	 * Return the value of the expression as a string.
 	 *
 	 * @return  string
 	 */
 	public function __toString()
 	{
-		return (string) $this->_value;
+		return $this->value()
 	}
 
 } // End Database_Expression
