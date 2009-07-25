@@ -179,6 +179,16 @@ abstract class Database {
 	abstract public function list_columns($table, $like = NULL);
 
 	/**
+	 * Return the table prefix.
+	 *
+	 * @return  string
+	 */
+	public function table_prefix()
+	{
+		return $this->_config['table_prefix'];
+	}
+
+	/**
 	 * Quote a value for an SQL query.
 	 *
 	 * @param   mixed   any value to quote
@@ -225,7 +235,8 @@ abstract class Database {
 	}
 
 	/**
-	 * Quote a database identifier, such as a table or column name.
+	 * Quote a database identifier, such as a table or column name. Adds the
+	 * table prefix to the identifier if a table name is present.
 	 *
 	 * @param   mixed   any identifier
 	 * @return  string
@@ -269,9 +280,21 @@ abstract class Database {
 		}
 		elseif (strpos($value, '.') !== FALSE)
 		{
-			// Dots are used to separate schema, table, and column names
-			// Split each of the column parts and quote them separately
-			return implode('.', array_map(array($this, __FUNCTION__), explode('.', $value)));
+			// Split the identifier into the individual parts
+			$parts = explode('.', $value);
+
+			if ($prefix = $this->table_prefix())
+			{
+				// Get the offset of the table name, 2nd-to-last part
+				// This works for databases that can have 3 identifiers (Postgre)
+				$offset = count($parts) - 2;
+
+				// Add the table prefix to the table name
+				$parts[$offset] = $prefix.$parts[$offset];
+			}
+
+			// Quote each of the parts
+			return implode('.', array_map(array($this, __FUNCTION__), $parts));
 		}
 		else
 		{
