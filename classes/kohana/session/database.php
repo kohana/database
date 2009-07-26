@@ -9,6 +9,9 @@
  */
 class Kohana_Session_Database extends Session {
 
+	// Database instance
+	protected $_db;
+
 	// Database table name
 	protected $_table = 'sessions';
 
