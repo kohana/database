@@ -24,12 +24,6 @@ class Kohana_Session_Database extends Session {
 	// Update the session?
 	protected $_update = FALSE;
 
-	/**
-	 * Loads database-specific configuration data.
-	 *
-	 * @param   array   configuration
-	 * @return  void
-	 */
 	public function __construct(array $config = NULL)
 	{
 		if ( ! isset($config['group']))
@@ -50,12 +44,6 @@ class Kohana_Session_Database extends Session {
 		parent::__construct($config);
 	}
 
-	/**
-	 * Loads the session contents from the database.
-	 *
-	 * @param   string   session id
-	 * @return  string
-	 */
 	public function _read($id = NULL)
 	{
 		if ($id OR $id = Cookie::get($this->_name))
@@ -80,11 +68,6 @@ class Kohana_Session_Database extends Session {
 		return NULL;
 	}
 
-	/**
-	 * Generates a new unique session id.
-	 *
-	 * @return  string
-	 */
 	protected function _regenerate()
 	{
 		// Create the query to find an ID
@@ -104,9 +87,6 @@ class Kohana_Session_Database extends Session {
 		return $this->_session_id = $id;
 	}
 
-	/**
-	 * Inserts or updates the session in the database.
-	 */
 	protected function _write()
 	{
 		if ($this->_update_id === NULL)
@@ -150,6 +130,35 @@ class Kohana_Session_Database extends Session {
 
 		// Update the cookie with the new session id
 		Cookie::set($this->_name, $this->_session_id, $this->_lifetime);
+
+		return TRUE;
+	}
+
+	protected function _destroy()
+	{
+		if ($this->_update_id === NULL)
+		{
+			// Session has not been created yet
+			return TRUE;
+		}
+
+		// Delete the current session
+		$query = DB::query(Database::DELETE, "DELETE FROM {$this->_table} WHERE session_id = :id")
+			->param(':id', $this->_update_id);
+
+		try
+		{
+			// Execute the query
+			$query->execute($this->_db);
+
+			// Delete the cookie
+			Cookie::delete($this->_name);
+		}
+		catch (Exception $e)
+		{
+			// An error occurred, the session has not been deleted
+			return FALSE;
+		}
 
 		return TRUE;
 	}
