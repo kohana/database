@@ -65,12 +65,12 @@ class Kohana_Database_Query {
 	/**
 	 * Enables the query to be cached for a specified amount of time.
 	 *
-	 * @param   integer  number of seconds to cache
+	 * @param   integer  number of seconds to cache or null for default
 	 * @return  $this
 	 */
-	public function cached($lifetime)
+	public function cached($lifetime = NULL)
 	{
-		$this->_lifetime = (int) $lifetime;
+		$this->_lifetime = $lifetime;
 
 		return $this;
 	}
