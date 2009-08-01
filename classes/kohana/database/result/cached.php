@@ -9,9 +9,15 @@
  */
 class Kohana_Database_Result_Cached extends Database_Result {
 
-	public function __construct(array $result, $sql)
+	public function __construct(array $result, $sql, $as_object)
 	{
-		parent::__construct($result, $sql);
+		if (count($result) > 0)
+		{
+			// Determine if we stored as objects or associative arrays	
+			$as_object = get_class($result[0]);
+		}
+
+		parent::__construct($result, $sql, $as_object);
 
 		// Find the number of rows in the result
 		$this->_total_rows = count($result);
@@ -20,33 +26,6 @@ class Kohana_Database_Result_Cached extends Database_Result {
 	public function __destruct()
 	{
 		// Cached results do not use resources
-	}
-
-	public function as_array($key = NULL, $value = NULL)
-	{
-		if ($key === NULL AND $value === NULL)
-		{
-			// Return the full result array
-			return $this->_result;
-		}
-
-		$array = array();
-
-		foreach ($this->_result as $row)
-		{
-			if ($value !== NULL)
-			{
-				// Return the result as a $key => $value list
-				$array[$row[$key]] = $row[$value];
-			}
-			else
-			{
-				// Return the result as a $key => $row list
-				$array[$row[$key]] = $row;
-			}
-		}
-
-		return $array;
 	}
 
 	public function seek($offset)

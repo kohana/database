@@ -19,6 +19,9 @@ abstract class Kohana_Database_Result implements Countable, Iterator, SeekableIt
 	protected $_total_rows  = 0;
 	protected $_current_row = 0;
 
+	// Return rows as an object or associative array
+	protected $_as_object;
+
 	/**
 	 * Sets the total number of rows and stores the result locally.
 	 *
@@ -26,13 +29,16 @@ abstract class Kohana_Database_Result implements Countable, Iterator, SeekableIt
 	 * @param   string  SQL query
 	 * @return  void
 	 */
-	public function __construct($result, $sql)
+	public function __construct($result, $sql, $as_object)
 	{
 		// Store the result locally
 		$this->_result = $result;
 
 		// Store the SQL locally
 		$this->_query = $sql;
+
+		// Results as objects or associative arrays
+		$this->_as_object = $as_object;
 	}
 
 	/**
@@ -47,7 +53,63 @@ abstract class Kohana_Database_Result implements Countable, Iterator, SeekableIt
 	 * @param   string  column for an associative values
 	 * @return  array
 	 */
-	abstract public function as_array($key = NULL, $value = NULL);
+	public function as_array($key = NULL, $value = NULL)
+	{
+		// Go back to beginning of result set
+		$this->rewind();
+
+		$results = array();
+
+		if ($this->_as_object)
+		{
+			// Return as objects
+			foreach ($this as $row)
+			{
+				if ($key !== NULL)
+				{
+					if ($value !== NULL)
+					{
+						// $key => $value list
+						$results[$row->$key] = $row->$value;
+					}
+					else
+					{
+						// $key => $row list 
+						$results[$row->$key] = $row;
+					}
+				}
+				else
+				{
+					// Add each row to the array
+					$results[] = $row;
+				}
+			}
+		}
+		else
+		{
+			// Return as associative arrays
+			foreach ($this as $row)
+			{
+				if ($key !== NULL)
+				{
+					if ($value !== NULL)
+					{
+						$results[$row[$key]] = $row[$value];
+					}
+					else
+					{
+						$results[$row[$key]] = $row;
+					}
+				}
+				else
+				{
+					$results[] = $row;
+				}
+			}
+		}
+
+		return $results;
+	}
 
 	/**
 	 * Return the named column from the current row.

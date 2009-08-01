@@ -9,9 +9,9 @@
  */
 class Kohana_Database_MySQL_Result extends Database_Result {
 
-	public function __construct($result, $sql)
+	public function __construct($result, $sql, $as_object)
 	{
-		parent::__construct($result, $sql);
+		parent::__construct($result, $sql, $as_object);
 
 		// Find the number of rows in the result
 		$this->_total_rows = mysql_num_rows($result);
@@ -23,41 +23,6 @@ class Kohana_Database_MySQL_Result extends Database_Result {
 		{
 			mysql_free_result($this->_result);
 		}
-	}
-
-	public function as_array($key = NULL, $value = NULL)
-	{
-		$array = array();
-
-		if ($this->_total_rows > 0)
-		{
-			// Seek to the beginning of the result
-			mysql_data_seek($this->_result, 0);
-
-			while ($row = mysql_fetch_assoc($this->_result))
-			{
-				if ($key !== NULL)
-				{
-					if ($value !== NULL)
-					{
-						// Return the result as a $key => $value list
-						$array[$row[$key]] = $row[$value];
-					}
-					else
-					{
-						// Return the result as a $key => $row list
-						$array[$row[$key]] = $row;
-					}
-				}
-				else
-				{
-					// Add each row to the array
-					$array[] = $row;
-				}
-			}
-		}
-
-		return $array;
 	}
 
 	public function seek($offset)
@@ -79,9 +44,22 @@ class Kohana_Database_MySQL_Result extends Database_Result {
 	{
 		if ( ! $this->seek($offset))
 			return FALSE;
-
-		// Return an array of the row
-		return mysql_fetch_assoc($this->_result);
+		
+		if ($this->_as_object === TRUE)
+		{
+			// Return an stdClass
+			return mysql_fetch_object($this->_result);
+		}
+		elseif (is_string($this->_as_object))
+		{
+			// Return an object of given class name
+			return mysql_fetch_object($this->_result, $this->_as_object);
+		} 
+		else
+		{
+			// Return an array of the row
+			return mysql_fetch_assoc($this->_result);
+		}
 	}
 
 } // End Database_MySQL_Result_Select

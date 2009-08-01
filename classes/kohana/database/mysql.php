@@ -125,7 +125,7 @@ class Kohana_Database_MySQL extends Database {
 		}
 	}
 
-	public function query($type, $sql)
+	public function query($type, $sql, $as_object)
 	{
 		// Make sure the database is connected
 		$this->_connection or $this->connect();
@@ -161,7 +161,7 @@ class Kohana_Database_MySQL extends Database {
 		if ($type === Database::SELECT)
 		{
 			// Return an iterator of results
-			return new Database_MySQL_Result($result, $sql);
+			return new Database_MySQL_Result($result, $sql, $as_object);
 		}
 		elseif ($type === Database::INSERT)
 		{
