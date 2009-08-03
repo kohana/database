@@ -38,7 +38,7 @@ class Kohana_Database_Expression {
 	 */
 	public function __toString()
 	{
-		return $this->value()
+		return $this->value();
 	}
 
 } // End Database_Expression
