@@ -9,6 +9,8 @@
  */
 class Kohana_Database_MySQL_Result extends Database_Result {
 
+	protected $_internal_row = 0;
+
 	public function __construct($result, $sql, $as_object)
 	{
 		parent::__construct($result, $sql, $as_object);
@@ -30,7 +32,7 @@ class Kohana_Database_MySQL_Result extends Database_Result {
 		if ($this->offsetExists($offset) AND mysql_data_seek($this->_result, $offset))
 		{
 			// Set the current row to the offset
-			$this->_current_row = $offset;
+			$this->_current_row = $this->_internal_row = $offset;
 
 			return TRUE;
 		}
@@ -40,10 +42,13 @@ class Kohana_Database_MySQL_Result extends Database_Result {
 		}
 	}
 
-	public function offsetGet($offset)
+	public function current()
 	{
-		if ( ! $this->seek($offset))
+		if ($this->_current_row !== $this->_internal_row AND ! $this->seek($this->_current_row))
 			return FALSE;
+		
+		// Increment internal row for optimization assuming rows are fetched in order
+		$this->_internal_row++;
 		
 		if ($this->_as_object === TRUE)
 		{

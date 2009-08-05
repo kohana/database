@@ -60,43 +60,39 @@ abstract class Kohana_Database_Result implements Countable, Iterator, SeekableIt
 
 		$results = array();
 
-		if ($this->_as_object)
+		foreach ($this as $row)
 		{
-			// Return as objects
-			foreach ($this as $row)
-			{
-				if ($key !== NULL)
-				{		
-					if ($value !== NULL)
+			if ($key !== NULL)
+			{		
+				if ($value !== NULL)
+				{
+					// $key => $value list
+					if ($this->_as_object)
 					{
-						// $key => $value list
-						if ($this->_as_object)
-						{
-							$results[$row->$key] = $row->$value;
-						}
-						else
-						{
-							$results[$row[$key]] = $row[$value];
-						}
+						$results[$row->$key] = $row->$value;
 					}
 					else
 					{
-						// $key => $row list 
-						if ($this->_as_object)
-						{
-							$results[$row->$key] = $row;
-						}
-						else
-						{
-							$results[$row[$key]] = $row;
-						}	
+						$results[$row[$key]] = $row[$value];
 					}
 				}
 				else
 				{
-					// Add each row to the array
-					$results[] = $row;
+					// $key => $row list 
+					if ($this->_as_object)
+					{
+						$results[$row->$key] = $row;
+					}
+					else
+					{
+						$results[$row[$key]] = $row;
+					}	
 				}
+			}
+			else
+			{
+				// Add each row to the array
+				$results[] = $row;
 			}
 		}
 
@@ -112,7 +108,13 @@ abstract class Kohana_Database_Result implements Countable, Iterator, SeekableIt
 	 */
 	public function get($name, $default = NULL)
 	{
-		if ($row = $this->current() AND array_key_exists($name, $row))
+		$row = $this->current();
+		
+		if ($this->_as_object AND isset($row->$name))
+		{
+			return $row->$name;
+		}
+		elseif ( ! $this->_as_object AND isset($row[$name]))
 		{
 			return $row[$name];
 		}
@@ -145,6 +147,17 @@ abstract class Kohana_Database_Result implements Countable, Iterator, SeekableIt
 
 		return FALSE;
 	}
+	
+	/**
+	 * ArrayAccess: offsetGet
+	 */
+	public function offsetGet($offset)
+	{
+		if ( ! $this->seek($offset))
+			return NULL;
+			
+		return $this->current();
+	}
 
 	/**
 	 * ArrayAccess: offsetSet
@@ -164,14 +177,6 @@ abstract class Kohana_Database_Result implements Countable, Iterator, SeekableIt
 	final public function offsetUnset($offset)
 	{
 		throw new Kohana_Exception('Database results are read-only');
-	}
-
-	/**
-	 * Iterator: current
-	 */
-	public function current()
-	{
-		return $this->offsetGet($this->_current_row);
 	}
 
 	/**

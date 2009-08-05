@@ -44,11 +44,8 @@ class Kohana_Database_Result_Cached extends Database_Result {
 		}
 	}
 
-	public function offsetGet($offset)
+	public function current()
 	{
-		if ( ! $this->seek($offset))
-			return FALSE;
-
 		// Return an array of the row
 		return $this->_result[$this->_current_row];
 	}
