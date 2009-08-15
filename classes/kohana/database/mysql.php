@@ -125,7 +125,7 @@ class Kohana_Database_MySQL extends Database {
 		}
 	}
 
-	public function query($type, $sql)
+	public function query($type, $sql, $as_object)
 	{
 		// Make sure the database is connected
 		$this->_connection or $this->connect();
@@ -161,7 +161,7 @@ class Kohana_Database_MySQL extends Database {
 		if ($type === Database::SELECT)
 		{
 			// Return an iterator of results
-			return new Database_MySQL_Result($result, $sql);
+			return new Database_MySQL_Result($result, $sql, $as_object);
 		}
 		elseif ($type === Database::INSERT)
 		{
@@ -183,12 +183,12 @@ class Kohana_Database_MySQL extends Database {
 		if (is_string($like))
 		{
 			// Search for table names
-			$result = $this->query(Database::SELECT, 'SHOW TABLES LIKE '.$this->quote($like))->as_array();
+			$result = $this->query(Database::SELECT, 'SHOW TABLES LIKE '.$this->quote($like), FALSE);
 		}
 		else
 		{
 			// Find all table names
-			$result = $this->query(Database::SELECT, 'SHOW TABLES')->as_array();
+			$result = $this->query(Database::SELECT, 'SHOW TABLES', FALSE);
 		}
 
 		$tables = array();
@@ -209,12 +209,12 @@ class Kohana_Database_MySQL extends Database {
 		if (is_string($like))
 		{
 			// Search for column names
-			$result = $this->query(Database::SELECT, 'SHOW COLUMNS FROM '.$table.' LIKE '.$this->quote($like));
+			$result = $this->query(Database::SELECT, 'SHOW COLUMNS FROM '.$table.' LIKE '.$this->quote($like), FALSE);
 		}
 		else
 		{
 			// Find all column names
-			$result = $this->query(Database::SELECT, 'SHOW COLUMNS FROM '.$table)->as_array();
+			$result = $this->query(Database::SELECT, 'SHOW COLUMNS FROM '.$table, FALSE);
 		}
 
 		$columns = array();

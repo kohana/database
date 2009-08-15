@@ -138,11 +138,12 @@ abstract class Kohana_Database {
 	 *
 	 * @param   integer  Database::SELECT, Database::INSERT, etc
 	 * @param   string   SQL query
+	 * @param   string   result object class, TRUE for stdClass, FALSE for assoc array
 	 * @return  object   Database_Result for SELECT queries
 	 * @return  array    list (insert id, row count) for INSERT queries
 	 * @return  integer  number of affected rows for all other queries
 	 */
-	abstract public function query($type, $sql);
+	abstract public function query($type, $sql, $as_object);
 
 	/**
 	 * Count the number of records in a table.
