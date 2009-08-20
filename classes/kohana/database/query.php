@@ -22,7 +22,7 @@ class Kohana_Database_Query {
 	protected $_parameters = array();
 
 	// Return results as associative arrays or objects
-	protected $_as_object = TRUE;
+	protected $_as_object = FALSE;
 
 	/**
 	 * Creates a new SQL query of the specified type.
