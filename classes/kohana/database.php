@@ -227,7 +227,7 @@ abstract class Kohana_Database {
 		{
 			return '('.implode(', ', array_map(array($this, __FUNCTION__), $value)).')';
 		}
-		elseif (is_int($value) OR (is_string($value) AND ctype_digit($value)))
+		elseif (is_int($value))
 		{
 			return (int) $value;
 		}
