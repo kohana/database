@@ -204,7 +204,7 @@ class Kohana_Database_MySQL extends Database {
 	public function list_columns($table, $like = NULL)
 	{
 		// Quote the table name
-		$table = $this->quote_identifier($table);
+		$table = $this->quote_table($table);
 
 		if (is_string($like))
 		{

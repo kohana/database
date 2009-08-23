@@ -49,7 +49,7 @@ class Kohana_Database_Query_Builder_Delete extends Database_Query_Builder_Where 
 	public function compile(Database $db)
 	{
 		// Start a deletion query
-		$query = 'DELETE FROM '.$db->quote_identifier($this->_table);
+		$query = 'DELETE FROM '.$db->quote_table($this->_table);
 
 		if ( ! empty($this->_where))
 		{

@@ -236,7 +236,23 @@ abstract class Kohana_Database {
 	}
 
 	/**
-	 * Quote a database identifier, such as a table or column name. Adds the
+	 * Quote a database table name and adds the table prefix if needed
+	 *
+	 * @param   mixed   table name
+	 * @return  string
+	 */
+	public function quote_table($table)
+	{
+		if (strpos($table, '.') === FALSE)
+		{
+			$table = $this->table_prefix().$table;
+		}
+
+		return $this->quote_identifier($table);
+	}
+
+	/**
+	 * Quote a database identifier, such as a column name. Adds the
 	 * table prefix to the identifier if a table name is present.
 	 *
 	 * @param   mixed   any identifier

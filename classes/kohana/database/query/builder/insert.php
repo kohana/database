@@ -115,7 +115,7 @@ class Kohana_Database_Query_Builder_Insert extends Database_Query_Builder {
 	public function compile(Database $db)
 	{
 		// Start an insertion query
-		$query = 'INSERT INTO '.$db->quote_identifier($this->_table);
+		$query = 'INSERT INTO '.$db->quote_table($this->_table);
 
 		// Add the column names
 		$query .= ' ('.implode(', ', array_map(array($db, 'quote_identifier'), $this->_columns)).') ';

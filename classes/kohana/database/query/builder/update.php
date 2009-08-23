@@ -82,7 +82,7 @@ class Kohana_Database_Query_Builder_Update extends Database_Query_Builder_Where 
 	public function compile(Database $db)
 	{
 		// Start an update query
-		$query = 'UPDATE '.$db->quote_identifier($this->_table);
+		$query = 'UPDATE '.$db->quote_table($this->_table);
 
 		$update = array();
 		foreach ($this->_set as $set)

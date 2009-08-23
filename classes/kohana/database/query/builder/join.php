@@ -71,7 +71,7 @@ class Kohana_Database_Query_Builder_Join extends Database_Query_Builder {
 		}
 
 		// Quote the table name that is being joined
-		$sql .= ' '.$db->quote_identifier($this->_table).' ON ';
+		$sql .= ' '.$db->quote_table($this->_table).' ON ';
 
 		$conditions = array();
 		foreach ($this->_on as $condition)

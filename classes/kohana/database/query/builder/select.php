@@ -332,7 +332,7 @@ class Kohana_Database_Query_Builder_Select extends Database_Query_Builder_Where 
 		if ( ! empty($this->_from))
 		{
 			// Set tables to select from
-			$query .= ' FROM '.implode(', ', array_map($quote_ident, $this->_from));
+			$query .= ' FROM '.implode(', ', array_map(array($db, 'quote_table'), $this->_from));
 		}
 
 		if ( ! empty($this->_join))
