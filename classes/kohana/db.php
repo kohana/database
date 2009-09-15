@@ -2,7 +2,7 @@
 /**
  * Database object creation helper methods.
  *
- * @package    Kohana
+ * @package    Database
  * @author     Kohana Team
  * @copyright  (c) 2009 Kohana Team
  * @license    http://kohanaphp.com/license.html

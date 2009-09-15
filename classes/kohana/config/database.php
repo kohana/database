@@ -9,6 +9,7 @@
  *     config_value  text
  *     primary key   (group_name, config_key)
  *
+ * @package    Database
  * @package    Kohana
  * @author     Kohana Team
  * @copyright  (c) 2009 Kohana Team

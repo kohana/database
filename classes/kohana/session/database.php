@@ -2,7 +2,8 @@
 /**
  * Database-based session class.
  *
- * @package    Kohana
+ * @package    Session
+ * @package    Database
  * @author     Kohana Team
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    http://kohanaphp.com/license.html
