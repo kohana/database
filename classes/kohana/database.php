@@ -243,12 +243,20 @@ abstract class Kohana_Database {
 	 */
 	public function quote_table($table)
 	{
+		if (is_array($table))
+		{
+			// Separate the column and alias
+			list ($table, $alias) = $table;
+		}
+
+		$alias = isset($alias) ? ' '.$this->quote_identifier($alias) : '';
+
 		if (strpos($table, '.') === FALSE)
 		{
 			$table = $this->table_prefix().$table;
 		}
 
-		return $this->quote_identifier($table);
+		return $this->quote_identifier($table).$alias;
 	}
 
 	/**
