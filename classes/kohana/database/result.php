@@ -7,7 +7,7 @@
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    http://kohanaphp.com/license.html
  */
-abstract class Kohana_Database_Result implements Countable, Iterator, SeekableIterator, ArrayAccess {
+abstract class Kohana_Database_Result implements Countable, Iterator,SeekableIterator, ArrayAccess {
 
 	// Executed SQL for this result
 	protected $_query;
@@ -63,7 +63,7 @@ abstract class Kohana_Database_Result implements Countable, Iterator, SeekableIt
 		foreach ($this as $row)
 		{
 			if ($key !== NULL)
-			{		
+			{
 				if ($value !== NULL)
 				{
 					// $key => $value list
@@ -78,7 +78,7 @@ abstract class Kohana_Database_Result implements Countable, Iterator, SeekableIt
 				}
 				else
 				{
-					// $key => $row list 
+					// $key => $row list
 					if ($this->_as_object)
 					{
 						$results[$row->$key] = $row;
@@ -86,7 +86,7 @@ abstract class Kohana_Database_Result implements Countable, Iterator, SeekableIt
 					else
 					{
 						$results[$row[$key]] = $row;
-					}	
+					}
 				}
 			}
 			else
@@ -109,7 +109,7 @@ abstract class Kohana_Database_Result implements Countable, Iterator, SeekableIt
 	public function get($name, $default = NULL)
 	{
 		$row = $this->current();
-		
+
 		if ($this->_as_object AND isset($row->$name))
 		{
 			return $row->$name;
@@ -147,7 +147,7 @@ abstract class Kohana_Database_Result implements Countable, Iterator, SeekableIt
 
 		return FALSE;
 	}
-	
+
 	/**
 	 * ArrayAccess: offsetGet
 	 */
@@ -155,7 +155,7 @@ abstract class Kohana_Database_Result implements Countable, Iterator, SeekableIt
 	{
 		if ( ! $this->seek($offset))
 			return NULL;
-			
+
 		return $this->current();
 	}
 

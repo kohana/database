@@ -46,10 +46,10 @@ class Kohana_Database_MySQL_Result extends Database_Result {
 	{
 		if ($this->_current_row !== $this->_internal_row AND ! $this->seek($this->_current_row))
 			return FALSE;
-		
+
 		// Increment internal row for optimization assuming rows are fetched in order
 		$this->_internal_row++;
-		
+
 		if ($this->_as_object === TRUE)
 		{
 			// Return an stdClass
@@ -59,7 +59,7 @@ class Kohana_Database_MySQL_Result extends Database_Result {
 		{
 			// Return an object of given class name
 			return mysql_fetch_object($this->_result, $this->_as_object);
-		} 
+		}
 		else
 		{
 			// Return an array of the row
