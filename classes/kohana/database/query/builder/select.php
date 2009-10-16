@@ -325,12 +325,16 @@ class Kohana_Database_Query_Builder_Select extends Database_Query_Builder_Where 
 		}
 		else
 		{
+			$this->_select = array_unique($this->_select);
+
 			// Select all columns
 			$query .= implode(', ', array_map($quote_ident, $this->_select));
 		}
 
 		if ( ! empty($this->_from))
 		{
+			$this->_from = array_unique($this->_from);
+
 			// Set tables to select from
 			$query .= ' FROM '.implode(', ', array_map(array($db, 'quote_table'), $this->_from));
 		}
