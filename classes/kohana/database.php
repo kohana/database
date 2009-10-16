@@ -238,25 +238,28 @@ abstract class Kohana_Database {
 	/**
 	 * Quote a database table name and adds the table prefix if needed
 	 *
-	 * @param   mixed   table name
+	 * @param   mixed   table name or array(table, alias)
 	 * @return  string
 	 */
-	public function quote_table($table)
+	public function quote_table($value)
 	{
-		if (is_array($table))
+		// Assign the table by reference from the value
+		if (is_array($value))
 		{
-			// Separate the column and alias
-			list ($table, $alias) = $table;
+			$table =& $value[0];
+		}
+		else
+		{
+			$table =& $value;
 		}
 
-		$alias = isset($alias) ? ' '.$this->quote_identifier($alias) : '';
-
-		if (strpos($table, '.') === FALSE)
+		if (is_string($table) AND strpos($table, '.') === FALSE)
 		{
+			// Add the table prefix for tables
 			$table = $this->table_prefix().$table;
 		}
 
-		return $this->quote_identifier($table).$alias;
+		return $this->quote_identifier($value);
 	}
 
 	/**
