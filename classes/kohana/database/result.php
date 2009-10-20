@@ -55,9 +55,6 @@ abstract class Kohana_Database_Result implements Countable, Iterator,SeekableIte
 	 */
 	public function as_array($key = NULL, $value = NULL)
 	{
-		// Go back to beginning of result set
-		$this->rewind();
-
 		$results = array();
 
 		foreach ($this as $row)
@@ -110,18 +107,18 @@ abstract class Kohana_Database_Result implements Countable, Iterator,SeekableIte
 	{
 		$row = $this->current();
 
-		if ($this->_as_object AND isset($row->$name))
+		if ($this->_as_object)
 		{
-			return $row->$name;
-		}
-		elseif ( ! $this->_as_object AND isset($row[$name]))
-		{
-			return $row[$name];
+			if (isset($row->$name))
+				return $row->$name;
 		}
 		else
 		{
-			return $default;
+			if (isset($row[$name]))
+				return $row[$name];
 		}
+
+		return $default;
 	}
 
 	/**
@@ -137,15 +134,7 @@ abstract class Kohana_Database_Result implements Countable, Iterator,SeekableIte
 	 */
 	public function offsetExists($offset)
 	{
-		if ($this->_total_rows > 0)
-		{
-			$min = 0;
-			$max = $this->_total_rows - 1;
-
-			return ! ($offset < $min OR $offset > $max);
-		}
-
-		return FALSE;
+		return ($offset >= 0 AND $offset < $this->_total_rows);
 	}
 
 	/**
