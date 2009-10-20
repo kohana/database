@@ -178,55 +178,6 @@ class Kohana_Database_MySQL extends Database {
 		}
 	}
 
-	public function list_tables($like = NULL)
-	{
-		if (is_string($like))
-		{
-			// Search for table names
-			$result = $this->query(Database::SELECT, 'SHOW TABLES LIKE '.$this->quote($like), FALSE);
-		}
-		else
-		{
-			// Find all table names
-			$result = $this->query(Database::SELECT, 'SHOW TABLES', FALSE);
-		}
-
-		$tables = array();
-		foreach ($result as $row)
-		{
-			// Get the table name from the results
-			$tables[] = current($row);
-		}
-
-		return $tables;
-	}
-
-	public function list_columns($table, $like = NULL)
-	{
-		// Quote the table name
-		$table = $this->quote_table($table);
-
-		if (is_string($like))
-		{
-			// Search for column names
-			$result = $this->query(Database::SELECT, 'SHOW COLUMNS FROM '.$table.' LIKE '.$this->quote($like), FALSE);
-		}
-		else
-		{
-			// Find all column names
-			$result = $this->query(Database::SELECT, 'SHOW COLUMNS FROM '.$table, FALSE);
-		}
-
-		$columns = array();
-		foreach ($result as $row)
-		{
-			// Get the column name from the results
-			$columns[] = $row['Field'];
-		}
-
-		return $columns;
-	}
-
 	public function escape($value)
 	{
 		// Make sure the database is connected
