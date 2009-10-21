@@ -59,37 +59,27 @@ abstract class Kohana_Database_Result implements Countable, Iterator,SeekableIte
 
 		foreach ($this as $row)
 		{
-			if ($key !== NULL)
+			if ($key)
 			{
-				if ($value !== NULL)
-				{
-					// $key => $value list
-					if ($this->_as_object)
-					{
-						$results[$row->$key] = $row->$value;
-					}
-					else
-					{
-						$results[$row[$key]] = $row[$value];
-					}
-				}
-				else
-				{
-					// $key => $row list
-					if ($this->_as_object)
-					{
-						$results[$row->$key] = $row;
-					}
-					else
-					{
-						$results[$row[$key]] = $row;
-					}
-				}
+				$row_key = $this->_as_object ? $row->$key : $row[$key];
+			}
+
+			if ($value)
+			{
+				$row_value = $this->_as_object ? $row->$value : $row[$value];
 			}
 			else
 			{
-				// Add each row to the array
-				$results[] = $row;
+				$row_value = $row;
+			}
+
+			if ($row_key)
+			{
+				$results[$row_key] = $row_value;
+			}
+			else
+			{
+				$results[] = $row_value;
 			}
 		}
 
