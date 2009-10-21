@@ -73,7 +73,7 @@ abstract class Kohana_Database_Result implements Countable, Iterator,SeekableIte
 				$row_value = $row;
 			}
 
-			if ($row_key)
+			if (isset($row_key))
 			{
 				$results[$row_key] = $row_value;
 			}
