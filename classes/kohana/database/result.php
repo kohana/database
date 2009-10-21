@@ -49,26 +49,45 @@ abstract class Kohana_Database_Result implements Countable, Iterator,SeekableIte
 	/**
 	 * Return all of the rows in the result as an array.
 	 *
-	 * @param   string  column for an associative keys
-	 * @param   string  column for an associative values
+	 * @param   string  column for associative keys
+	 * @param   string  column for values
 	 * @return  array
 	 */
 	public function as_array($key = NULL, $value = NULL)
 	{
 		$results = array();
 
-		if ($key === NULL)
+		if ($key === NULL AND $value === NULL)
 		{
-			// Add each row to the array
+			// Indexed rows
 
 			foreach ($this as $row)
 			{
 				$results[] = $row;
 			}
 		}
+		elseif ($key === NULL)
+		{
+			// Indexed columns
+
+			if ($this->_as_object)
+			{
+				foreach ($this as $row)
+				{
+					$results[] = $row->$value;
+				}
+			}
+			else
+			{
+				foreach ($this as $row)
+				{
+					$results[] = $row[$value];
+				}
+			}
+		}
 		elseif ($value === NULL)
 		{
-			// $key => $row list
+			// Associative rows
 
 			if ($this->_as_object)
 			{
@@ -87,7 +106,7 @@ abstract class Kohana_Database_Result implements Countable, Iterator,SeekableIte
 		}
 		else
 		{
-			// $key => $value list
+			// Associative columns
 
 			if ($this->_as_object)
 			{
