@@ -216,11 +216,50 @@ class Kohana_Database_MySQL extends Database {
 			$result = $this->query(Database::SELECT, 'SHOW COLUMNS FROM '.$table, FALSE);
 		}
 
+		$count = 0;
 		$columns = array();
 		foreach ($result as $row)
 		{
-			// Get the column name from the results
-			$columns[] = $row['Field'];
+			list($type, $length) = $this->_parse_type($row['Type']);
+
+			$column = array();
+
+			$column['column_name'] = $row['Field'];
+			$column['column_default'] = $row['Default'];
+			$column['data_type'] = $type;
+			$column['is_nullable'] = $row['Null'];
+			$column['ordinal_position'] = ++$count;
+
+			switch ($column['data_type'])
+			{
+				case 'binary':
+				case 'char':
+				case 'varbinary':
+				case 'varchar':
+					$column['character_maximum_length'] = $length;
+				break;
+				case 'decimal':
+					list($column['numeric_precision'], $column['numeric_scale']) = explode(',', $length);
+				break;
+				case 'tinyblob':
+				case 'tinytext':
+					$column['character_maximum_length'] = 255;
+				break;
+				case 'blob':
+				case 'text':
+					$column['character_maximum_length'] = 65535;
+				break;
+				case 'mediumblob':
+				case 'mediumtext':
+					$column['character_maximum_length'] = 16777215;
+				break;
+				case 'longblob':
+				case 'longtext':
+					$column['character_maximum_length'] = 4294967295;
+				break;
+			}
+
+			$columns[] = $column;
 		}
 
 		return $columns;

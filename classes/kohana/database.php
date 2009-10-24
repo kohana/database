@@ -180,6 +180,28 @@ abstract class Kohana_Database {
 	abstract public function list_columns($table, $like = NULL);
 
 	/**
+	 * Extracts the text between parentheses, if any
+	 *
+	 * @return  array   list containing the type and length, if any
+	 */
+	protected function _parse_type($type)
+	{
+		if (($open = strpos($type, '(')) === FALSE)
+			return array($type, NULL);
+
+		// Closing parenthesis
+		$close = strpos($type, ')', $open);
+
+		// Length without parenthesis
+		$length = substr($type, $open + 1, $close - 1 - $open);
+
+		// Type without the length
+		$type = substr($type, 0, $open).substr($type, $close + 1);
+
+		return array($type, $length);
+	}
+
+	/**
 	 * Return the table prefix.
 	 *
 	 * @return  string
