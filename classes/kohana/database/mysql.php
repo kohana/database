@@ -259,7 +259,18 @@ class Kohana_Database_MySQL extends Database {
 		{
 			list($type, $length) = $this->_parse_type($row['Type']);
 
-			$column = array();
+			if (isset(Database_MySQL::$_types[$type]))
+			{
+				$column = Database_MySQL::$_types[$type];
+			}
+			elseif (isset(Database::$_types[$type]))
+			{
+				$column = Database::$_types[$type];
+			}
+			else
+			{
+				$column = array();
+			}
 
 			$column['column_name'] = $row['Field'];
 			$column['column_default'] = $row['Default'];
