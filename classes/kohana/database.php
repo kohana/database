@@ -85,17 +85,6 @@ abstract class Kohana_Database {
 		// Store the config locally
 		$this->_config = $config;
 
-		if (isset($config['connection']['dsn']) AND preg_match('/dbname=([^;\b]+)/', $config['connection']['dsn'], $matches))
-		{
-			// Grab database name from dsn if possible
-			$this->_database_name = $matches[1];
-		}
-		else
-		{
-			// Fallback to connection database name
-			$this->_database_name = $config['connection']['database'];
-		}
-
 		// Store the database instance
 		Database::$instances[$name] = $this;
 	}
@@ -176,45 +165,9 @@ abstract class Kohana_Database {
 	 * be used to search for specific tables.
 	 *
 	 * @param   string   table to search for
-	 * @param   bool     grab extended table information
 	 * @return  array
 	 */
-	public function list_tables($like = NULL, $details = FALSE)
-	{
-		$database = $this->_database_name;
-
-		if (is_string($like))
-		{
-			// Specific tables
-			$result = $this->query(Database::SELECT, 'SELECT * FROM INFORMATION_SCHEMA.Tables WHERE TABLE_SCHEMA = '.$this->quote($database).' AND TABLE_NAME LIKE '.$this->quote($like), FALSE);
-		}
-		else
-		{
-			// All tables
-			$result = $this->query(Database::SELECT, 'SELECT * FROM INFORMATION_SCHEMA.Tables WHERE TABLE_SCHEMA = '.$this->quote($database), FALSE);
-		}
-
-		$tables = array();
-
-		if ($details)
-		{
-			foreach ($result as $row)
-			{
-				// Grab table details as table => details
-				$tables[$row['TABLE_NAME']] = $row;
-			}
-		}
-		else
-		{
-			foreach ($result as $row)
-			{
-				// Grab table name
-				$tables[] = $row['TABLE_NAME'];
-			}
-		}
-
-		return $tables;
-	}
+	abstract public function list_tables($like = NULL);
 
 	/**
 	 * Lists all of the columns in a table. Optionally, a LIKE string can be
@@ -222,43 +175,9 @@ abstract class Kohana_Database {
 	 *
 	 * @param   string  table to get columns from
 	 * @param   string  column to search for
-	 * @param   bool    grab extended column information
 	 * @return  array
 	 */
-	public function list_columns($table, $like = NULL, $details = FALSE)
-	{
-		$database = $this->_database_name;
-
-		if (is_string($like))
-		{
-			$result = $this->query(Database::SELECT, 'SELECT * FROM INFORMATION_SCHEMA.Columns WHERE TABLE_SCHEMA = '.$this->quote($database).' AND TABLE_NAME = '.$this->quote($table).' AND COLUMN_NAME LIKE '.$this->quote($like), FALSE);
-		}
-		else
-		{
-			$result = $this->query(Database::SELECT, 'SELECT * FROM INFORMATION_SCHEMA.Columns WHERE TABLE_SCHEMA = '.$this->quote($database).' AND TABLE_NAME = '.$this->quote($table), FALSE);
-		}
-
-		$columns = array();
-
-		if ($details)
-		{
-			foreach ($result as $row)
-			{
-				// Grab all column details as column => details
-				$columns[$row['COLUMN_NAME']] = $row;
-			}
-		}
-		else
-		{
-			foreach ($result as $row)
-			{
-				// Grab column names
-				$columns[] = $row['COLUMN_NAME'];
-			}
-		}
-
-		return $columns;
-	}
+	abstract public function list_columns($table, $like = NULL);
 
 	/**
 	 * Return the table prefix.
