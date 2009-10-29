@@ -143,6 +143,22 @@ class Kohana_Database_Query_Builder_Select extends Database_Query_Builder_Where 
 	}
 
 	/**
+	 * Adds "USING ..." conditions for the last created JOIN statement.
+	 *
+	 * @param   string  column name
+	 * @param   ...
+	 * @return  $this
+	 */
+	public function using($columns)
+	{
+		$columns = func_get_args();
+
+		call_user_func_array(array($this->_last_join, 'using'), $columns);
+
+		return $this;
+	}
+
+	/**
 	 * Creates a "GROUP BY ..." filter.
 	 *
 	 * @param   mixed   column name or array($column, $alias) or object
