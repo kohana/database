@@ -49,37 +49,78 @@ abstract class Kohana_Database_Result implements Countable, Iterator,SeekableIte
 	/**
 	 * Return all of the rows in the result as an array.
 	 *
-	 * @param   string  column for an associative keys
-	 * @param   string  column for an associative values
+	 * @param   string  column for associative keys
+	 * @param   string  column for values
 	 * @return  array
 	 */
 	public function as_array($key = NULL, $value = NULL)
 	{
 		$results = array();
 
-		foreach ($this as $row)
+		if ($key === NULL AND $value === NULL)
 		{
-			if ($key)
-			{
-				$row_key = $this->_as_object ? $row->$key : $row[$key];
-			}
+			// Indexed rows
 
-			if ($value)
+			foreach ($this as $row)
 			{
-				$row_value = $this->_as_object ? $row->$value : $row[$value];
+				$results[] = $row;
+			}
+		}
+		elseif ($key === NULL)
+		{
+			// Indexed columns
+
+			if ($this->_as_object)
+			{
+				foreach ($this as $row)
+				{
+					$results[] = $row->$value;
+				}
 			}
 			else
 			{
-				$row_value = $row;
+				foreach ($this as $row)
+				{
+					$results[] = $row[$value];
+				}
 			}
+		}
+		elseif ($value === NULL)
+		{
+			// Associative rows
 
-			if (isset($row_key))
+			if ($this->_as_object)
 			{
-				$results[$row_key] = $row_value;
+				foreach ($this as $row)
+				{
+					$results[$row->$key] = $row;
+				}
 			}
 			else
 			{
-				$results[] = $row_value;
+				foreach ($this as $row)
+				{
+					$results[$row[$key]] = $row;
+				}
+			}
+		}
+		else
+		{
+			// Associative columns
+
+			if ($this->_as_object)
+			{
+				foreach ($this as $row)
+				{
+					$results[$row->$key] = $row->$value;
+				}
+			}
+			else
+			{
+				foreach ($this as $row)
+				{
+					$results[$row[$key]] = $row[$value];
+				}
 			}
 		}
 
