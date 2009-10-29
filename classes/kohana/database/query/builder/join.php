@@ -84,18 +84,7 @@ class Kohana_Database_Query_Builder_Join extends Database_Query_Builder {
 		}
 
 		// Concat the conditions "... AND ..."
-		$conditions = implode(' AND ', $conditions);
-
-		if (count($this->_on) > 1)
-		{
-			// Wrap the conditions in a group. Some databases (Postgre) will fail
-			// when singular conditions are grouped like this.
-			$sql .= '('.$conditions.')';
-		}
-		else
-		{
-			$sql .= $conditions;
-		}
+		$sql .= '('.implode(' AND ', $conditions).')';
 
 		return $sql;
 	}
