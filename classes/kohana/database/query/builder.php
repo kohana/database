@@ -97,13 +97,21 @@ abstract class Kohana_Database_Query_Builder extends Database_Query {
 		{
 			list ($column, $direction) = $group;
 
-			if ( ! empty($direction))
+			if ($direction)
 			{
 				// Make the direction uppercase
 				$direction = ' '.strtoupper($direction);
 			}
 
-			$sort[] = $db->quote_identifier($column).$direction;
+			if ($column)
+			{
+				$sort[] = $db->quote_identifier($column).$direction;
+			}
+			else
+			{
+				// RAND() support
+				$sort[] = $direction;
+			}
 		}
 
 		return 'ORDER BY '.implode(', ', $sort);
