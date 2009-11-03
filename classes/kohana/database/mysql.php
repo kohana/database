@@ -59,10 +59,7 @@ class Kohana_Database_MySQL extends Database {
 			// No connection exists
 			$this->_connection = NULL;
 
-			// Unable to connect to the database
-			throw new Database_Exception(':error',
-				array(':error' => mysql_error()),
-				mysql_errno());
+			throw $e;
 		}
 
 		if ( ! mysql_select_db($database, $this->_connection))
