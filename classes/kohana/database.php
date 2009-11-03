@@ -283,9 +283,13 @@ abstract class Kohana_Database {
 		{
 			return 'NULL';
 		}
-		elseif ($value === TRUE OR $value === FALSE)
+		elseif ($value === TRUE)
 		{
-			return $value ? 'TRUE' : 'FALSE';
+			return "'1'";
+		}
+		elseif ($value === FALSE)
+		{
+			return "'0'";
 		}
 		elseif (is_object($value))
 		{
