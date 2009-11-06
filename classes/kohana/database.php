@@ -231,11 +231,11 @@ abstract class Kohana_Database {
 
 		if (is_string($like))
 		{
-			$result = $this->query(Database::SELECT, 'SELECT * FROM INFORMATION_SCHEMA.Columns WHERE TABLE_SCHEMA = '.$this->quote($database).' AND TABLE_NAME = '.$this->quote($table).' AND COLUMN_NAME LIKE '.$this->quote($like), FALSE);
+			$result = $this->query(Database::SELECT, 'SELECT * FROM INFORMATION_SCHEMA.Columns WHERE TABLE_SCHEMA = '.$this->quote($database).' AND TABLE_NAME = '.$this->quote_table($table).' AND COLUMN_NAME LIKE '.$this->quote($like), FALSE);
 		}
 		else
 		{
-			$result = $this->query(Database::SELECT, 'SELECT * FROM INFORMATION_SCHEMA.Columns WHERE TABLE_SCHEMA = '.$this->quote($database).' AND TABLE_NAME = '.$this->quote($table), FALSE);
+			$result = $this->query(Database::SELECT, 'SELECT * FROM INFORMATION_SCHEMA.Columns WHERE TABLE_SCHEMA = '.$this->quote($database).' AND TABLE_NAME = '.$this->quote_table($table), FALSE);
 		}
 
 		$columns = array();
