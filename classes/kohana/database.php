@@ -290,7 +290,7 @@ abstract class Kohana_Database {
 	public function count_records($table)
 	{
 		// Quote the table name
-		$table = $this->quote_identifier($table);
+		$table = $this->quote_table($table);
 
 		return $this->query(Database::SELECT, 'SELECT COUNT(*) AS total_row_count FROM '.$table, FALSE)
 			->get('total_row_count');
@@ -575,26 +575,40 @@ abstract class Kohana_Database {
 	 */
 	public function quote_table($value)
 	{
-		// Assign the table by reference from the value
-		if (is_array($value))
-		{
-			$table =& $value[0];
+		$table = is_array($value) ? reset($value) : $value;
 
-			// Attach table prefix to alias
-			$value[1] = $this->table_prefix().$value[1];
+		if ( ! is_string($table))
+			return $this->quote_identifier($value);
+
+		if (strpos($table, '.') === FALSE)
+		{
+			// Add the table prefix
+			$table = $this->quote_identifier($this->table_prefix().$table);
 		}
 		else
 		{
-			$table =& $value;
+			$parts = explode('.', $table);
+
+			if ($prefix = $this->table_prefix())
+			{
+				// Get the offset of the table name, last part
+				$offset = count($parts) - 1;
+
+				// Add the table prefix to the table name
+				$parts[$offset] = $prefix.$parts[$offset];
+			}
+
+			// Quote each of the parts
+			$table = implode('.', array_map(array($this, 'quote_identifier'), $parts));
 		}
 
-		if (is_string($table) AND strpos($table, '.') === FALSE)
+		if (is_array($value))
 		{
-			// Add the table prefix for tables
-			$table = $this->table_prefix().$table;
+			// Attach table prefix to alias
+			$table .= ' AS '.$this->quote_identifier($this->table_prefix().next($value));
 		}
 
-		return $this->quote_identifier($value);
+		return $table;
 	}
 
 	/**
