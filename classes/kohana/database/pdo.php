@@ -17,7 +17,7 @@ class Kohana_Database_PDO extends Database {
 		if ($this->_connection)
 			return;
 
-		// Extract the connection parameters, adding required variables
+		// Extract the connection parameters, adding required variabels
 		extract($this->_config['connection'] + array(
 			'dsn'        => '',
 			'username'   => NULL,
@@ -114,7 +114,7 @@ class Kohana_Database_PDO extends Database {
 			{
 				$result->setFetchMode(PDO::FETCH_CLASS, 'stdClass');
 			}
-
+			
 			$result = $result->fetchAll();
 
 			// Return an iterator of results
@@ -133,6 +133,18 @@ class Kohana_Database_PDO extends Database {
 			// Return the number of rows affected
 			return $result->rowCount();
 		}
+	}
+
+	public function list_tables($like = NULL)
+	{
+		throw new Kohana_Exception('Database method :method is not supported by :class',
+			array(':method' => __FUNCTION__, ':class' => __CLASS__));
+	}
+
+	public function list_columns($table, $like = NULL)
+	{
+		throw new Kohana_Exception('Database method :method is not supported by :class',
+			array(':method' => __FUNCTION__, ':class' => __CLASS__));
 	}
 
 	public function escape($value)
