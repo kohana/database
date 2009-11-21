@@ -72,8 +72,25 @@ abstract class Kohana_Database_Query_Builder extends Database_Query {
 					// Split the condition
 					list($column, $op, $value) = $condition;
 
+					// Database operators are always uppercase
+					$op = strtoupper($op);
+
+					if ($op === 'BETWEEN' AND is_array($value))
+					{
+						// BETWEEN always has exactly two arguments
+						list($min, $max) = $value;
+
+						// Quote the min and max value
+						$value = $db->quote($min).' AND '.$db->quote($max);
+					}
+					else
+					{
+						// Quote the entire value normally
+						$value = $db->quote($value);
+					}
+
 					// Append the statement to the query
-					$sql .= $db->quote_identifier($column).' '.strtoupper($op).' '.$db->quote($value);
+					$sql .= $db->quote_identifier($column).' '.$op.' '.$value;
 				}
 
 				$last_condition = $condition;
