@@ -253,7 +253,7 @@ abstract class Kohana_Database {
 		$close = strpos($type, ')', $open);
 
 		// Length without parenthesis
-		$length = (int) substr($type, $open + 1, $close - 1 - $open);
+		$length = substr($type, $open + 1, $close - 1 - $open);
 
 		// Type without the length
 		$type = substr($type, 0, $open).substr($type, $close + 1);
