@@ -305,7 +305,7 @@ class Kohana_Database_MySQL extends Database {
 				break;
 			}
 
-			$columns[] = $column;
+			$columns[$row['Field']] = $column;
 		}
 
 		return $columns;
