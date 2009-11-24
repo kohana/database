@@ -96,14 +96,14 @@ class Kohana_Database_Query_Builder_Insert extends Database_Query_Builder {
 	 */
 	public function select(Database_Query $query)
 	{
-		if ($select->type() !== Database::SELECT)
+		if ($query->type() !== Database::SELECT)
 		{
 			throw new Kohana_Exception('Only SELECT queries can be combined with INSERT queries');
 		}
 
-		$this->_values = $select;
+		$this->_values = $query;
 
-		return $select;
+		return $this;
 	}
 
 	/**
