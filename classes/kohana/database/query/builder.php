@@ -125,7 +125,7 @@ abstract class Kohana_Database_Query_Builder extends Database_Query {
 					if ($column)
 					{
 						// Apply proper quoting to the column
-						$column = $db->quote_identifier($column);
+						$column = $db->quote_column($column);
 					}
 
 					// Append the statement to the query
@@ -155,7 +155,7 @@ abstract class Kohana_Database_Query_Builder extends Database_Query {
 			list ($column, $value) = $group;
 
 			// Quote the column name
-			$column = $db->quote_identifier($column);
+			$column = $db->quote_column($column);
 
 			if (is_string($value) AND array_key_exists($value, $this->_parameters))
 			{
@@ -189,7 +189,7 @@ abstract class Kohana_Database_Query_Builder extends Database_Query {
 				$direction = ' '.strtoupper($direction);
 			}
 
-			$sort[] = $db->quote_identifier($column).$direction;
+			$sort[] = $db->quote_column($column).$direction;
 		}
 
 		return 'ORDER BY '.implode(', ', $sort);

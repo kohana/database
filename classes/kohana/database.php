@@ -508,6 +508,62 @@ abstract class Kohana_Database {
 	}
 
 	/**
+	 * Quote a database column name and add the table prefix if needed.
+	 *
+	 *     $column = $db->quote_column($column);
+	 *
+	 * You can also use SQL methods within identifiers.
+	 *
+	 *     // The value of "column" will be quoted
+	 *     $column = $db->quote_column('COUNT("column")');
+	 *
+	 * @param   mixed   column name or array(column, alias)
+	 * @return  string
+	 * @uses    Database::quote_identifier
+	 * @uses    Database::table_prefix
+	 */
+	public function quote_column($value)
+	{
+		$column = is_array($value) ? reset($value) : $value;
+
+		if ( ! is_string($column))
+			return $this->quote_identifier($value);
+
+		if (strpos($column, '"') !== FALSE)
+		{
+			// Quote the column in FUNC("column") identifiers
+			$column = preg_replace('/"(.+?)"/e', '$this->quote_column("$1")', $column);
+		}
+		elseif (strpos($column, '.') !== FALSE)
+		{
+			$parts = explode('.', $column);
+
+			if ($prefix = $this->table_prefix())
+			{
+				// Get the offset of the table name, 2nd-to-last part
+				$offset = count($parts) - 2;
+
+				// Add the table prefix to the table name
+				$parts[$offset] = $prefix.$parts[$offset];
+			}
+
+			// Quote each of the parts
+			$column = implode('.', array_map(array($this, 'quote_identifier'), $parts));
+		}
+		else
+		{
+			$column = $this->quote_identifier($column);
+		}
+
+		if (is_array($value))
+		{
+			$column .= ' AS '.$this->quote_identifier(next($value));
+		}
+
+		return $column;
+	}
+
+	/**
 	 * Quote a database table name and adds the table prefix if needed.
 	 *
 	 *     $table = $db->quote_table($table);
@@ -542,15 +598,7 @@ abstract class Kohana_Database {
 	}
 
 	/**
-	 * Quote a database identifier, such as a column name. Adds the
-	 * table prefix to the identifier if a table name is present.
-	 *
-	 *     $column = $db->quote_identifier($column);
-	 *
-	 * You can also use SQL methods within identifiers.
-	 *
-	 *     // The value of "column" will be quoted
-	 *     $column = $db->quote_identifier('COUNT("column")');
+	 * Quote a database identifier
 	 *
 	 * Objects passed to this function will be converted to strings.
 	 * [Database_Expression] objects will use the value of the expression.
@@ -559,7 +607,6 @@ abstract class Kohana_Database {
 	 *
 	 * @param   mixed   any identifier
 	 * @return  string
-	 * @uses    Database::table_prefix
 	 */
 	public function quote_identifier($value)
 	{
@@ -593,28 +640,10 @@ abstract class Kohana_Database {
 			return $this->quote_identifier($value).' AS '.$this->quote_identifier($alias);
 		}
 
-		if (strpos($value, '"') !== FALSE)
+		if (strpos($value, '.') !== FALSE)
 		{
-			// Quote the column in FUNC("ident") identifiers
-			return preg_replace('/"(.+?)"/e', '$this->quote_identifier("$1")', $value);
-		}
-		elseif (strpos($value, '.') !== FALSE)
-		{
-			// Split the identifier into the individual parts
-			$parts = explode('.', $value);
-
-			if ($prefix = $this->table_prefix())
-			{
-				// Get the offset of the table name, 2nd-to-last part
-				// This works for databases that can have 3 identifiers (Postgre)
-				$offset = count($parts) - 2;
-
-				// Add the table prefix to the table name
-				$parts[$offset] = $prefix.$parts[$offset];
-			}
-
 			// Quote each of the parts
-			return implode('.', array_map(array($this, __FUNCTION__), $parts));
+			return implode('.', array_map(array($this, 'quote_identifier'), explode('.', $value)));
 		}
 		else
 		{

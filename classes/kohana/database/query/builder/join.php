@@ -106,7 +106,7 @@ class Kohana_Database_Query_Builder_Join extends Database_Query_Builder {
 		if ( ! empty($this->_using))
 		{
 			// Quote and concat the columns
-			$sql .= ' USING ('.implode(', ', array_map(array($db, 'quote_identifier'), $this->_using)).')';
+			$sql .= ' USING ('.implode(', ', array_map(array($db, 'quote_column'), $this->_using)).')';
 		}
 		else
 		{
@@ -122,8 +122,8 @@ class Kohana_Database_Query_Builder_Join extends Database_Query_Builder {
 					$op = ' '.strtoupper($op);
 				}
 
-				// Quote each of the identifiers used for the condition
-				$conditions[] = $db->quote_identifier($c1).$op.' '.$db->quote_identifier($c2);
+				// Quote each of the columns used for the condition
+				$conditions[] = $db->quote_column($c1).$op.' '.$db->quote_column($c2);
 			}
 
 			// Concat the conditions "... AND ..."
