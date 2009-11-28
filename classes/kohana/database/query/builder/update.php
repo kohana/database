@@ -93,6 +93,12 @@ class Kohana_Database_Query_Builder_Update extends Database_Query_Builder_Where 
 			// Quote the column name
 			$column = $db->quote_identifier($column);
 
+			if (array_key_exists($value, $this->_parameters))
+			{
+				// Use the bound parameter as the value
+				$value = $this->_parameters[$value];
+			}
+
 			$update[$column] = $column.' = '.$db->quote($value);
 		}
 
@@ -102,13 +108,7 @@ class Kohana_Database_Query_Builder_Update extends Database_Query_Builder_Where 
 		if ( ! empty($this->_where))
 		{
 			// Add selection conditions
-			$query .= ' WHERE '.Database_Query_Builder::compile_conditions($db, $this->_where);
-		}
-
-		if ($this->_parameters)
-		{
-			// Replace the bound parameters
-			$query = strtr($query, $this->_parameters);
+			$query .= ' WHERE '.$this->_compile_conditions($db, $this->_where);
 		}
 
 		return $query;
