@@ -125,17 +125,9 @@ class Kohana_Database_Query_Builder_Insert extends Database_Query_Builder {
 			// Callback for quoting values
 			$quote = array($db, 'quote');
 
+			$groups = array();
 			foreach ($this->_values as $group)
 			{
-				foreach ($group as $i => $value)
-				{
-					if (array_key_exists($value, $this->_parameters))
-					{
-						// Use the bound parameter as the value
-						$group[$i] = $this->_parameters[$value];
-					}
-				}
-
 				$groups[] = '('.implode(', ', array_map($quote, $group)).')';
 			}
 
@@ -146,6 +138,12 @@ class Kohana_Database_Query_Builder_Insert extends Database_Query_Builder {
 		{
 			// Add the sub-query
 			$query .= (string) $this->_values;
+		}
+
+		if ($this->_parameters)
+		{
+			// Replace the bound parameters
+			$query = strtr($query, $this->_parameters);
 		}
 
 		return $query;

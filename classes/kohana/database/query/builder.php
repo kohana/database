@@ -16,7 +16,7 @@ abstract class Kohana_Database_Query_Builder extends Database_Query {
 	 * @param   array   join statements
 	 * @return  string
 	 */
-	public function _compile_join(Database $db, array $joins)
+	public static function compile_join(Database $db, array $joins)
 	{
 		$statements = array();
 
@@ -37,7 +37,7 @@ abstract class Kohana_Database_Query_Builder extends Database_Query {
 	 * @param   array   condition statements
 	 * @return  string
 	 */
-	public function _compile_conditions(Database $db, array $conditions)
+	public static function compile_conditions(Database $db, array $conditions)
 	{
 		$last_condition = NULL;
 
@@ -71,12 +71,6 @@ abstract class Kohana_Database_Query_Builder extends Database_Query {
 
 					// Split the condition
 					list($column, $op, $value) = $condition;
-
-					if (array_key_exists($value, $this->_parameters))
-					{
-						// Use the bound parameter as the value
-						$value = $this->_parameters[$value];
-					}
 
 					// Database operators are always uppercase
 					$op = strtoupper($op);
@@ -113,7 +107,7 @@ abstract class Kohana_Database_Query_Builder extends Database_Query {
 	 * @param   array   sorting columns
 	 * @return  string
 	 */
-	public function _compile_order_by(Database $db, array $columns)
+	public static function compile_order_by(Database $db, array $columns)
 	{
 		$sort = array();
 		foreach ($columns as $group)

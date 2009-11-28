@@ -341,13 +341,13 @@ class Kohana_Database_Query_Builder_Select extends Database_Query_Builder_Where 
 		if ( ! empty($this->_join))
 		{
 			// Add tables to join
-			$query .= ' '.$this->_compile_join($db, $this->_join);
+			$query .= ' '.Database_Query_Builder::compile_join($db, $this->_join);
 		}
 
 		if ( ! empty($this->_where))
 		{
 			// Add selection conditions
-			$query .= ' WHERE '.$this->_compile_conditions($db, $this->_where);
+			$query .= ' WHERE '.Database_Query_Builder::compile_conditions($db, $this->_where);
 		}
 
 		if ( ! empty($this->_group_by))
@@ -359,13 +359,13 @@ class Kohana_Database_Query_Builder_Select extends Database_Query_Builder_Where 
 		if ( ! empty($this->_having))
 		{
 			// Add filtering conditions
-			$query .= ' HAVING '.$this->_compile_conditions($db, $this->_having);
+			$query .= ' HAVING '.Database_Query_Builder::compile_conditions($db, $this->_having);
 		}
 
 		if ( ! empty($this->_order_by))
 		{
 			// Add sorting
-			$query .= ' '.$this->_compile_order_by($db, $this->_order_by);
+			$query .= ' '.Database_Query_Builder::compile_order_by($db, $this->_order_by);
 		}
 
 		if ($this->_limit !== NULL)
@@ -378,6 +378,12 @@ class Kohana_Database_Query_Builder_Select extends Database_Query_Builder_Where 
 		{
 			// Add offsets
 			$query .= ' OFFSET '.$this->_offset;
+		}
+
+		if ($this->_parameters)
+		{
+			// Replace the bound parameters
+			$query = strtr($query, $this->_parameters);
 		}
 
 		return $query;
