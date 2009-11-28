@@ -140,12 +140,6 @@ class Kohana_Database_Query_Builder_Insert extends Database_Query_Builder {
 			$query .= (string) $this->_values;
 		}
 
-		if ($this->_parameters)
-		{
-			// Replace the bound parameters
-			$query = strtr($query, $this->_parameters);
-		}
-
 		return $query;
 	}
 

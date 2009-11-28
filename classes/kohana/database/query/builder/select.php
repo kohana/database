@@ -380,12 +380,6 @@ class Kohana_Database_Query_Builder_Select extends Database_Query_Builder_Where 
 			$query .= ' OFFSET '.$this->_offset;
 		}
 
-		if ($this->_parameters)
-		{
-			// Replace the bound parameters
-			$query = strtr($query, $this->_parameters);
-		}
-
 		return $query;
 	}
 
