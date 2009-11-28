@@ -105,6 +105,12 @@ class Kohana_Database_Query_Builder_Update extends Database_Query_Builder_Where 
 			$query .= ' WHERE '.Database_Query_Builder::compile_conditions($db, $this->_where);
 		}
 
+		if ($this->_parameters)
+		{
+			// Replace the bound parameters
+			$query = strtr($query, $this->_parameters);
+		}
+
 		return $query;
 	}
 
