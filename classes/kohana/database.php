@@ -203,6 +203,27 @@ abstract class Kohana_Database {
 	abstract public function query($type, $sql, $as_object);
 
 	/**
+	 * Start a SQL transaction
+	 *
+	 * @return  boolean
+	 */
+	abstract public function begin();
+
+	/**
+	 * Commit the current transaction
+	 *
+	 * @return  boolean
+	 */
+	abstract public function commit();
+
+	/**
+	 * Abort the current transaction
+	 *
+	 * @return  boolean
+	 */
+	abstract public function rollback();
+
+	/**
 	 * Count the number of records in a table.
 	 *
 	 * @param   mixed    table name string or array(query, alias)

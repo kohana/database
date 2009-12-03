@@ -213,6 +213,30 @@ class Kohana_Database_MySQL extends Database {
 		}
 	}
 
+	public function begin()
+	{
+		// Make sure the database is connected
+		$this->_connection or $this->connect();
+
+		return (bool) mysql_query('START TRANSACTION', $this->_connection);
+	}
+
+	public function commit()
+	{
+		// Make sure the database is connected
+		$this->_connection or $this->connect();
+
+		return (bool) mysql_query('COMMIT', $this->_connection);
+	}
+
+	public function rollback()
+	{
+		// Make sure the database is connected
+		$this->_connection or $this->connect();
+
+		return (bool) mysql_query('ROLLBACK', $this->_connection);
+	}
+
 	public function list_tables($like = NULL)
 	{
 		if (is_string($like))
