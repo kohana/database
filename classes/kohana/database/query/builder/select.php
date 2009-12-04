@@ -87,6 +87,19 @@ class Kohana_Database_Query_Builder_Select extends Database_Query_Builder_Where 
 	}
 
 	/**
+	 * Choose the columns to select from, using an array.
+	 *
+	 * @param   array  list of column names or aliases
+	 * @return  $this
+	 */
+	public function select_array(array $columns)
+	{
+		$this->_select = array_merge($this->_select, $columns);
+
+		return $this;
+	}
+
+	/**
 	 * Choose the tables to select "FROM ..."
 	 *
 	 * @param   mixed  table name or array($table, $alias) or object

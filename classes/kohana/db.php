@@ -34,6 +34,17 @@ class Kohana_DB {
 	}
 
 	/**
+	 * Create a new SELECT builder from an array of columns
+	 *
+	 * @param   array   columns to select
+	 * @return  Database_Query_Builder_Select
+	 */
+	public static function select_array(array $columns = NULL)
+	{
+		return new Database_Query_Builder_Select($columns);
+	}
+
+	/**
 	 * Create a new INSERT builder.
 	 *
 	 * @param   string  table to insert into
