@@ -271,16 +271,24 @@ class Kohana_Database_MySQL extends Database {
 			$column['is_nullable']      = ($row['Null'] == 'YES');
 			$column['ordinal_position'] = ++$count;
 
-			switch ($column['data_type'])
+			switch ($column['type'])
 			{
-				case 'binary':
-				case 'char':
-				case 'varbinary':
-				case 'varchar':
-					$column['character_maximum_length'] = $length;
+				case 'float':
+					if (isset($length))
+					{
+						list($column['numeric_precision'], $column['numeric_scale']) = explode(',', $length);
+					}
 				break;
-				case 'decimal':
-					list($column['numeric_precision'], $column['numeric_scale']) = explode(',', $length);
+				case 'string':
+					switch ($column['data_type'])
+					{
+						case 'binary':
+						case 'char':
+						case 'varbinary':
+						case 'varchar':
+							$column['character_maximum_length'] = $length;
+						break;
+					}
 				break;
 			}
 
