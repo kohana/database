@@ -9,44 +9,6 @@
  */
 class Kohana_Database_MySQL extends Database {
 
-	/**
-	 * @var array   MySQL types
-	 */
-	protected static $_types = array
-	(
-		'bool'                      => array('type' => 'bool'),
-		'bigint unsigned'           => array('type' => 'int', 'min' => '0', 'max' => '18446744073709551615'),
-		'datetime'                  => array('type' => 'string'),
-		'decimal unsigned'          => array('type' => 'float', 'exact' => TRUE, 'min' => '0'),
-		'double'                    => array('type' => 'float'),
-		'double precision unsigned' => array('type' => 'float', 'min' => '0'),
-		'double unsigned'           => array('type' => 'float', 'min' => '0'),
-		'enum'                      => array('type' => 'string'),
-		'fixed'                     => array('type' => 'float', 'exact' => TRUE),
-		'fixed unsigned'            => array('type' => 'float', 'exact' => TRUE, 'min' => '0'),
-		'float unsigned'            => array('type' => 'float', 'min' => '0'),
-		'int unsigned'              => array('type' => 'int', 'min' => '0', 'max' => '4294967295'),
-		'integer unsigned'          => array('type' => 'int', 'min' => '0', 'max' => '4294967295'),
-		'longblob'                  => array('type' => 'string', 'binary' => TRUE),
-		'longtext'                  => array('type' => 'string'),
-		'mediumblob'                => array('type' => 'string', 'binary' => TRUE),
-		'mediumint'                 => array('type' => 'int', 'min' => '-8388608', 'max' => '8388607'),
-		'mediumint unsigned'        => array('type' => 'int', 'min' => '0', 'max' => '16777215'),
-		'mediumtext'                => array('type' => 'string'),
-		'national varchar'          => array('type' => 'string'),
-		'numeric unsigned'          => array('type' => 'float', 'exact' => TRUE, 'min' => '0'),
-		'nvarchar'                  => array('type' => 'string'),
-		'real unsigned'             => array('type' => 'float', 'min' => '0'),
-		'set'                       => array('type' => 'string'),
-		'smallint unsigned'         => array('type' => 'int', 'min' => '0', 'max' => '65535'),
-		'text'                      => array('type' => 'string'),
-		'tinyblob'                  => array('type' => 'string', 'binary' => TRUE),
-		'tinyint'                   => array('type' => 'int', 'min' => '-128', 'max' => '127'),
-		'tinyint unsigned'          => array('type' => 'int', 'min' => '0', 'max' => '255'),
-		'tinytext'                  => array('type' => 'string'),
-		'year'                      => array('type' => 'string'),
-	);
-
 	// Use SET NAMES to set the character set
 	protected static $_set_names;
 
@@ -213,6 +175,49 @@ class Kohana_Database_MySQL extends Database {
 		}
 	}
 
+	public function datatype($type)
+	{
+		static $types = array
+		(
+			'bool'                      => array('type' => 'bool'),
+			'bigint unsigned'           => array('type' => 'int', 'min' => '0', 'max' => '18446744073709551615'),
+			'datetime'                  => array('type' => 'string'),
+			'decimal unsigned'          => array('type' => 'float', 'exact' => TRUE, 'min' => '0'),
+			'double'                    => array('type' => 'float'),
+			'double precision unsigned' => array('type' => 'float', 'min' => '0'),
+			'double unsigned'           => array('type' => 'float', 'min' => '0'),
+			'enum'                      => array('type' => 'string'),
+			'fixed'                     => array('type' => 'float', 'exact' => TRUE),
+			'fixed unsigned'            => array('type' => 'float', 'exact' => TRUE, 'min' => '0'),
+			'float unsigned'            => array('type' => 'float', 'min' => '0'),
+			'int unsigned'              => array('type' => 'int', 'min' => '0', 'max' => '4294967295'),
+			'integer unsigned'          => array('type' => 'int', 'min' => '0', 'max' => '4294967295'),
+			'longblob'                  => array('type' => 'string', 'binary' => TRUE),
+			'longtext'                  => array('type' => 'string'),
+			'mediumblob'                => array('type' => 'string', 'binary' => TRUE),
+			'mediumint'                 => array('type' => 'int', 'min' => '-8388608', 'max' => '8388607'),
+			'mediumint unsigned'        => array('type' => 'int', 'min' => '0', 'max' => '16777215'),
+			'mediumtext'                => array('type' => 'string'),
+			'national varchar'          => array('type' => 'string'),
+			'numeric unsigned'          => array('type' => 'float', 'exact' => TRUE, 'min' => '0'),
+			'nvarchar'                  => array('type' => 'string'),
+			'real unsigned'             => array('type' => 'float', 'min' => '0'),
+			'set'                       => array('type' => 'string'),
+			'smallint unsigned'         => array('type' => 'int', 'min' => '0', 'max' => '65535'),
+			'text'                      => array('type' => 'string'),
+			'tinyblob'                  => array('type' => 'string', 'binary' => TRUE),
+			'tinyint'                   => array('type' => 'int', 'min' => '-128', 'max' => '127'),
+			'tinyint unsigned'          => array('type' => 'int', 'min' => '0', 'max' => '255'),
+			'tinytext'                  => array('type' => 'string'),
+			'year'                      => array('type' => 'string'),
+		);
+
+		if (isset($types[$type]))
+			return $types[$type];
+
+		return parent::datatype($type);
+	}
+
 	public function list_tables($like = NULL)
 	{
 		if (is_string($like))
@@ -257,18 +262,7 @@ class Kohana_Database_MySQL extends Database {
 		{
 			list($type, $length) = $this->_parse_type($row['Type']);
 
-			if (isset(Database_MySQL::$_types[$type]))
-			{
-				$column = Database_MySQL::$_types[$type];
-			}
-			elseif (isset(Database::$_types[$type]))
-			{
-				$column = Database::$_types[$type];
-			}
-			else
-			{
-				$column = array();
-			}
+			$column = $this->datatype($type);
 
 			$column['column_name']      = $row['Field'];
 			$column['column_default']   = $row['Default'];
