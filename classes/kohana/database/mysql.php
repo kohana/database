@@ -179,6 +179,7 @@ class Kohana_Database_MySQL extends Database {
 	{
 		static $types = array
 		(
+			'blob'                      => array('type' => 'string', 'binary' => TRUE, 'character_maximum_length' => '65535'),
 			'bool'                      => array('type' => 'bool'),
 			'bigint unsigned'           => array('type' => 'int', 'min' => '0', 'max' => '18446744073709551615'),
 			'datetime'                  => array('type' => 'string'),
@@ -192,23 +193,23 @@ class Kohana_Database_MySQL extends Database {
 			'float unsigned'            => array('type' => 'float', 'min' => '0'),
 			'int unsigned'              => array('type' => 'int', 'min' => '0', 'max' => '4294967295'),
 			'integer unsigned'          => array('type' => 'int', 'min' => '0', 'max' => '4294967295'),
-			'longblob'                  => array('type' => 'string', 'binary' => TRUE),
-			'longtext'                  => array('type' => 'string'),
-			'mediumblob'                => array('type' => 'string', 'binary' => TRUE),
+			'longblob'                  => array('type' => 'string', 'binary' => TRUE, 'character_maximum_length' => '4294967295'),
+			'longtext'                  => array('type' => 'string', 'character_maximum_length' => '4294967295'),
+			'mediumblob'                => array('type' => 'string', 'binary' => TRUE, 'character_maximum_length' => '16777215'),
 			'mediumint'                 => array('type' => 'int', 'min' => '-8388608', 'max' => '8388607'),
 			'mediumint unsigned'        => array('type' => 'int', 'min' => '0', 'max' => '16777215'),
-			'mediumtext'                => array('type' => 'string'),
+			'mediumtext'                => array('type' => 'string', 'character_maximum_length' => '16777215'),
 			'national varchar'          => array('type' => 'string'),
 			'numeric unsigned'          => array('type' => 'float', 'exact' => TRUE, 'min' => '0'),
 			'nvarchar'                  => array('type' => 'string'),
 			'real unsigned'             => array('type' => 'float', 'min' => '0'),
 			'set'                       => array('type' => 'string'),
 			'smallint unsigned'         => array('type' => 'int', 'min' => '0', 'max' => '65535'),
-			'text'                      => array('type' => 'string'),
-			'tinyblob'                  => array('type' => 'string', 'binary' => TRUE),
+			'text'                      => array('type' => 'string', 'character_maximum_length' => '65535'),
+			'tinyblob'                  => array('type' => 'string', 'binary' => TRUE, 'character_maximum_length' => '255'),
 			'tinyint'                   => array('type' => 'int', 'min' => '-128', 'max' => '127'),
 			'tinyint unsigned'          => array('type' => 'int', 'min' => '0', 'max' => '255'),
-			'tinytext'                  => array('type' => 'string'),
+			'tinytext'                  => array('type' => 'string', 'character_maximum_length' => '255'),
 			'year'                      => array('type' => 'string'),
 		);
 
@@ -280,22 +281,6 @@ class Kohana_Database_MySQL extends Database {
 				break;
 				case 'decimal':
 					list($column['numeric_precision'], $column['numeric_scale']) = explode(',', $length);
-				break;
-				case 'tinyblob':
-				case 'tinytext':
-					$column['character_maximum_length'] = 255;
-				break;
-				case 'blob':
-				case 'text':
-					$column['character_maximum_length'] = 65535;
-				break;
-				case 'mediumblob':
-				case 'mediumtext':
-					$column['character_maximum_length'] = 16777215;
-				break;
-				case 'longblob':
-				case 'longtext':
-					$column['character_maximum_length'] = 4294967295;
 				break;
 			}
 
