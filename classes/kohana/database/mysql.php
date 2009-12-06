@@ -249,12 +249,12 @@ class Kohana_Database_MySQL extends Database {
 		if (is_string($like))
 		{
 			// Search for column names
-			$result = $this->query(Database::SELECT, 'SHOW COLUMNS FROM '.$table.' LIKE '.$this->quote($like), FALSE);
+			$result = $this->query(Database::SELECT, 'SHOW FULL COLUMNS FROM '.$table.' LIKE '.$this->quote($like), FALSE);
 		}
 		else
 		{
 			// Find all column names
-			$result = $this->query(Database::SELECT, 'SHOW COLUMNS FROM '.$table, FALSE);
+			$result = $this->query(Database::SELECT, 'SHOW FULL COLUMNS FROM '.$table, FALSE);
 		}
 
 		$count = 0;
@@ -283,14 +283,29 @@ class Kohana_Database_MySQL extends Database {
 					switch ($column['data_type'])
 					{
 						case 'binary':
-						case 'char':
 						case 'varbinary':
+							$column['character_maximum_length'] = $length;
+						break;
+						case 'char':
 						case 'varchar':
 							$column['character_maximum_length'] = $length;
+						case 'enum':
+						case 'set':
+						case 'text':
+						case 'tinytext':
+						case 'mediumtext':
+						case 'longtext':
+							$column['collation_name'] = $row['Collation'];
 						break;
 					}
 				break;
 			}
+
+			// MySQL attributes
+			$column['comment']      = $row['Comment'];
+			$column['extra']        = $row['Extra'];
+			$column['key']          = $row['Key'];
+			$column['privileges']   = $row['Privileges'];
 
 			$columns[$row['Field']] = $column;
 		}
