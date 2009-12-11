@@ -229,7 +229,7 @@ class Kohana_Database_MySQL extends Database {
 		$tables = array();
 		foreach ($result as $row)
 		{
-			$tables[] = $row[0];
+			$tables[] = reset($row);
 		}
 
 		return $tables;
