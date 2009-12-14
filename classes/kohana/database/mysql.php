@@ -9,8 +9,14 @@
  */
 class Kohana_Database_MySQL extends Database {
 
+	// Database in use by each connection
+	protected static $_current_databases = array();
+
 	// Use SET NAMES to set the character set
 	protected static $_set_names;
+
+	// Identifier for this connection within the PHP driver
+	protected $_connection_id;
 
 	// MySQL uses a backtick for identifiers
 	protected $_identifier = '`';
@@ -38,9 +44,6 @@ class Kohana_Database_MySQL extends Database {
 			'persistent' => FALSE,
 		));
 
-		// Clear the connection parameters for security
-		unset($this->_config['connection']);
-
 		try
 		{
 			if (empty($persistent))
@@ -62,6 +65,26 @@ class Kohana_Database_MySQL extends Database {
 			throw $e;
 		}
 
+		// \xFF is a better delimiter, but the PHP driver uses underscore
+		$this->_connection_id = sprintf("%s_%s_%s", $hostname, $username, $password);
+
+		$this->_select_db($database);
+
+		if ( ! empty($this->_config['charset']))
+		{
+			// Set the character set
+			$this->set_charset($this->_config['charset']);
+		}
+	}
+
+	/**
+	 * Select the database
+	 *
+	 * @param   string  Database
+	 * @return  void
+	 */
+	protected function _select_db($database)
+	{
 		if ( ! mysql_select_db($database, $this->_connection))
 		{
 			// Unable to select database
@@ -70,11 +93,7 @@ class Kohana_Database_MySQL extends Database {
 				mysql_errno($this->_connection));
 		}
 
-		if ( ! empty($this->_config['charset']))
-		{
-			// Set the character set
-			$this->set_charset($this->_config['charset']);
-		}
+		Database_MySQL::$_current_databases[$this->_connection_id] = $database;
 	}
 
 	public function disconnect()
@@ -131,6 +150,13 @@ class Kohana_Database_MySQL extends Database {
 		{
 			// Benchmark this query for the current instance
 			$benchmark = Profiler::start("Database ({$this->_instance})", $sql);
+		}
+
+		if ( ! empty($this->_config['connection']['persistent'])
+			AND $this->_config['connection']['database'] !== Database_MySQL::$_current_databases[$this->_connection_id])
+		{
+			// Select database on persistent connections
+			$this->_select_db($this->_config['connection']['database']);
 		}
 
 		// Execute the query
