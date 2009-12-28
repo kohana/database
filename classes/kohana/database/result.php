@@ -130,6 +130,8 @@ abstract class Kohana_Database_Result implements Countable, Iterator,SeekableIte
 			}
 		}
 
+		$this->rewind();
+
 		return $results;
 	}
 
