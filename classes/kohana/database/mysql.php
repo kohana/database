@@ -44,6 +44,9 @@ class Kohana_Database_MySQL extends Database {
 			'persistent' => FALSE,
 		));
 
+		// Prevent this information from showing up in traces
+		unset($this->_config['connection']['username'], $this->_config['connection']['password']);
+
 		try
 		{
 			if (empty($persistent))
@@ -66,7 +69,7 @@ class Kohana_Database_MySQL extends Database {
 		}
 
 		// \xFF is a better delimiter, but the PHP driver uses underscore
-		$this->_connection_id = sprintf("%s_%s_%s", $hostname, $username, $password);
+		$this->_connection_id = sha1($hostname.'_'.$username.'_'.$password);
 
 		$this->_select_db($database);
 
@@ -152,8 +155,7 @@ class Kohana_Database_MySQL extends Database {
 			$benchmark = Profiler::start("Database ({$this->_instance})", $sql);
 		}
 
-		if ( ! empty($this->_config['connection']['persistent'])
-			AND $this->_config['connection']['database'] !== Database_MySQL::$_current_databases[$this->_connection_id])
+		if ( ! empty($this->_config['connection']['persistent']) AND $this->_config['connection']['database'] !== Database_MySQL::$_current_databases[$this->_connection_id])
 		{
 			// Select database on persistent connections
 			$this->_select_db($this->_config['connection']['database']);
