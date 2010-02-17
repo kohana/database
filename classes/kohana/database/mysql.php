@@ -316,16 +316,21 @@ class Kohana_Database_MySQL extends Database {
 						case 'varbinary':
 							$column['character_maximum_length'] = $length;
 						break;
+
 						case 'char':
 						case 'varchar':
 							$column['character_maximum_length'] = $length;
-						case 'enum':
-						case 'set':
 						case 'text':
 						case 'tinytext':
 						case 'mediumtext':
 						case 'longtext':
 							$column['collation_name'] = $row['Collation'];
+						break;
+
+						case 'enum':
+						case 'set':
+							$column['collation_name'] = $row['Collation'];
+							$column['options'] = explode('\',\'', substr($length, 1, -1));
 						break;
 					}
 				break;
