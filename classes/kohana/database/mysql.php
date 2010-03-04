@@ -230,6 +230,7 @@ class Kohana_Database_MySQL extends Database {
 			'national varchar'          => array('type' => 'string'),
 			'numeric unsigned'          => array('type' => 'float', 'exact' => TRUE, 'min' => '0'),
 			'nvarchar'                  => array('type' => 'string'),
+			'point'                     => array('type' => 'string', 'binary' => TRUE),
 			'real unsigned'             => array('type' => 'float', 'min' => '0'),
 			'set'                       => array('type' => 'string'),
 			'smallint unsigned'         => array('type' => 'int', 'min' => '0', 'max' => '65535'),
