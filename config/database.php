@@ -10,12 +10,12 @@ return array
 			 * The following options are available for MySQL:
 			 *
 			 * string   hostname
-			 * integer  port
-			 * string   socket
 			 * string   username
 			 * string   password
 			 * boolean  persistent
 			 * string   database
+			 *
+			 * Ports and sockets may be appended to the hostname.
 			 */
 			'hostname'   => 'localhost',
 			'username'   => FALSE,
