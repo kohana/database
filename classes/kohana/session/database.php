@@ -124,16 +124,8 @@ class Kohana_Session_Database extends Session {
 			->param(':active',   $this->_data['last_active'])
 			->param(':contents', $this->__toString());
 
-		try
-		{
-			// Execute the query
-			$query->execute($this->_db);
-		}
-		catch (Exception $e)
-		{
-			// Ignore all errors when a write fails
-			return FALSE;
-		}
+		// Execute the query
+		$query->execute($this->_db);
 
 		// The update and the session id are now the same
 		$this->_update_id = $this->_session_id;
