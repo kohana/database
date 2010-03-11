@@ -102,7 +102,7 @@ class Kohana_Database_Query {
 
 		return $this;
 	}
- 
+
 	/**
 	 * Set the value of a parameter in the query.
 	 *
@@ -198,7 +198,7 @@ class Kohana_Database_Query {
 			if ($result = Kohana::cache($cache_key, NULL, $this->_lifetime))
 			{
 				// Return a cached result
-				return new Database_Result_Cached($result, $sql);
+				return new Database_Result_Cached($result, $sql, $this->_as_object);
 			}
 		}
 
