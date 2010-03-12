@@ -25,6 +25,9 @@ class Kohana_Session_Database extends Session {
 	// Database table name
 	protected $_table = 'sessions';
 
+	// Garbage collection requests
+	protected $_gc = 500;
+
 	// The current session id
 	protected $_session_id;
 
@@ -51,7 +54,20 @@ class Kohana_Session_Database extends Session {
 			$this->_table = (string) $config['table'];
 		}
 
+		if (isset($config['gc']))
+		{
+			// Set the gc chance
+			$this->_gc = (int) $config['gc'];
+		}
+
 		parent::__construct($config);
+
+		if (mt_rand(0, $this->_gc) === $this->_gc)
+		{
+			// Run garbage collection
+			// This will average out to run once every X requests
+			$this->_gc();
+		}
 	}
 
 	public function _read($id = NULL)
@@ -163,6 +179,25 @@ class Kohana_Session_Database extends Session {
 		}
 
 		return TRUE;
+	}
+
+	protected function _gc()
+	{
+		if ($this->_lifetime)
+		{
+			// Expire sessions when their lifetime is up
+			$expires = $this->_lifetime;
+		}
+		else
+		{
+			// Expire sessions after one month
+			$expires = Date::MONTH;
+		}
+
+		// Delete all sessions that have expired
+		DB::query(Database::DELETE, "DELETE FROM {$this->_table} WHERE last_active < :time")
+			->param(':time', time() - $expires)
+			->execute($this->_db);
 	}
 
 } // End Session_Database
