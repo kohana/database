@@ -54,7 +54,7 @@ class Kohana_Database_Query_Builder_Delete extends Database_Query_Builder_Where 
 		if ( ! empty($this->_where))
 		{
 			// Add deletion conditions
-			$query .= ' WHERE '.Database_Query_Builder::compile_conditions($db, $this->_where);
+			$query .= ' WHERE '.$this->_compile_conditions($db, $this->_where);
 		}
 
 		return $query;
