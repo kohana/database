@@ -84,20 +84,8 @@ class Kohana_Database_Query_Builder_Update extends Database_Query_Builder_Where 
 		// Start an update query
 		$query = 'UPDATE '.$db->quote_table($this->_table);
 
-		$update = array();
-		foreach ($this->_set as $set)
-		{
-			// Split the set
-			list ($column, $value) = $set;
-
-			// Quote the column name
-			$column = $db->quote_identifier($column);
-
-			$update[$column] = $column.' = '.$db->quote($value);
-		}
-
 		// Add the columns to update
-		$query .= ' SET '.implode(', ', $update);
+		$query .= ' SET '.$this->_compile_set($db, $this->_set);
 
 		if ( ! empty($this->_where))
 		{
@@ -114,6 +102,8 @@ class Kohana_Database_Query_Builder_Update extends Database_Query_Builder_Where 
 
 		$this->_set   =
 		$this->_where = array();
+
+		$this->_parameters = array();
 
 		return $this;
 	}

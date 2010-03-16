@@ -412,6 +412,8 @@ class Kohana_Database_Query_Builder_Select extends Database_Query_Builder_Where 
 		$this->_offset    =
 		$this->_last_join = NULL;
 
+		$this->_parameters = array();
+
 		return $this;
 	}
 

@@ -80,11 +80,29 @@ abstract class Kohana_Database_Query_Builder extends Database_Query {
 						// BETWEEN always has exactly two arguments
 						list($min, $max) = $value;
 
+						if (is_string($value) AND isset($this->_parameters[$value]))
+						{
+							// Set the parameter as the minimum
+							$min = $parameters[$min];
+						}
+
+						if (is_string($value) AND isset($this->_parameters[$value]))
+						{
+							// Set the parameter as the maximum
+							$max = $parameters[$max];
+						}
+
 						// Quote the min and max value
 						$value = $db->quote($min).' AND '.$db->quote($max);
 					}
 					else
 					{
+						if (is_string($value) AND isset($this->_parameters[$value]))
+						{
+							// Set the parameter as the value
+							$value = $parameters[$value];
+						}
+
 						// Quote the entire value normally
 						$value = $db->quote($value);
 					}
@@ -98,6 +116,36 @@ abstract class Kohana_Database_Query_Builder extends Database_Query {
 		}
 
 		return $sql;
+	}
+
+	/**
+	 * Compiles an array of set values into an SQL partial. Used for UPDATE.
+	 *
+	 * @param   object  Database instance
+	 * @param   array   updated values
+	 * @return  string
+	 */
+	protected function _compile_set(Database $db, array $values)
+	{
+		$set = array();
+		foreach ($values as $group)
+		{
+			// Split the set
+			list ($column, $value) = $group;
+
+			// Quote the column name
+			$column = $db->quote_identifier($column);
+
+			if (is_string($value) AND isset($this->_parameters[$value]))
+			{
+				// Use the parameter value
+				$value = $this->_parameters[$value];
+			}
+
+			$set[$column] = $column.' = '.$db->quote($value);
+		}
+
+		return implode(', ', $set);
 	}
 
 	/**
