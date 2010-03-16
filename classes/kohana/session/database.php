@@ -37,7 +37,7 @@ class Kohana_Session_Database extends Session {
 	// Update the session?
 	protected $_update = FALSE;
 
-	public function __construct(array $config = NULL)
+	public function __construct(array $config = NULL, $id = NULL)
 	{
 		if ( ! isset($config['group']))
 		{
@@ -60,7 +60,7 @@ class Kohana_Session_Database extends Session {
 			$this->_gc = (int) $config['gc'];
 		}
 
-		parent::__construct($config);
+		parent::__construct($config, $id);
 
 		if (mt_rand(0, $this->_gc) === $this->_gc)
 		{
