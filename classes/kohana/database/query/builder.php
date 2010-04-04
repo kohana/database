@@ -80,16 +80,16 @@ abstract class Kohana_Database_Query_Builder extends Database_Query {
 						// BETWEEN always has exactly two arguments
 						list($min, $max) = $value;
 
-						if (is_string($value) AND isset($this->_parameters[$value]))
+						if (is_string($min) AND isset($this->_parameters[$min]))
 						{
 							// Set the parameter as the minimum
-							$min = $parameters[$min];
+							$min = $this->_parameters[$min];
 						}
 
-						if (is_string($value) AND isset($this->_parameters[$value]))
+						if (is_string($max) AND isset($this->_parameters[$max]))
 						{
 							// Set the parameter as the maximum
-							$max = $parameters[$max];
+							$max = $this->_parameters[$max];
 						}
 
 						// Quote the min and max value
@@ -100,7 +100,7 @@ abstract class Kohana_Database_Query_Builder extends Database_Query {
 						if (is_string($value) AND isset($this->_parameters[$value]))
 						{
 							// Set the parameter as the value
-							$value = $parameters[$value];
+							$value = $this->_parameters[$value];
 						}
 
 						// Quote the entire value normally
