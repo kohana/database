@@ -25,6 +25,13 @@ class Kohana_Session_Database extends Session {
 	// Database table name
 	protected $_table = 'sessions';
 
+	// Database column names
+	protected $_columns = array(
+		'session_id'  => 'session_id',
+		'last_active' => 'last_active',
+		'contents'    => 'contents'
+	);
+
 	// Garbage collection requests
 	protected $_gc = 500;
 
@@ -60,6 +67,12 @@ class Kohana_Session_Database extends Session {
 			$this->_gc = (int) $config['gc'];
 		}
 
+		if (isset($config['columns']))
+		{
+			// Overload column names
+			$this->_columns = $config['columns'];
+		}
+
 		parent::__construct($config, $id);
 
 		if (mt_rand(0, $this->_gc) === $this->_gc)
@@ -74,7 +87,10 @@ class Kohana_Session_Database extends Session {
 	{
 		if ($id OR $id = Cookie::get($this->_name))
 		{
-			$result = DB::query(Database::SELECT, "SELECT contents FROM {$this->_table} WHERE session_id = :id LIMIT 1")
+			$result = DB::select(array($this->_columns['contents'], 'contents'))
+				->from($this->_table)
+				->where($this->_columns['session_id'], '=', ':id')
+				->limit(1)
 				->param(':id', $id)
 				->execute($this->_db);
 
@@ -97,7 +113,10 @@ class Kohana_Session_Database extends Session {
 	protected function _regenerate()
 	{
 		// Create the query to find an ID
-		$query = DB::query(Database::SELECT, "SELECT session_id FROM {$this->_table} WHERE session_id = :id LIMIT 1")
+		$query = DB::select($this->_columns['session_id'])
+			->from($this->_table)
+			->where($this->_columns['session_id'], '=', ':id')
+			->limit(1)
 			->bind(':id', $id);
 
 		do
@@ -108,7 +127,7 @@ class Kohana_Session_Database extends Session {
 			// Get the the id from the database
 			$result = $query->execute($this->_db);
 		}
-		while ($result->count() > 0);
+		while ($result->count());
 
 		return $this->_session_id = $id;
 	}
@@ -118,20 +137,22 @@ class Kohana_Session_Database extends Session {
 		if ($this->_update_id === NULL)
 		{
 			// Insert a new row
-			$query = DB::query(Database::INSERT,
-				"INSERT INTO {$this->_table} (session_id, last_active, contents) VALUES (:new_id, :active, :contents)");
-		}
-		elseif ($this->_update_id === $this->_session_id)
-		{
-			// Update just the activity and contents
-			$query = DB::query(Database::UPDATE,
-				"UPDATE {$this->_table} SET last_active = :active, contents = :contents WHERE session_id = :old_id");
+			$query = DB::insert($this->_table, $this->_columns)
+				->values(array(':new_id', ':active', ':contents'));
 		}
 		else
 		{
-			// Update all fields
-			$query = DB::query(Database::UPDATE,
-				"UPDATE {$this->_table} SET session_id = :new_id, last_active = :active, contents = :contents WHERE session_id = :old_id");
+			// Update the row
+			$query = DB::update($this->_table)
+				->value($this->_columns['last_active'], ':active')
+				->value($this->_columns['contents'], ':contents')
+				->where($this->_columns['session_id'], '=', ':old_id');
+
+			if ($this->_update_id !== $this->_session_id)
+			{
+				// Also update the session id
+				$query->value($this->_columns['session_id'], ':new_id');
+			}
 		}
 
 		$query
@@ -161,7 +182,8 @@ class Kohana_Session_Database extends Session {
 		}
 
 		// Delete the current session
-		$query = DB::query(Database::DELETE, "DELETE FROM {$this->_table} WHERE session_id = :id")
+		$query = DB::delete($this->_table)
+			->where($this->_columns['session_id'], '=', ':id')
 			->param(':id', $this->_update_id);
 
 		try
@@ -195,7 +217,8 @@ class Kohana_Session_Database extends Session {
 		}
 
 		// Delete all sessions that have expired
-		DB::query(Database::DELETE, "DELETE FROM {$this->_table} WHERE last_active < :time")
+		DB::delete($this->_table)
+			->where($this->_columns['last_active'], '<', ':time')
 			->param(':time', time() - $expires)
 			->execute($this->_db);
 	}
