@@ -57,6 +57,18 @@ class Kohana_Database_Query_Builder_Delete extends Database_Query_Builder_Where 
 			$query .= ' WHERE '.$this->_compile_conditions($db, $this->_where);
 		}
 
+		if ( ! empty($this->_order_by))
+		{
+			// Add sorting
+			$query .= ' '.$this->_compile_order_by($db, $this->_order_by);
+		}
+
+		if ($this->_limit !== NULL)
+		{
+			// Add limiting
+			$query .= ' LIMIT '.$this->_limit;
+		}
+
 		return $query;
 	}
 

@@ -12,6 +12,12 @@ abstract class Kohana_Database_Query_Builder_Where extends Database_Query_Builde
 	// WHERE ...
 	protected $_where = array();
 
+	// ORDER BY ...
+	protected $_order_by = array();
+
+	// LIMIT ...
+	protected $_limit = NULL;
+
 	/**
 	 * Alias of and_where()
 	 *
@@ -119,6 +125,33 @@ abstract class Kohana_Database_Query_Builder_Where extends Database_Query_Builde
 	public function or_where_close()
 	{
 		$this->_where[] = array('OR' => ')');
+
+		return $this;
+	}
+
+	/**
+	 * Applies sorting with "ORDER BY ..."
+	 *
+	 * @param   mixed   column name or array($column, $alias) or object
+	 * @param   string  direction of sorting
+	 * @return  $this
+	 */
+	public function order_by($column, $direction = NULL)
+	{
+		$this->_order_by[] = array($column, $direction);
+
+		return $this;
+	}
+
+	/**
+	 * Return up to "LIMIT ..." results
+	 *
+	 * @param   integer  maximum results to return
+	 * @return  $this
+	 */
+	public function limit($number)
+	{
+		$this->_limit = (int) $number;
 
 		return $this;
 	}
