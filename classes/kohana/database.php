@@ -2,7 +2,8 @@
 /**
  * Database connection wrapper.
  *
- * @package    Database
+ * @package    Kohana/Database
+ * @category   Base
  * @author     Kohana Team
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    http://kohanaphp.com/license
