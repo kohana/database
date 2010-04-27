@@ -1,6 +1,12 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
- * Database expressions.
+ * Database expressions can be used to add unescaped SQL fragments to a
+ * [Database_Query_Builder] object.
+ *
+ * For example, you can use an expression to generate a column alias:
+ *
+ *     // SELECT CONCAT(first_name, last_name) AS full_name
+ *     $query = DB::select(array(DB::expr('CONCAT(first_name, last_name)', 'full_name')));
  *
  * @package    Kohana/Database
  * @category   Base
@@ -15,6 +21,10 @@ class Kohana_Database_Expression {
 
 	/**
 	 * Sets the expression string.
+	 *
+	 *     $expression = new Database_Expression('COUNT(users.id)');
+	 *
+	 * @return  void
 	 */
 	public function __construct($value)
 	{
@@ -24,6 +34,8 @@ class Kohana_Database_Expression {
 
 	/**
 	 * Get the expression value as a string.
+	 *
+	 *     $sql = $expression->value();
 	 *
 	 * @return  string
 	 */
@@ -35,7 +47,10 @@ class Kohana_Database_Expression {
 	/**
 	 * Return the value of the expression as a string.
 	 *
+	 *     echo $expression;
+	 *
 	 * @return  string
+	 * @uses    Database_Expression::value
 	 */
 	public function __toString()
 	{
