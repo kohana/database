@@ -9,7 +9,8 @@
  *     config_value  text
  *     primary key   (group_name, config_key)
  *
- * @package    Configuration
+ * @package    Kohana/Database
+ * @category   Configuration
  * @author     Kohana Team
  * @copyright  (c) 2009 Kohana Team
  * @license    http://kohanaphp.com/license

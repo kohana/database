@@ -2,7 +2,8 @@
 /**
  * Database connection wrapper.
  *
- * @package    Database
+ * @package    Kohana/Database
+ * @category   Base
  * @author     Kohana Team
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    http://kohanaphp.com/license
@@ -144,6 +145,49 @@ abstract class Kohana_Database {
 	 * @return  integer  number of affected rows for all other queries
 	 */
 	abstract public function query($type, $sql, $as_object);
+
+	/**
+	 * Count the number of records in the last query, without LIMIT or OFFSET applied.
+	 *
+	 * @return  integer
+	 */
+	public function count_last_query()
+	{
+		if ($sql = $this->last_query)
+		{
+			$sql = trim($sql);
+			if (stripos($sql, 'SELECT') !== 0)
+			{
+				return FALSE;
+			}
+
+			if (stripos($sql, 'LIMIT') !== FALSE)
+			{
+				// Remove LIMIT from the SQL
+				$sql = preg_replace('/\sLIMIT\s+[^a-z]+/i', ' ', $sql);
+			}
+
+			if (stripos($sql, 'OFFSET') !== FALSE)
+			{
+				// Remove OFFSET from the SQL
+				$sql = preg_replace('/\sOFFSET\s+\d+/i', '', $sql);
+			}
+
+			// Get the total rows from the last query executed
+			$result = $this->query
+			(
+				Database::SELECT,
+				'SELECT COUNT(*) AS '.$this->quote_identifier('total_rows').' '.
+				'FROM ('.$sql.') AS '.$this->quote_table('counted_results'),
+				TRUE
+			);
+
+			// Return the total number of rows from the query
+			return (int) $result->current()->total_rows;
+		}
+
+		return FALSE;
+	}
 
 	/**
 	 * Count the number of records in a table.
@@ -328,6 +372,11 @@ abstract class Kohana_Database {
 		elseif (is_int($value))
 		{
 			return (int) $value;
+		}
+		elseif (is_float($value))
+		{
+			// Convert to non-locale aware float to prevent possible commas
+			return sprintf('%F', $value);
 		}
 
 		return $this->escape($value);

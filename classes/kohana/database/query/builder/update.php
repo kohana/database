@@ -2,7 +2,8 @@
 /**
  * Database query builder for UPDATE statements.
  *
- * @package    Database
+ * @package    Kohana/Database
+ * @category   Query
  * @author     Kohana Team
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    http://kohanaphp.com/license
@@ -84,25 +85,13 @@ class Kohana_Database_Query_Builder_Update extends Database_Query_Builder_Where 
 		// Start an update query
 		$query = 'UPDATE '.$db->quote_table($this->_table);
 
-		$update = array();
-		foreach ($this->_set as $set)
-		{
-			// Split the set
-			list ($column, $value) = $set;
-
-			// Quote the column name
-			$column = $db->quote_identifier($column);
-
-			$update[$column] = $column.' = '.$db->quote($value);
-		}
-
 		// Add the columns to update
-		$query .= ' SET '.implode(', ', $update);
+		$query .= ' SET '.$this->_compile_set($db, $this->_set);
 
 		if ( ! empty($this->_where))
 		{
 			// Add selection conditions
-			$query .= ' WHERE '.Database_Query_Builder::compile_conditions($db, $this->_where);
+			$query .= ' WHERE '.$this->_compile_conditions($db, $this->_where);
 		}
 
 		return $query;
@@ -114,6 +103,8 @@ class Kohana_Database_Query_Builder_Update extends Database_Query_Builder_Where 
 
 		$this->_set   =
 		$this->_where = array();
+
+		$this->_parameters = array();
 
 		return $this;
 	}

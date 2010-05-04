@@ -2,12 +2,13 @@
 /**
  * Database result wrapper.
  *
- * @package    Database
+ * @package    Kohana/Database
+ * @category   Query/Result
  * @author     Kohana Team
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-abstract class Kohana_Database_Result implements Countable, Iterator,SeekableIterator, ArrayAccess {
+abstract class Kohana_Database_Result implements Countable, Iterator, SeekableIterator, ArrayAccess {
 
 	// Executed SQL for this result
 	protected $_query;
@@ -49,11 +50,22 @@ abstract class Kohana_Database_Result implements Countable, Iterator,SeekableIte
 
 	/**
 	 * Result destruction cleans up all open result sets.
+	 *
+	 * @return  void
 	 */
 	abstract public function __destruct();
 
 	/**
 	 * Return all of the rows in the result as an array.
+	 *
+	 *     // Indexed array of all rows
+	 *     $rows = $result->as_array();
+	 *
+	 *     // Associative array of rows by "id"
+	 *     $rows = $result->as_array('id');
+	 *
+	 *     // Associative array of rows, "id" => "name"
+	 *     $rows = $result->as_array('id', 'name');
 	 *
 	 * @param   string  column for associative keys
 	 * @param   string  column for values
@@ -138,6 +150,9 @@ abstract class Kohana_Database_Result implements Countable, Iterator,SeekableIte
 	/**
 	 * Return the named column from the current row.
 	 *
+	 *     // Get the "id" value
+	 *     $id = $result->get('id');
+	 *
 	 * @param   string  column to get
 	 * @param   mixed   default value if the column does not exist
 	 * @return  mixed
@@ -161,7 +176,11 @@ abstract class Kohana_Database_Result implements Countable, Iterator,SeekableIte
 	}
 
 	/**
-	 * Countable: count
+	 * Implements [Countable::count], returns the total number of rows.
+	 *
+	 *     echo count($result);
+	 *
+	 * @return  integer
 	 */
 	public function count()
 	{
@@ -169,7 +188,14 @@ abstract class Kohana_Database_Result implements Countable, Iterator,SeekableIte
 	}
 
 	/**
-	 * ArrayAccess: offsetExists
+	 * Implements [ArrayAccess::offsetExists], determines if row exists.
+	 *
+	 *     if (isset($result[10]))
+	 *     {
+	 *         // Row 10 exists
+	 *     }
+	 *
+	 * @return  boolean
 	 */
 	public function offsetExists($offset)
 	{
@@ -177,7 +203,11 @@ abstract class Kohana_Database_Result implements Countable, Iterator,SeekableIte
 	}
 
 	/**
-	 * ArrayAccess: offsetGet
+	 * Implements [ArrayAccess::offsetGet], gets a given row.
+	 *
+	 *     $row = $result[10];
+	 *
+	 * @return  mixed
 	 */
 	public function offsetGet($offset)
 	{
@@ -188,9 +218,12 @@ abstract class Kohana_Database_Result implements Countable, Iterator,SeekableIte
 	}
 
 	/**
-	 * ArrayAccess: offsetSet
+	 * Implements [ArrayAccess::offsetSet], throws an error.
 	 *
-	 * @throws  Kohana_Database_Exception
+	 * [!!] You cannot modify a database result.
+	 *
+	 * @return  void
+	 * @throws  Kohana_Exception
 	 */
 	final public function offsetSet($offset, $value)
 	{
@@ -198,9 +231,12 @@ abstract class Kohana_Database_Result implements Countable, Iterator,SeekableIte
 	}
 
 	/**
-	 * ArrayAccess: offsetUnset
+	 * Implements [ArrayAccess::offsetUnset], throws an error.
 	 *
-	 * @throws  Kohana_Database_Exception
+	 * [!!] You cannot modify a database result.
+	 *
+	 * @return  void
+	 * @throws  Kohana_Exception
 	 */
 	final public function offsetUnset($offset)
 	{
@@ -208,7 +244,11 @@ abstract class Kohana_Database_Result implements Countable, Iterator,SeekableIte
 	}
 
 	/**
-	 * Iterator: key
+	 * Implements [Iterator::key], returns the current row number.
+	 *
+	 *     echo key($result);
+	 *
+	 * @return  integer
 	 */
 	public function key()
 	{
@@ -216,7 +256,11 @@ abstract class Kohana_Database_Result implements Countable, Iterator,SeekableIte
 	}
 
 	/**
-	 * Iterator: next
+	 * Implements [Iterator::next], moves to the next row.
+	 *
+	 *     next($result);
+	 *
+	 * @return  $this
 	 */
 	public function next()
 	{
@@ -225,7 +269,11 @@ abstract class Kohana_Database_Result implements Countable, Iterator,SeekableIte
 	}
 
 	/**
-	 * Iterator: prev
+	 * Implements [Iterator::prev], moves to the previous row.
+	 *
+	 *     prev($result);
+	 *
+	 * @return  $this
 	 */
 	public function prev()
 	{
@@ -234,7 +282,11 @@ abstract class Kohana_Database_Result implements Countable, Iterator,SeekableIte
 	}
 
 	/**
-	 * Iterator: rewind
+	 * Implements [Iterator::rewind], sets the current row to zero.
+	 *
+	 *     rewind($result);
+	 *
+	 * @return  $this
 	 */
 	public function rewind()
 	{
@@ -243,7 +295,11 @@ abstract class Kohana_Database_Result implements Countable, Iterator,SeekableIte
 	}
 
 	/**
-	 * Iterator: valid
+	 * Implements [Iterator::valid], checks if the current row exists.
+	 *
+	 * [!!] This method is only used internally.
+	 *
+	 * @return  boolean
 	 */
 	public function valid()
 	{

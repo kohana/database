@@ -2,7 +2,8 @@
 /**
  * MySQL database connection.
  *
- * @package    Database
+ * @package    Kohana/Database
+ * @category   Drivers
  * @author     Kohana Team
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    http://kohanaphp.com/license
@@ -114,7 +115,7 @@ class Kohana_Database_MySQL extends Database {
 		catch (Exception $e)
 		{
 			// Database is probably not disconnected
-			$status = is_resource($this->_connection);
+			$status = ! is_resource($this->_connection);
 		}
 
 		return $status;
@@ -230,6 +231,7 @@ class Kohana_Database_MySQL extends Database {
 			'national varchar'          => array('type' => 'string'),
 			'numeric unsigned'          => array('type' => 'float', 'exact' => TRUE, 'min' => '0'),
 			'nvarchar'                  => array('type' => 'string'),
+			'point'                     => array('type' => 'string', 'binary' => TRUE),
 			'real unsigned'             => array('type' => 'float', 'min' => '0'),
 			'set'                       => array('type' => 'string'),
 			'smallint unsigned'         => array('type' => 'int', 'min' => '0', 'max' => '65535'),
@@ -316,16 +318,21 @@ class Kohana_Database_MySQL extends Database {
 						case 'varbinary':
 							$column['character_maximum_length'] = $length;
 						break;
+
 						case 'char':
 						case 'varchar':
 							$column['character_maximum_length'] = $length;
-						case 'enum':
-						case 'set':
 						case 'text':
 						case 'tinytext':
 						case 'mediumtext':
 						case 'longtext':
 							$column['collation_name'] = $row['Collation'];
+						break;
+
+						case 'enum':
+						case 'set':
+							$column['collation_name'] = $row['Collation'];
+							$column['options'] = explode('\',\'', substr($length, 1, -1));
 						break;
 					}
 				break;
