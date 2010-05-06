@@ -17,6 +17,11 @@ abstract class Kohana_Database {
 	const DELETE =  4;
 
 	/**
+	 * @var  string  default database instance name
+	 */
+	public static $name = 'default';
+
+	/**
 	 * @var  array  Database instances
 	 */
 	public static $instances = array();
@@ -30,8 +35,14 @@ abstract class Kohana_Database {
 	 * @param   array    configuration parameters
 	 * @return  Database
 	 */
-	public static function instance($name = 'default', array $config = NULL)
+	public static function instance($name = NULL, array $config = NULL)
 	{
+		if ($name === NULL)
+		{
+			// Use the default database instance name
+			$name = Database::$name;
+		}
+
 		if ( ! isset(Database::$instances[$name]))
 		{
 			if ($config === NULL)
@@ -394,9 +405,6 @@ abstract class Kohana_Database {
 		if (is_array($value))
 		{
 			$table =& $value[0];
-
-			// Attach table prefix to alias
-			$value[1] = $this->table_prefix().$value[1];
 		}
 		else
 		{
