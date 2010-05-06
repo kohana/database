@@ -1,11 +1,13 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
- * Database connection wrapper.
+ * Database connection wrapper. All database object instances are referenced
+ * by a name. Queries are typically handled by [Database_Query], rather than
+ * using the database object directly.
  *
  * @package    Kohana/Database
  * @category   Base
  * @author     Kohana Team
- * @copyright  (c) 2008-2009 Kohana Team
+ * @copyright  (c) 2008-2010 Kohana Team
  * @license    http://kohanaphp.com/license
  */
 abstract class Kohana_Database {
@@ -30,6 +32,12 @@ abstract class Kohana_Database {
 	 * Get a singleton Database instance. If configuration is not specified,
 	 * it will be loaded from the database configuration file using the same
 	 * group as the name.
+	 *
+	 *     // Load the default database
+	 *     $db = Database::instance();
+	 *
+	 *     // Create a custom configured instance
+	 *     $db = Database::instance('custom', $config);
 	 *
 	 * @param   string   instance name
 	 * @param   array    configuration parameters
@@ -87,6 +95,8 @@ abstract class Kohana_Database {
 	/**
 	 * Stores the database configuration locally and name the instance.
 	 *
+	 * [!!] This method cannot be accessed directly, you must use [Database::instance].
+	 *
 	 * @return  void
 	 */
 	final protected function __construct($name, array $config)
@@ -104,6 +114,12 @@ abstract class Kohana_Database {
 	/**
 	 * Disconnect from the database when the object is destroyed.
 	 *
+	 *     // Destroy the database instance
+	 *     unset(Database::instances[(string) $db], $db);
+	 *
+	 * [!!] Calling `unset($db)` is not enough to destroy the database, as it
+	 * will still be stored in `Database::$instances`.
+	 *
 	 * @return  void
 	 */
 	final public function __destruct()
@@ -114,6 +130,8 @@ abstract class Kohana_Database {
 	/**
 	 * Returns the database instance name.
 	 *
+	 *     echo (string) $db;
+	 *
 	 * @return  string
 	 */
 	final public function __toString()
@@ -122,7 +140,10 @@ abstract class Kohana_Database {
 	}
 
 	/**
-	 * Connect to the database.
+	 * Connect to the database. This is called automatically when the first
+	 * query is executed.
+	 *
+	 *     $db->connect();
 	 *
 	 * @throws  Database_Exception
 	 * @return  void
@@ -130,14 +151,18 @@ abstract class Kohana_Database {
 	abstract public function connect();
 
 	/**
-	 * Disconnect from the database
+	 * Disconnect from the database. This is called automatically by [Database::__destruct].
+	 *
+	 *     $db->disconnect();
 	 *
 	 * @return  boolean
 	 */
 	abstract public function disconnect();
 
 	/**
-	 * Set the connection character set.
+	 * Set the connection character set. This is called automatically by [Database::connect].
+	 *
+	 *     $db->set_charset('utf8');
 	 *
 	 * @throws  Database_Exception
 	 * @param   string   character set name
@@ -148,9 +173,15 @@ abstract class Kohana_Database {
 	/**
 	 * Perform an SQL query of the given type.
 	 *
+	 *     // Make a SELECT query and use objects for results
+	 *     $db->query(Database::SELECT, 'SELECT * FROM groups', TRUE);
+	 *
+	 *     // Make a SELECT query and use "Model_User" for the results
+	 *     $db->query(Database::SELECT, 'SELECT * FROM users LIMIT 1', 'Model_User');
+	 *
 	 * @param   integer  Database::SELECT, Database::INSERT, etc
 	 * @param   string   SQL query
-	 * @param   string   result object class, TRUE for stdClass, FALSE for assoc array
+	 * @param   mixed    result object class, TRUE for stdClass, FALSE for assoc array
 	 * @return  object   Database_Result for SELECT queries
 	 * @return  array    list (insert id, row count) for INSERT queries
 	 * @return  integer  number of affected rows for all other queries
@@ -159,6 +190,9 @@ abstract class Kohana_Database {
 
 	/**
 	 * Count the number of records in the last query, without LIMIT or OFFSET applied.
+	 *
+	 *     // Get the total number of records that match the last query
+	 *     $count = $db->count_last_query();
 	 *
 	 * @return  integer
 	 */
@@ -203,6 +237,9 @@ abstract class Kohana_Database {
 	/**
 	 * Count the number of records in a table.
 	 *
+	 *     // Get the total number of records in the "users" table
+	 *     $count = $db->count_records('users');
+	 *
 	 * @param   mixed    table name string or array(query, alias)
 	 * @return  integer
 	 */
@@ -217,6 +254,8 @@ abstract class Kohana_Database {
 
 	/**
 	 * Returns a normalized array describing the SQL data type
+	 *
+	 *     $db->datatype('char');
 	 *
 	 * @param   string  SQL data type
 	 * @return  array
@@ -287,6 +326,12 @@ abstract class Kohana_Database {
 	 * List all of the tables in the database. Optionally, a LIKE string can
 	 * be used to search for specific tables.
 	 *
+	 *     // Get all tables in the current database
+	 *     $tables = $db->list_tables();
+	 *
+	 *     // Get all user-related tables
+	 *     $tables = $db->list_tables('user%');
+	 *
 	 * @param   string   table to search for
 	 * @return  array
 	 */
@@ -296,6 +341,12 @@ abstract class Kohana_Database {
 	 * Lists all of the columns in a table. Optionally, a LIKE string can be
 	 * used to search for specific fields.
 	 *
+	 *     // Get all columns from the "users" table
+	 *     $columns = $db->list_columns('users');
+	 *
+	 *     // Get all name-related columns
+	 *     $columns = $db->list_columns('users', '%name%');
+	 *
 	 * @param   string  table to get columns from
 	 * @param   string  column to search for
 	 * @return  array
@@ -303,7 +354,10 @@ abstract class Kohana_Database {
 	abstract public function list_columns($table, $like = NULL);
 
 	/**
-	 * Extracts the text between parentheses, if any
+	 * Extracts the text between parentheses, if any.
+	 *
+	 *     // Returns: array('CHAR', '6')
+	 *     list($type, $length) = $db->_parse_type('CHAR(6)');
 	 *
 	 * @param   string
 	 * @return  array   list containing the type and length, if any
@@ -329,7 +383,9 @@ abstract class Kohana_Database {
 	}
 
 	/**
-	 * Return the table prefix.
+	 * Return the table prefix defined in the current configuration.
+	 *
+	 *     $prefix = $db->table_prefix();
 	 *
 	 * @return  string
 	 */
@@ -341,8 +397,18 @@ abstract class Kohana_Database {
 	/**
 	 * Quote a value for an SQL query.
 	 *
+	 *     $db->quote(NULL);   // 'NULL'
+	 *     $db->quote(10);     // 10
+	 *     $db->quote('fred'); // 'fred'
+	 *
+	 * Objects passed to this function will be converted to strings.
+	 * [Database_Expression] objects will use the value of the expression.
+	 * [Database_Query] objects will be compiled and converted to a sub-query.
+	 * All other objects will be converted using the `__toString` method.
+	 *
 	 * @param   mixed   any value to quote
 	 * @return  string
+	 * @uses    Database::escape
 	 */
 	public function quote($value)
 	{
@@ -394,10 +460,14 @@ abstract class Kohana_Database {
 	}
 
 	/**
-	 * Quote a database table name and adds the table prefix if needed
+	 * Quote a database table name and adds the table prefix if needed.
+	 *
+	 *     $table = $db->quote_table($table);
 	 *
 	 * @param   mixed   table name or array(table, alias)
 	 * @return  string
+	 * @uses    Database::quote_identifier
+	 * @uses    Database::table_prefix
 	 */
 	public function quote_table($value)
 	{
@@ -424,8 +494,21 @@ abstract class Kohana_Database {
 	 * Quote a database identifier, such as a column name. Adds the
 	 * table prefix to the identifier if a table name is present.
 	 *
+	 *     $column = $db->quote_identifier($column);
+	 *
+	 * You can also use SQL methods within identifiers.
+	 *
+	 *     // The value of "column" will be quoted
+	 *     $column = $db->quote_identifier('COUNT("column")');
+	 *
+	 * Objects passed to this function will be converted to strings.
+	 * [Database_Expression] objects will use the value of the expression.
+	 * [Database_Query] objects will be compiled and converted to a sub-query.
+	 * All other objects will be converted using the `__toString` method.
+	 *
 	 * @param   mixed   any identifier
 	 * @return  string
+	 * @uses    Database::table_prefix
 	 */
 	public function quote_identifier($value)
 	{
@@ -491,6 +574,8 @@ abstract class Kohana_Database {
 	/**
 	 * Sanitize a string by escaping characters that could cause an SQL
 	 * injection attack.
+	 *
+	 *     $value = $db->escape('any string');
 	 *
 	 * @param   string   value to quote
 	 * @return  string
