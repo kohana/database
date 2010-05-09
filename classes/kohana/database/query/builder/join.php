@@ -80,8 +80,14 @@ class Kohana_Database_Query_Builder_Join extends Database_Query_Builder {
 			// Split the condition
 			list($c1, $op, $c2) = $condition;
 
+			if ($op)
+			{
+				// Make the operator uppercase and spaced
+				$op = ' '.strtoupper($op);
+			}
+
 			// Quote each of the identifiers used for the condition
-			$conditions[] = $db->quote_identifier($c1).' '.strtoupper($op).' '.$db->quote_identifier($c2);
+			$conditions[] = $db->quote_identifier($c1).$op.' '.$db->quote_identifier($c2);
 		}
 
 		// Concat the conditions "... AND ..."
