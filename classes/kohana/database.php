@@ -19,9 +19,9 @@ abstract class Kohana_Database {
 	const DELETE =  4;
 
 	/**
-	 * @var  string  default database instance name
+	 * @var  string  default instance name
 	 */
-	public static $name = 'default';
+	public static $default = 'default';
 
 	/**
 	 * @var  array  Database instances
@@ -47,8 +47,8 @@ abstract class Kohana_Database {
 	{
 		if ($name === NULL)
 		{
-			// Use the default database instance name
-			$name = Database::$name;
+			// Use the default instance name
+			$name = Database::$default;
 		}
 
 		if ( ! isset(Database::$instances[$name]))
