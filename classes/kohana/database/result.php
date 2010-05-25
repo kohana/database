@@ -56,6 +56,19 @@ abstract class Kohana_Database_Result implements Countable, Iterator, SeekableIt
 	abstract public function __destruct();
 
 	/**
+	 * Get a cached database result from the current result iterator.
+	 *
+	 *     $cachable = serialize($result->cached());
+	 *
+	 * @return  Database_Result_Cached
+	 * @since   3.0.5
+	 */
+	public function cached()
+	{
+		return new Database_Result_Cached($this->as_array(), $this->_query, $this->_as_object);
+	}
+
+	/**
 	 * Return all of the rows in the result as an array.
 	 *
 	 *     // Indexed array of all rows
