@@ -6,7 +6,7 @@
  * For example, you can use an expression to generate a column alias:
  *
  *     // SELECT CONCAT(first_name, last_name) AS full_name
- *     $query = DB::select(array(DB::expr('CONCAT(first_name, last_name)', 'full_name')));
+ *     $query = DB::select(array(DB::expr('CONCAT(first_name, last_name)'), 'full_name')));
  *
  * @package    Kohana/Database
  * @category   Base
