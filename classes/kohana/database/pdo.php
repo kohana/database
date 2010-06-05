@@ -41,6 +41,12 @@ class Kohana_Database_PDO extends Database {
 		// Create a new PDO connection
 		$this->_connection = new PDO($dsn, $username, $password, $attrs);
 
+		if (isset($this->_config['identifier']))
+		{
+			// Allow the identifier to be overloaded per-connection
+			$this->_identifier = (string) $this->_config['identifier'];
+		}
+
 		if ( ! empty($this->_config['charset']))
 		{
 			// Set the character set
@@ -115,7 +121,7 @@ class Kohana_Database_PDO extends Database {
 			{
 				$result->setFetchMode(PDO::FETCH_CLASS, 'stdClass');
 			}
-			
+
 			$result = $result->fetchAll();
 
 			// Return an iterator of results
