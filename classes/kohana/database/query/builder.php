@@ -73,10 +73,18 @@ abstract class Kohana_Database_Query_Builder extends Database_Query {
 					// Split the condition
 					list($column, $op, $value) = $condition;
 
-					if ($value === NULL AND $op === '=')
+					if ($value === NULL)
 					{
-						// Convert "val = NULL" to "val IS NULL"
-						$op = 'IS';
+						if ($op === '=')
+						{
+							// Convert "val = NULL" to "val IS NULL"
+							$op = 'IS';
+						}
+						elseif ($op === '!=')
+						{
+							// Convert "val != NULL" to "valu IS NOT NULL"
+							$op = 'IS NOT';
+						}
 					}
 
 					// Database operators are always uppercase
