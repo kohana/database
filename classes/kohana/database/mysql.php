@@ -109,7 +109,11 @@ class Kohana_Database_MySQL extends Database {
 
 			if (is_resource($this->_connection))
 			{
-				$status = mysql_close($this->_connection);
+				if ($status = mysql_close($this->_connection))
+				{
+					// Clear the connection
+					$this->_connection = NULL;
+				}
 			}
 		}
 		catch (Exception $e)
