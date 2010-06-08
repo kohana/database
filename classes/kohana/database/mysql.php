@@ -311,6 +311,13 @@ class Kohana_Database_MySQL extends Database {
 						list($column['numeric_precision'], $column['numeric_scale']) = explode(',', $length);
 					}
 				break;
+				case 'int':
+					if (isset($length))
+					{
+						// MySQL attribute
+						$column['display'] = $length;
+					}
+				break;
 				case 'string':
 					switch ($column['data_type'])
 					{
