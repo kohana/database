@@ -99,7 +99,7 @@ abstract class Kohana_Database {
 	 *
 	 * @return  void
 	 */
-	final protected function __construct($name, array $config)
+	protected function __construct($name, array $config)
 	{
 		// Set the instance name
 		$this->_instance = $name;
