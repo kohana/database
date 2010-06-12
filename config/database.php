@@ -9,19 +9,19 @@ return array
 			/**
 			 * The following options are available for MySQL:
 			 *
-			 * string   hostname
-			 * string   username
-			 * string   password
-			 * boolean  persistent
-			 * string   database
+			 * string   hostname     server hostname, or socket
+			 * string   database     database name
+			 * string   username     database username
+			 * string   password     database password
+			 * boolean  persistent   use persistent connections?
 			 *
 			 * Ports and sockets may be appended to the hostname.
 			 */
 			'hostname'   => 'localhost',
+			'database'   => 'kohana',
 			'username'   => FALSE,
 			'password'   => FALSE,
 			'persistent' => FALSE,
-			'database'   => 'kohana',
 		),
 		'table_prefix' => '',
 		'charset'      => 'utf8',
@@ -34,11 +34,10 @@ return array
 			/**
 			 * The following options are available for PDO:
 			 *
-			 * string   dsn
-			 * string   username
-			 * string   password
-			 * boolean  persistent
-			 * string   identifier
+			 * string   dsn         Data Source Name
+			 * string   username    database username
+			 * string   password    database password
+			 * boolean  persistent  use persistent connections?
 			 */
 			'dsn'        => 'mysql:host=localhost;dbname=kohana',
 			'username'   => 'root',
