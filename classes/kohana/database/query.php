@@ -175,12 +175,12 @@ class Kohana_Database_Query {
 	/**
 	 * Execute the current query on the given database.
 	 *
-	 * @param   mixed  Database instance or name of instance
+	 * @param   mixed    Database instance or name of instance
 	 * @return  object   Database_Result for SELECT queries
 	 * @return  mixed    the insert id for INSERT queries
 	 * @return  integer  number of affected rows for all other queries
 	 */
-	public function execute($db = 'default')
+	public function execute($db = NULL)
 	{
 		if ( ! is_object($db))
 		{
