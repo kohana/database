@@ -153,7 +153,7 @@ class Kohana_Database_PDO extends Database {
 			array(':method' => __FUNCTION__, ':class' => __CLASS__));
 	}
 
-	public function list_columns($table, $like = NULL, $append_prefix = TRUE)
+	public function list_columns($table, $like = NULL, $add_prefix = TRUE)
 	{
 		throw new Kohana_Exception('Database method :method is not supported by :class',
 			array(':method' => __FUNCTION__, ':class' => __CLASS__));
