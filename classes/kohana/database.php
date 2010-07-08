@@ -346,12 +346,16 @@ abstract class Kohana_Database {
 	 *
 	 *     // Get all name-related columns
 	 *     $columns = $db->list_columns('users', '%name%');
+         *
+         *     // Get the columns from a table that doesn't use the table prefix
+         *     $columns = $db->list_columns('users', NULL, FALSE);
 	 *
 	 * @param   string  table to get columns from
 	 * @param   string  column to search for
+         * @param   boolean whether to append the table prefix automatically or not
 	 * @return  array
 	 */
-	abstract public function list_columns($table, $like = NULL);
+	abstract public function list_columns($table, $like = NULL, $append_prefix = TRUE);
 
 	/**
 	 * Extracts the text between parentheses, if any.
