@@ -277,10 +277,10 @@ class Kohana_Database_MySQL extends Database {
 		return $tables;
 	}
 
-	public function list_columns($table, $like = NULL, $append_prefix = TRUE)
+	public function list_columns($table, $like = NULL, $add_prefix = TRUE)
 	{
 		// Quote the table name
-		$table = ($append_prefix === TRUE) ? $this->quote_table($table) : $table;
+		$table = ($add_prefix === TRUE) ? $this->quote_table($table) : $table;
 
 		if (is_string($like))
 		{
