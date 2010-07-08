@@ -352,10 +352,10 @@ abstract class Kohana_Database {
 	 *
 	 * @param   string  table to get columns from
 	 * @param   string  column to search for
-         * @param   boolean whether to append the table prefix automatically or not
+         * @param   boolean whether to add the table prefix automatically or not
 	 * @return  array
 	 */
-	abstract public function list_columns($table, $like = NULL, $append_prefix = TRUE);
+	abstract public function list_columns($table, $like = NULL, $add_prefix = TRUE);
 
 	/**
 	 * Extracts the text between parentheses, if any.
