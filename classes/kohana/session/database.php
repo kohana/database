@@ -84,7 +84,12 @@ class Kohana_Session_Database extends Session {
 		}
 	}
 
-	public function _read($id = NULL)
+	public function id()
+	{
+		return $this->_session_id;
+	}
+
+	protected function _read($id = NULL)
 	{
 		if ($id OR $id = Cookie::get($this->_name))
 		{
