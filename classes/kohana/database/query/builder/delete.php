@@ -19,10 +19,13 @@ class Kohana_Database_Query_Builder_Delete extends Database_Query_Builder_Where 
 	 * @param   mixed  table name or array($table, $alias) or object
 	 * @return  void
 	 */
-	public function __construct($table)
+	public function __construct($table = NULL)
 	{
-		// Set the inital table name
-		$this->_table = $table;
+		if ($table)
+		{
+			// Set the inital table name
+			$this->_table = $table;
+		}
 
 		// Start the query with no SQL
 		return parent::__construct(Database::DELETE, '');

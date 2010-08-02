@@ -26,12 +26,15 @@ class Kohana_Database_Query_Builder_Insert extends Database_Query_Builder {
 	 * @param   array  column names
 	 * @return  void
 	 */
-	public function __construct($table, array $columns = NULL)
+	public function __construct($table = NULL, array $columns = NULL)
 	{
-		// Set the inital table name
-		$this->_table = $table;
+		if ($table)
+		{
+			// Set the inital table name
+			$this->_table = $table;
+		}
 
-		if ( ! empty($columns))
+		if ($columns)
 		{
 			// Set the column names
 			$this->_columns = $columns;
