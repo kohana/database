@@ -97,6 +97,12 @@ class Kohana_Database_Query_Builder_Update extends Database_Query_Builder_Where 
 			$query .= ' WHERE '.$this->_compile_conditions($db, $this->_where);
 		}
 
+		if ($this->_limit !== NULL)
+		{
+			// Add limiting
+			$query .= ' LIMIT '.$this->_limit;
+		}
+
 		return $query;
 	}
 
