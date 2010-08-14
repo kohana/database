@@ -113,6 +113,8 @@ class Kohana_Database_Query_Builder_Update extends Database_Query_Builder_Where 
 		$this->_set   =
 		$this->_where = array();
 
+		$this->_limit = NULL;
+
 		$this->_parameters = array();
 
 		return $this;
