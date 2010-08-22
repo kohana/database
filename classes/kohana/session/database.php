@@ -42,9 +42,6 @@ class Kohana_Session_Database extends Session {
 	// The old session id
 	protected $_update_id;
 
-	// Update the session?
-	protected $_update = FALSE;
-
 	public function __construct(array $config = NULL, $id = NULL)
 	{
 		if ( ! isset($config['group']))
