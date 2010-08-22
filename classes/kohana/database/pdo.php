@@ -49,8 +49,19 @@ class Kohana_Database_PDO extends Database {
 			$attrs[PDO::ATTR_PERSISTENT] = TRUE;
 		}
 
-		// Create a new PDO connection
-		$this->_connection = new PDO($dsn, $username, $password, $attrs);
+		try
+		{
+			// Create a new PDO connection
+			$this->_connection = new PDO($dsn, $username, $password, $attrs);
+		}
+		catch (PDOException $e)
+		{
+			throw new Database_Exception(':error', array(
+					':error' => $e->getMessage(),
+				),
+				$e->getCode(),
+				$e);
+		}
 
 		if ( ! empty($this->_config['charset']))
 		{
@@ -99,8 +110,13 @@ class Kohana_Database_PDO extends Database {
 				Profiler::delete($benchmark);
 			}
 
-			// Rethrow the exception
-			throw $e;
+			// Convert the exception in a database exception
+			throw new Database_Exception(':error [ :query ]', array(
+					':error' => $e->getMessage(),
+					':query' => $sql
+				),
+				$e->getCode(),
+				$e);
 		}
 
 		if (isset($benchmark))
