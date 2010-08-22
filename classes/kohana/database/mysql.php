@@ -66,7 +66,10 @@ class Kohana_Database_MySQL extends Database {
 			// No connection exists
 			$this->_connection = NULL;
 
-			throw $e;
+			throw new Database_Exception(':error', array(
+					':error' => mysql_error(),
+				),
+				mysql_errno());
 		}
 
 		// \xFF is a better delimiter, but the PHP driver uses underscore
