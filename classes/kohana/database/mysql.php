@@ -38,8 +38,6 @@ class Kohana_Database_MySQL extends Database {
 		extract($this->_config['connection'] + array(
 			'database'   => '',
 			'hostname'   => '',
-			'port'       => NULL,
-			'socket'     => NULL,
 			'username'   => '',
 			'password'   => '',
 			'persistent' => FALSE,
@@ -50,15 +48,15 @@ class Kohana_Database_MySQL extends Database {
 
 		try
 		{
-			if (empty($persistent))
-			{
-				// Create a connection and force it to be a new link
-				$this->_connection = mysql_connect($hostname, $username, $password, TRUE);
-			}
-			else
+			if ($persistent)
 			{
 				// Create a persistent connection
 				$this->_connection = mysql_pconnect($hostname, $username, $password);
+			}
+			else
+			{
+				// Create a connection and force it to be a new link
+				$this->_connection = mysql_connect($hostname, $username, $password, TRUE);
 			}
 		}
 		catch (ErrorException $e)
