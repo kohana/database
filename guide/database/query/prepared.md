@@ -1,30 +1,35 @@
-### Prepared Statements
+# Prepared Statements
 
 Using prepared statements allows you to write SQL queries manually while still escaping the query values automatically to prevent [SQL injection](http://wikipedia.org/wiki/SQL_Injection). Creating a query is simple:
 
     $query = DB::query(Database::SELECT, 'SELECT * FROM users WHERE username = :user');
 
-The [DB::query] factory method creates a new [Database_Query] class for us, to allow method chaining. The query contains a `:user` parameter, which we can assign to a value:
+The [DB::query] method is just a shortcut that creates a new [Database_Query] class for us, to allow method chaining. The query contains a `:user` parameter, which we will get to in a second.
+
+The first parameter is the type of query.  This is done for compatibility reasons for drivers, and to determine the return type.
+
+The second parameter is the query itself.  You should use parameters, rather than trying to concatenate your query and variables together.
+
+## Parameters
+
+Our example query earlier contains a `:user` parameter, which we can assign to a value using [Database_Query::param] like so:
 
     $query->param(':user', 'john');
 
-[!!] Parameter names can be any string, as they are replaced using [strtr](http://php.net/strtr). It is highly recommended to **not** use dollars signs as parameter names to prevent confusion.
-
-If you want to display the SQL that will be executed, simply cast the object to a string:
-
-    echo Kohana::debug((string) $query);
-    // Should display:
-    // SELECT * FROM users WHERE username = 'john'
+[!!] Parameter names can be any unique string, as they are replaced using [strtr](http://php.net/strtr). It is highly recommended to **not** use dollars signs as parameter names to prevent confusion.  Colons are commonly used.
 
 You can also update the `:user` parameter by calling [Database_Query::param] again:
 
     $query->param(':user', $_GET['search']);
 
-[!!] If you want to set multiple parameters at once, you can use [Database_Query::parameters].
+If you want to set multiple parameters at once, you can use [Database_Query::parameters].
+	
+	$query = DB::query(Database::SELECT, 'SELECT * FROM users WHERE username = :user AND status = :status');
 
-Once you have assigned something to each of the parameters, you can execute the query:
-
-    $query->execute();
+	$query->parameters(array(
+		'user' => 'john',
+		'status' => 'active',
+	))
 
 It is also possible to bind a parameter to a variable, using a [variable reference]((http://php.net/language.references.whatdo)). This can be extremely useful when running the same query many times:
 
@@ -38,3 +43,19 @@ It is also possible to bind a parameter to a variable, using a [variable referen
     }
 
 In the above example, the variables `$username` and `$password` are changed for every loop of the `foreach` statement. When the parameter changes, it effectively changes the `:user` and `:pass` query parameters. Careful parameter binding can save a lot of code when it is used properly.
+
+[!!] Although all parameters are escaped to prevent SQL injection, it is still a good idea to validate/sanitize your input.
+
+## Display the raw query
+
+If you want to display the SQL that will be executed, simply cast the object to a string:
+
+    echo Kohana::debug((string) $query);
+    // Should display:
+    // SELECT * FROM users WHERE username = 'john'
+
+## Executing
+
+Once you have assigned something to each of the parameters, you can execute the query and use [the results](results).
+
+    $query->execute();
