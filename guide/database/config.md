@@ -1,8 +1,8 @@
-## Configuration
+# Configuration
 
-After the module has been enabled you will need to provide a configuration file so that the module knows how to connect to your database. An example config file can be found at `modules/database/config/database.php`.
+The default config file is located in `MODPATH/database/config/database.php`.  You should copy this file to `APPPATH/config/database.php` and make changes there, in keeping with the [cascading filesystem](../kohana/files).
 
-The structure of a database configuration group, called an "instance", looks like this:
+The database configuration file contains an array of configuration groups. The structure of each database configuration group, called an "instance", looks like this:
 
     string INSTANCE_NAME => array(
         'type'         => string DATABASE_TYPE,
@@ -11,9 +11,7 @@ The structure of a database configuration group, called an "instance", looks lik
         'charset'      => string CHARACTER_SET,
         'profiling'    => boolean QUERY_PROFILING,
     ),
-
-[!!] Multiple instances of these settings can be defined within the configuration file.
-
+	
 Understanding each of these settings is important.
 
 INSTANCE_NAME
@@ -23,15 +21,15 @@ DATABASE_TYPE
 :  One of the installed database drivers. Kohana comes with "mysql" and "pdo" drivers.
 
 CONNECTION_ARRAY
-:  Specific driver options for connecting to your database. (Driver options are explained [below](#connection_settings).)
+:  Specific driver options for connecting to your database. (Driver options are explained [below](#connection-settings).)
 
 TABLE_PREFIX
 :  Prefix that will be added to all table names by the [query builder](#query_building).
 
 QUERY_PROFILING
-:  Enables [profiling](debugging.profiling) of database queries.
+:  Enables [profiling](../kohana/profiling) of database queries.  This is useful for seeing how many queries each page is using, and which are taking the longest.  You must enable the profiler the view these stats.
 
-### Example
+## Example
 
 The example file below shows 2 MySQL connections, one local and one remote.
 
@@ -66,13 +64,35 @@ The example file below shows 2 MySQL connections, one local and one remote.
         ),
     );
 
-### Connection Settings {#connection_settings}
+## Connections and Instances
+
+Each configuration group is referred to as a database instance. Each instance can be accessed by calling [Database::instance].  If you don't provide a parameter, the default instance is used.
+
+	// This would connect to the database defined as 'default'
+    $default = Database::instance();
+	
+	// This would connect to the database defined as 'remote'
+    $remote  = Database::instance('remote');
+
+To disconnect the database, simply destroy the object:
+
+    unset($default)
+	
+	// Or
+	
+	unset(Database::$instances['default']);
+
+If you want to disconnect all of the database instances at once:
+
+    Database::$instances = array();
+
+## Connection Settings
 
 Every database driver has different connection settings.
 
-#### MySQL
+### MySQL
 
-A MySQL database can accept the following options in the `connection` array:
+A [MySQL database](http://www.php.net/manual/en/book.mysql.php) can accept the following options in the `connection` array:
 
 Type      | Option     |  Description               | Default value
 ----------|------------|----------------------------| -------------------------
@@ -84,9 +104,9 @@ Type      | Option     |  Description               | Default value
 `boolean` | persistent | Persistent connections     | `FALSE`
 `string`  | database   | Database name              | `kohana`
 
-#### PDO
+### PDO
 
-A PDO database can accept these options in the `connection` array:
+A [PDO database](http://php.net/manual/en/book.pdo.php) can accept these options in the `connection` array:
 
 Type      | Option     |  Description               | Default value
 ----------|------------|----------------------------| -------------------------
@@ -96,18 +116,3 @@ Type      | Option     |  Description               | Default value
 `boolean` | persistent | Persistent connections     | `FALSE`
 
 [!!] If you are using PDO and are not sure what to use for the `dsn` option, review [PDO::__construct](http://php.net/pdo.construct).
-
-## Connections and Instances {#connections}
-
-Each configuration group is referred to as a database instance. Each instance can be accessed by calling [Database::instance]:
-
-    $default = Database::instance();
-    $remote  = Database::instance('remote');
-
-To disconnect the database, simply destroy the object:
-
-    unset($default, Database::$instances['default']);
-
-If you want to disconnect all of the database instances at once:
-
-    Database::$instances = array();
