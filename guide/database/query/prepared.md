@@ -6,9 +6,9 @@ Using prepared statements allows you to write SQL queries manually while still e
 
 The [DB::query] method is just a shortcut that creates a new [Database_Query] class for us, to allow method chaining. The query contains a `:user` parameter, which we will get to in a second.
 
-The first parameter is the type of query.  This is done for compatibility reasons for drivers, and to determine the return type.
+The first parameter of [DB::query] is the type of query.  It should be `Database::SELECT`, `Database::INSERT`, `Database::UPDATE`, or `Database::DELETE`.  This is done for compatibility reasons for drivers, and to easily determine what `execute()` should return.
 
-The second parameter is the query itself.  You should use parameters, rather than trying to concatenate your query and variables together.
+The second parameter is the query itself.  Rather than trying to concatenate your query and variables together, you should make use of [Database_Query::param].  This will make your queries much easier to mantain, and will escape the values to prevent [SQL injection](http://wikipedia.org/wiki/SQL_Injection). 
 
 ## Parameters
 
@@ -58,4 +58,4 @@ If you want to display the SQL that will be executed, simply cast the object to 
 
 Once you have assigned something to each of the parameters, you can execute the query and use [the results](results).
 
-    $query->execute();
+    $result = $query->execute();

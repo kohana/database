@@ -18,13 +18,13 @@ INSTANCE_NAME
 :  Connections can be named anything you want, but you should always have at least one connection called "default".
 
 DATABASE_TYPE
-:  One of the installed database drivers. Kohana comes with "mysql" and "pdo" drivers.
+:  One of the installed database drivers. Kohana comes with "mysql" and "pdo" drivers.  Drivers must extend the Database class.
 
 CONNECTION_ARRAY
 :  Specific driver options for connecting to your database. (Driver options are explained [below](#connection-settings).)
 
 TABLE_PREFIX
-:  Prefix that will be added to all table names by the [query builder](#query_building).
+:  Prefix that will be added to all table names by the [query builder](#query_building). Prepared statements will **not** use the table prefix.
 
 QUERY_PROFILING
 :  Enables [profiling](../kohana/profiling) of database queries.  This is useful for seeing how many queries each page is using, and which are taking the longest.  You must enable the profiler the view these stats.
