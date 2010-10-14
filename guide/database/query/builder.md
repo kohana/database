@@ -10,7 +10,7 @@ Each type of database query is represented by a different class, each with their
 
     $query = DB::select();
 
-Select queries have one additional method that must be called and that is from(). The from() method takes one parameter which can be a the table name (string), an array, or an object. 
+Query Builder methods return a reference to itself so that method chaining may be used. Select queries ussually require a table and they are referenced using the from() method. The from() method takes one parameter which can be the table name (string), an array of two strings (table name and alias), or an object (See Subqueries in the Advanced Section below). 
 
     $query = DB::select()->from('users');
 
