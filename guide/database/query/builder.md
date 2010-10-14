@@ -6,11 +6,11 @@ Creating queries dynamically using objects and methods allows queries to be writ
 
 ## Select
 
-Each type of database query is represented by a different class, each with their own methods. For instance, to create a SELECT query, we use [DB::select] which is a shortcut to return a new chainable [Database_Query_Builder_Select] object:
+Each type of database query is represented by a different class, each with their own methods. For instance, to create a SELECT query, we use [DB::select] which is a shortcut to return a new [Database_Query_Builder_Select] object:
 
     $query = DB::select();
 
-Query Builder methods return a reference to itself so that method chaining may be used. Select queries ussually require a table and they are referenced using the from() method. The from() method takes one parameter which can be the table name (string), an array of two strings (table name and alias), or an object (See Subqueries in the Advanced Section below). 
+Query Builder methods return a reference to itself so that method chaining may be used. Select queries ussually require a table and they are referenced using the from() method. The from() method takes one parameter which can be the table name (string), an array of two strings (table name and alias), or an object (See Subqueries in the Advanced Queries section below). 
 
     $query = DB::select()->from('users');
 
@@ -18,7 +18,7 @@ Limiting the results of queries is done using the where(), and_where() and or_wh
 
     $query = DB::select()->from('users')->where('username', '=', 'john');
 
-Multiple where() methods may be used to string together multiple clauses connected by the boolean operator in the method's prefix. The where() method is the same as calling and_where(). 
+Multiple where() methods may be used to string together multiple clauses connected by the boolean operator in the method's prefix. The where() method is a wrapper that just calls and_where(). 
 
     $query = DB::select()->from('users')->where('username', '=', 'john')->or_where('username', '=', 'jane');
 
@@ -58,7 +58,7 @@ This query would generate the following SQL:
 
 When querying large sets of data, it is often better to limit the results and page through the data one chunk at a time. This is done using the limit() and offset() methods.
 
-    $query = DB::select()->from(‘posts’)->limit(10)->offset(30);
+    $query = DB::select()->from(`posts`)->limit(10)->offset(30);
 
 This query would generate the following SQL:
 
@@ -66,9 +66,9 @@ This query would generate the following SQL:
 
 ### Select - ORDER BY
 
-Often you will want the results in a particular order and rather than sorting the results, it’s better to have the results returned to you in the correct order. You can do this by using the order_by() method. It takes the column name and an optional direction string as the parameters. Multiple order_by methods can be used to add additional sorting capability.
+Often you will want the results in a particular order and rather than sorting the results, it's better to have the results returned to you in the correct order. You can do this by using the order_by() method. It takes the column name and an optional direction string as the parameters. Multiple order_by methods can be used to add additional sorting capability.
 
-    $query = DB::select()->from(‘posts’)->order_by(‘published’, ‘DESC’);
+    $query = DB::select()->from(`posts`)->order_by(`published`, `DESC`);
 
 This query would generate the following SQL:
 
@@ -118,9 +118,10 @@ This query would generate the following SQL:
 
 Multiple tables can be joined using the join() and on() methods. The join() method takes two parameters. The first is either a table name, an array containing the table and alias, or an object (subquery or expression). The second parameter is the join type: LEFT, RIGHT, INNER, etc. The on() method sets the conditions for the previous join() method and is very similar to the where() method in that it takes three parameters; left column (name, array or object), an operator, and the right column (name, array, or object). Multiple on() methods may be used to supply multiple conditions and they will be appended with an 'AND' operator. 
 
-    $query = DB::select('posts.username', 'users.email')->from('posts')->join('users')->on('posts.username', '=', 'users.username');
+[!!] When joining multiple tables with similar column names, it's best to prefix the columns with the table name or table alias to avoid errors. Ambiguous column names should also be aliased so that they can be referenced easier.
 
-[!!] When joining multiple tables with similar column names, its best to prefix the columns with the table name or table alias to avoid errors. These ambiguous column names should also be aliased so that they can be referenced easier.
+    $query = DB::select('posts.username', 'users.email')->from('posts')
+        ->join('users')->on('posts.username', '=', 'users.username');
 
 ### Database Functions
 
@@ -147,7 +148,8 @@ This looks almost exactly the same as a standard `AS` alias, but note how the co
 
 Aggregate functions like COUNT(), SUM(), AVG(), etc. will most likely be used with the group_by() and possibly the having() methods in order to group and filter the results on a set of columns.
 
-    $query = DB::select('username', array('COUNT("id"), 'total_posts')->from('posts')->group_by('username')->having('total_posts', '>=', 10);
+    $query = DB::select('username', array('COUNT("id"), 'total_posts')
+        ->from('posts')->group_by('username')->having('total_posts', '>=', 10);
 
 This will generate the following query:
 
@@ -155,9 +157,10 @@ This will generate the following query:
 
 ### Subqueries
 
-Query Builder objects can be passed as parameters to many of the methods to create subqueries. Let’s take the previous example query and pass it to a new query.
+Query Builder objects can be passed as parameters to many of the methods to create subqueries. Let's take the previous example query and pass it to a new query.
 
-    $sub = DB::select('username', array('COUNT("id"), 'total_posts')->from('posts')->group_by('username')->having('total_posts', '>=', 10);
+    $sub = DB::select('username', array('COUNT("id"), 'total_posts')
+        ->from('posts')->group_by('username')->having('total_posts', '>=', 10);
     
     $query = DB::select('profiles.*', 'posts.total_posts')->from('profiles')
         ->join(array($sub, 'posts'), 'INNER')->on('profiles.username', '=', 'posts.username');
@@ -170,13 +173,15 @@ This will generate the following query:
 
 Insert queries can also use a select query for the input values
 
-    $sub = DB::select('username', array('COUNT("id"), 'total_posts')->from('posts')->group_by('username')->having('total_posts', '>=', 10);
+    $sub = DB::select('username', array('COUNT("id"), 'total_posts')
+        ->from('posts')->group_by('username')->having('total_posts', '>=', 10);
     
     $query = DB::insert('post_totals', array('username', 'posts'))->select($sub);
 
 This will generate the following query:
 
-    INSERT INTO `post_totals` (`username`, `posts`) SELECT `username`, COUNT(`id`) AS `total_posts` FROM `posts` GROUP BY `username` HAVING `total_posts` >= 10 
+    INSERT INTO `post_totals` (`username`, `posts`) 
+    SELECT `username`, COUNT(`id`) AS `total_posts` FROM `posts` GROUP BY `username` HAVING `total_posts` >= 10 
 
 ### Boolean Operators and Nested Clauses 
 
@@ -200,7 +205,8 @@ This will generate the following query:
 
 Quoted aliases will solve most problems, but from time to time you may run into a situation where you need a complex expression or other database functions. In these cases, you will need to use a database expression created with [DB::expr].  A database expression is taken as direct input and no escaping is performed.
 
-    $query = DB::select('username')->from('users')->where('last_login', 'BETWEEN', DB::expr($then.' AND '.$now));
+    $query = DB::select('username')->from('users')
+        ->where('last_login', 'BETWEEN', DB::expr($then.' AND '.$now));
 
 This will generate the following query, assuming that $then == 1287020305 and $now == 1287026921:
 
