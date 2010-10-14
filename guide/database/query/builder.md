@@ -116,7 +116,7 @@ This query would generate the following SQL:
 
 ### Joins
 
-Multiple tables can be joined using the join() and on() methods. The join() method takes two parameters. The first is either a table name, an array containing the table and alias, or an object (subquery or expression). The second parameter is the join type: LEFT, RIGHT, INNER, etc. The on() method sets the conditions for the previous join() method and is very similar to the where() method in that it takes three parameters; left column (name, array or object), an operator, and the right column (name, array, or object). Multiple on() methods may be used to supply multiple conditions and they will be appended with an 'AND' operator. 
+Multiple tables can be joined using the join() and on() methods. The join() method takes two parameters. The first is either a table name, an array containing the table and alias, or an object (subquery or expression). The second parameter is the join type: LEFT, RIGHT, INNER, etc. The on() method sets the conditions for the previous join() method and is very similar to the where() method in that it takes three parameters; left column (name or object), an operator, and the right column (name or object). Multiple on() methods may be used to supply multiple conditions and they will be appended with an 'AND' operator. 
 
 [!!] When joining multiple tables with similar column names, it's best to prefix the columns with the table name or table alias to avoid errors. Ambiguous column names should also be aliased so that they can be referenced easier.
 
