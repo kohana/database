@@ -68,13 +68,32 @@ This query would generate the following SQL:
 
     DELETE FROM `users` WHERE `username` IN ('john', 'jane')
 
-[!!] For a complete list of methods available while building a dalete query see [Database_Query_Builder_Delete].
+[!!] For a complete list of methods available while building a delete query see [Database_Query_Builder_Delete].
 
 ## Advanced Queries
 
 ### Joins
 
-	// todo
+To do a JOIN you can use [DB::select] in the following way:
+
+    // This query will find all the posts related to "smith" with JOIN
+    $query = DB::select('authors.name', 'posts.content')->from('authors')->join('posts')->on('authors.id', '=', 'posts.author_id')->where('authors.name', '=', 'smith');
+
+This query would generate the following SQL:
+
+    SELECT `authors`.`name`, `posts`.`content` FROM `authors` JOIN `posts` ON (`authors`.`id` = `posts`.`author_id`) WHERE `authors`.`name` = 'smith'
+
+If you want to do a LEFT, RIGHT or INNER JOIN you would do it like this **join('colum_name', 'type_of_join')**:
+
+    // This query will find all the posts related to "smith" with LEFT JOIN
+    $query = DB::select()->from('authors')->join('posts', 'LEFT')->on('authors.id', '=', 'posts.author_id')->where('authors.name', '=', 'smith');
+
+This query would generate the following SQL:
+
+    SELECT `authors`.`name`, `posts`.`content` FROM `authors` LEFT JOIN `posts` ON (`authors`.`id` = `posts`.`author_id`) WHERE `authors`.`name` = 'smith'
+
+	
+[!!] For a complete list of methods available while building a select query see [Database_Query_Builder_Select].
 
 ### Database Functions
 
