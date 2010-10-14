@@ -148,7 +148,7 @@ This looks almost exactly the same as a standard `AS` alias, but note how the co
 
 Aggregate functions like COUNT(), SUM(), AVG(), etc. will most likely be used with the group_by() and possibly the having() methods in order to group and filter the results on a set of columns.
 
-    $query = DB::select('username', array('COUNT("id"), 'total_posts')
+    $query = DB::select('username', array('COUNT("id")', 'total_posts')
         ->from('posts')->group_by('username')->having('total_posts', '>=', 10);
 
 This will generate the following query:
@@ -159,7 +159,7 @@ This will generate the following query:
 
 Query Builder objects can be passed as parameters to many of the methods to create subqueries. Let's take the previous example query and pass it to a new query.
 
-    $sub = DB::select('username', array('COUNT("id"), 'total_posts')
+    $sub = DB::select('username', array('COUNT("id")', 'total_posts')
         ->from('posts')->group_by('username')->having('total_posts', '>=', 10);
     
     $query = DB::select('profiles.*', 'posts.total_posts')->from('profiles')
@@ -173,7 +173,7 @@ This will generate the following query:
 
 Insert queries can also use a select query for the input values
 
-    $sub = DB::select('username', array('COUNT("id"), 'total_posts')
+    $sub = DB::select('username', array('COUNT("id")', 'total_posts')
         ->from('posts')->group_by('username')->having('total_posts', '>=', 10);
     
     $query = DB::insert('post_totals', array('username', 'posts'))->select($sub);
@@ -185,7 +185,7 @@ This will generate the following query:
 
 ### Boolean Operators and Nested Clauses 
 
-Multiple Where and Having clauses are added to the query with Boolean operators connecting each expression. The default operator for both methods is AND which is the same as the "and_" prefixed method. The OR operator can be specified by prefixing the methods with "or_". Where and Having clauses can be nested or grouped by post fixing either method with "_open" and then followed by a method with a "_close". 
+Multiple Where and Having clauses are added to the query with Boolean operators connecting each expression. The default operator for both methods is AND which is the same as the and_ prefixed method. The OR operator can be specified by prefixing the methods with or_. Where and Having clauses can be nested or grouped by post fixing either method with _open and then followed by a method with a _close. 
 
     $query = DB::select()->from('users')
         ->where_open()
