@@ -27,9 +27,9 @@ If you want to set multiple parameters at once, you can use [Database_Query::par
 	$query = DB::query(Database::SELECT, 'SELECT * FROM users WHERE username = :user AND status = :status');
 
 	$query->parameters(array(
-		'user' => 'john',
-		'status' => 'active',
-	))
+		':user' => 'john',
+		':status' => 'active',
+	));
 
 It is also possible to bind a parameter to a variable, using a [variable reference]((http://php.net/language.references.whatdo)). This can be extremely useful when running the same query many times:
 
@@ -43,6 +43,8 @@ It is also possible to bind a parameter to a variable, using a [variable referen
     }
 
 In the above example, the variables `$username` and `$password` are changed for every loop of the `foreach` statement. When the parameter changes, it effectively changes the `:user` and `:pass` query parameters. Careful parameter binding can save a lot of code when it is used properly.
+
+The only difference between `param()` and `bind()` is that `bind()` passes the variable by reference rather than by assignment (copied), so future changes to the variable can be "seen" by the query. 
 
 [!!] Although all parameters are escaped to prevent SQL injection, it is still a good idea to validate/sanitize your input.
 
