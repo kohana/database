@@ -17,7 +17,7 @@ Once you have a query object built, either through a prepared statement or throu
 
 ### Select - `as_object()` and `as_assoc()`
 
-When iterating over a result set, the default type will be an associative array with the column names or aliases as the keys. As an option, before calling `execute()`, you can specify to return the result rows as an object by using the `as_object()` method. The `as_object() method takes one parameter, the name of the class of your choice, but will default to TRUE which uses the `stdClass`. Here is the example again using `stdClass`.
+When iterating over a result set, the default type will be an associative array with the column names or aliases as the keys. As an option, before calling `execute()`, you can specify to return the result rows as an object by using the `as_object()` method. The `as_object()` method takes one parameter, the name of the class of your choice, but will default to TRUE which uses the `stdClass`. Here is the example again using `stdClass`.
 
 	$results = DB::select()->from('users')->where('verified', '=', 0)->as_object()->execute();
 	foreach($results as $user)
