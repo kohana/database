@@ -1,6 +1,6 @@
 # Results
 
-[DB::select] will return a Database_Result which you can iterate on or return as an array. This example shows how you can iterate through the Database_Result using a foreach.
+[DB::select] will return a `Database_Result` which you can iterate on or return as an array. This example shows how you can iterate through the `Database_Result` using a foreach.
 
 	$results = DB::select()->from('users')->where('verified', '=', 0)->execute();
 	foreach($results as $user)
@@ -9,7 +9,7 @@
 		echo $user->email." needs to verfiy his/her account\n";
 	}
 
-Alternatively, you can access the Database_Result object like you would as an array.
+Alternatively, you can access the `Database_Result` object like you would as an array.
 
 	
 	$cars = DB::select()->from('cars')->where('year', '<', '1970')->limit(1)->execute();
@@ -27,6 +27,6 @@ Alternatively, you can access the Database_Result object like you would as an ar
 		
 	list($insert_id, $affected_rows) = $insert->execute();
 
-[DB:delete] and [DB:update] both return the number of affected rows as an integer
+[DB::delete] and [DB::update] both return the number of affected rows as an integer
 
 	$rows_updated = DB::delete('tools')->where('model', 'like', '3400')->execute();
