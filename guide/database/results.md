@@ -1,23 +1,95 @@
 # Results
 
-[DB::select] will return a `Database_Result` which you can iterate on or return as an array. This example shows how you can iterate through the `Database_Result` using a foreach.
+## Execute
+
+Once you have a query object built, either through a prepared statement or through the builder, you must then `execute()` the query and retreive the results. Depending on the query type used, the results returned will vary. 
+
+## Select
+
+[DB::select] will return a `Database_Result` object which you can then iterate over. This example shows how you can iterate through the `Database_Result` using a foreach.
 
 	$results = DB::select()->from('users')->where('verified', '=', 0)->execute();
+	foreach($results as $user)
+	{
+		//send reminder email to $user['email']
+		echo $user['email']." needs to verfiy his/her account\n";
+	}
+
+### Select - `as_object()` and `as_assoc()`
+
+When iterating over a result set, the default type will be an associative array with the column names or aliases as the keys. As an option, before calling `execute()`, you can specify to return the result rows as an object by using the `as_object()` method. The `as_object() method takes one parameter, the name of the class of your choice, but will default to TRUE which uses the `stdClass`. Here is the example again using `stdClass`.
+
+	$results = DB::select()->from('users')->where('verified', '=', 0)->as_object()->execute();
 	foreach($results as $user)
 	{
 		//send reminder email to $user->email
 		echo $user->email." needs to verfiy his/her account\n";
 	}
 
-Alternatively, you can access the `Database_Result` object like you would as an array.
+[!!] The method `as_assoc()` will remove the object name and return the results set back to an associative array. Since this is the default, this method is seldom required.
 
-	
-	$cars = DB::select()->from('cars')->where('year', '<', '1970')->limit(1)->execute();
-	if(count($cars))
+### Select - `as_array()`
+
+Sometimes you will require the results as a pure array rather than as an object. The `Database_Result` method `as_array()` will return an array of all rows. 
+
+	$results = DB::select('id', 'email')->from('users')->execute();
+	$users = $results->as_array();
+	foreach($users as $user)
 	{
-		echo 'Found '.$cars[0]['make'].' '.$cars[0]['model'];
+		echo 'User ID: '.$user['id'];
+		echo 'User Email: '.$user['email'];
 	}
-	
+
+It also accepts two parameters that can be verfy helpful: `$key` and `$value`. When passing a value to `$key` you will index the resulting array by the column specified.
+
+	$results = DB::select('id', 'email')->from('users')->execute();
+	$users = $results->as_array('id');
+	foreach($users as $id => $user)
+	{
+		echo 'User ID: '.$id;
+		echo 'User Email: '.$user['email'];
+	}
+
+The second parameter, `$value`, will referrence the column specified and return that value rather than the whole row.
+
+	$results = DB::select('id', 'email')->from('users')->execute();
+	$users = $results->as_array('id', 'email');
+	foreach($users as $id => $email)
+	{
+		echo 'User ID: '.$id;
+		echo 'User Email: '.$email;
+	}
+
+To return a non-associative array, leave `$key` as NULL and just pass a `$value`.
+
+	$results = DB::select('email')->from('users')->execute();
+	$users = $results->as_array(NULL, 'email');
+	foreach($users as $email)
+	{
+		echo 'User Email: '.$email;
+	}
+
+### Select - `get()`
+
+Sometime you only want a single value from a query. The `get()` method returns the value of the named column from the current row. The second parameter, `$default`, is used to supply a default value when the result is NULL.
+
+	$total_users = DB::select(array('COUNT("username")', 'total_users'))->from('users')->execute()->get('total_users', 0);
+
+### Select - `cached()`
+
+The mysql database diver returns a `Database_Result` that works with a MySQL Resource data type. Since this resource lives outside of PHP environment, it can't be serialized which menas it also can't be cached. To get around this the `Database_Result` object has the `cached()` method that returns a `Database_Result_Cached` object of teh result set. The `Database_Result_Cached` can be serialized and cached, but can take up more memory. 
+
+[!!] NOTE: Currently, the PDO diver always returns a class of `Database_Result_Cached`, so `cached()` just returns itself.
+
+### Select - `count()`
+
+The `Database_Result` object implements the `Countable` Interface. The method `count()` returns the total row count in the result set. 
+
+[!!] NOTE: This is the count of the current result set, not a count of how many records are in the database. This is important to point out especially when using `limit()` and `offset()` in your query.
+
+[!!] For a complete list of methods available when working with a result set see [Database_Result].
+
+## Insert
 
 [DB::insert] returns an array of two values: the last insert id and the number of affected rows
 	
@@ -27,6 +99,8 @@ Alternatively, you can access the `Database_Result` object like you would as an 
 		
 	list($insert_id, $affected_rows) = $insert->execute();
 
-[DB::delete] and [DB::update] both return the number of affected rows as an integer
+## Update & Delete
 
-	$rows_updated = DB::delete('tools')->where('model', 'like', '3400')->execute();
+[DB::update] and [DB::delete] both return the number of affected rows as an integer
+
+	$rows_deleted = DB::delete('tools')->where('model', 'like', '3400')->execute();
