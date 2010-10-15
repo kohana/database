@@ -1,10 +1,10 @@
 # Examples
 
-we needz them. lots of them.
+Here are some "real world" examples of using the database library to construct your queries and use the results.
 
-These examples should be pretty thorough. 
-Still need to show `having` 
+## Examples of Prepared Statements
 
+TODO: 4-6 examples of prepared statements of varying complexity, including a good bind() example.
 
 ## Pagination and search/filter
 
@@ -43,5 +43,8 @@ In this example, we loop through an array of whitelisted input fields and for ea
 	$query->order_by('last_name', 'asc')->order_by('first_name', 'asc')->limit($pagination->items_per_page)->offset($pagination->offset);
 	$results = $query->execute()->as_array();
 
+## Having
 
-## Having 
+TODO: example goes here
+
+[!!]  We could use more examples on this page. 
