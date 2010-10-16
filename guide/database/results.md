@@ -6,12 +6,12 @@ Once you have a query object built, either through a prepared statement or throu
 
 ## Select
 
-[DB::select] will return a `Database_Result` object which you can then iterate over. This example shows how you can iterate through the `Database_Result` using a foreach.
+[DB::select] will return a [Database_Result] object which you can then iterate over. This example shows how you can iterate through the [Database_Result] using a foreach.
 
 	$results = DB::select()->from('users')->where('verified', '=', 0)->execute();
 	foreach($results as $user)
 	{
-		//send reminder email to $user['email']
+		// Send reminder email to $user['email']
 		echo $user['email']." needs to verify his/her account\n";
 	}
 
@@ -22,7 +22,7 @@ When iterating over a result set, the default type will be an associative array 
 	$results = DB::select()->from('users')->where('verified', '=', 0)->as_object()->execute();
 	foreach($results as $user)
 	{
-		//send reminder email to $user->email
+		// Send reminder email to $user->email
 		echo $user->email." needs to verify his/her account\n";
 	}
 
@@ -50,15 +50,12 @@ It also accepts two parameters that can be very helpful: `$key` and `$value`. Wh
 		echo 'User Email: '.$user['email'];
 	}
 
-The second parameter, `$value`, will reference the column specified and return that value rather than the whole row.
+The second parameter, `$value`, will reference the column specified and return that value rather than the whole row.  This is particularly useful when making `<select>` dropdowns.
 
-	$results = DB::select('id', 'email')->from('users')->execute();
-	$users = $results->as_array('id', 'email');
-	foreach($users as $id => $email)
-	{
-		echo 'User ID: '.$id;
-		echo 'User Email: '.$email;
-	}
+	$results = DB::select('id', 'name')->from('users')->execute();
+	$users = $results->as_array('id','name');
+	// Show a dropdown with all users in it.
+	echo Form::select('author', $users)
 
 To return a non-associative array, leave `$key` as NULL and just pass a `$value`.
 
@@ -91,7 +88,7 @@ The `Database_Result` object implements the `Countable` Interface. The method `c
 
 ## Insert
 
-[DB::insert] returns an array of two values: the last insert id and the number of affected rows
+[DB::insert] returns an array of two values: the last insert id and the number of affected rows.
 	
 	$insert = DB::insert('tools')
 		->columns(array('name', 'model', 'description'))
@@ -101,6 +98,6 @@ The `Database_Result` object implements the `Countable` Interface. The method `c
 
 ## Update & Delete
 
-[DB::update] and [DB::delete] both return the number of affected rows as an integer
+[DB::update] and [DB::delete] both return the number of affected rows as an integer.
 
 	$rows_deleted = DB::delete('tools')->where('model', 'like', '3400')->execute();
