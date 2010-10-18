@@ -74,7 +74,7 @@ Sometime you only want a single value from a query. The `get()` method returns t
 
 ### Select - `cached()`
 
-The mysql database diver returns a `Database_Result` that works with a MySQL Resource data type. Since this resource lives outside of PHP environment, it can't be serialized which means it also can't be cached. To get around this the `Database_Result` object has the `cached()` method that returns a `Database_Result_Cached` object of the result set. The `Database_Result_Cached` can be serialized and cached, but can take up more memory. 
+The mysql database driver returns a `Database_Result` that works with a MySQL Resource data type. Since this resource lives outside of PHP environment, it can't be serialized which means it also can't be cached. To get around this the `Database_Result` object has the `cached()` method that returns a `Database_Result_Cached` object of the result set. The `Database_Result_Cached` can be serialized and cached, but can take up more memory. 
 
 [!!] NOTE: Currently, the PDO diver always returns a class of `Database_Result_Cached`, so `cached()` just returns itself.
 

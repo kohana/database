@@ -241,3 +241,13 @@ Another example to calculate the distance of two geographical points:
     $query = DB::select(array(DB::expr('degrees(acos(sin(radians('.$lat.')) * sin(radians(`latitude`)) + cos(radians('.$lat.')) * cos(radians(`latitude`)) * cos(radians(abs('.$lng.' - `longitude`))))) * 69.172'), 'distance'))->from('locations');
 
 [!!] You must validate or escape any user input inside of DB::expr as it will obviously not be escaped it for you.
+
+## Executing
+
+Once you are done building, you can execute the query using `execute()` and use [the results](results).
+
+    $result = $query->execute();
+
+To use a different database [config group](config) pass either the name or the config object to `execute()`.
+
+	$result = $query->execute('config_name')
