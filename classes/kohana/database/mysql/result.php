@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
- * MySQL database result.
+ * MySQL database result.   See [Results](/database/results) for usage and examples.
  *
  * @package    Kohana/Database
  * @category   Query/Result
