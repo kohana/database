@@ -78,6 +78,8 @@ The mysql database driver returns a `Database_Result` that works with a MySQL Re
 
 [!!] NOTE: Currently, the PDO diver always returns a class of `Database_Result_Cached`, so `cached()` just returns itself.
 
+The `cached()` function doesn't actually do any caching, it simply returns the result in a way that can be serialized and cached.  You will need to use the [Cache Module](../cache) or some other caching method.
+
 ### Select - `count()`
 
 The `Database_Result` object implements the `Countable` Interface. The method `count()` returns the total row count in the result set. 
