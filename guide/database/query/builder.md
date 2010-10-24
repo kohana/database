@@ -82,7 +82,7 @@ Often you will want the results in a particular order and rather than sorting th
 
 This query would generate the following SQL:
 
-    SELECT * FROM `posts` ORDER BY `created` DESC
+    SELECT * FROM `posts` ORDER BY `published` DESC
 
 [!!] For a complete list of methods available while building a select query see [Database_Query_Builder_Select].
 
