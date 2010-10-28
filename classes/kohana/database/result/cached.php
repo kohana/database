@@ -2,7 +2,8 @@
 /**
  * Cached database result.
  *
- * @package    Database
+ * @package    Kohana/Database
+ * @category   Query/Result
  * @author     Kohana Team
  * @copyright  (c) 2009 Kohana Team
  * @license    http://kohanaphp.com/license
@@ -20,6 +21,11 @@ class Kohana_Database_Result_Cached extends Database_Result {
 	public function __destruct()
 	{
 		// Cached results do not use resources
+	}
+
+	public function cached()
+	{
+		return $this;
 	}
 
 	public function seek($offset)

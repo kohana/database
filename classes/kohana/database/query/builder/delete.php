@@ -2,7 +2,8 @@
 /**
  * Database query builder for DELETE statements.
  *
- * @package    Database
+ * @package    Kohana/Database
+ * @category   Query
  * @author     Kohana Team
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    http://kohanaphp.com/license
@@ -18,10 +19,13 @@ class Kohana_Database_Query_Builder_Delete extends Database_Query_Builder_Where 
 	 * @param   mixed  table name or array($table, $alias) or object
 	 * @return  void
 	 */
-	public function __construct($table)
+	public function __construct($table = NULL)
 	{
-		// Set the inital table name
-		$this->_table = $table;
+		if ($table)
+		{
+			// Set the inital table name
+			$this->_table = $table;
+		}
 
 		// Start the query with no SQL
 		return parent::__construct(Database::DELETE, '');
@@ -54,7 +58,19 @@ class Kohana_Database_Query_Builder_Delete extends Database_Query_Builder_Where 
 		if ( ! empty($this->_where))
 		{
 			// Add deletion conditions
-			$query .= ' WHERE '.Database_Query_Builder::compile_conditions($db, $this->_where);
+			$query .= ' WHERE '.$this->_compile_conditions($db, $this->_where);
+		}
+
+		if ( ! empty($this->_order_by))
+		{
+			// Add sorting
+			$query .= ' '.$this->_compile_order_by($db, $this->_order_by);
+		}
+
+		if ($this->_limit !== NULL)
+		{
+			// Add limiting
+			$query .= ' LIMIT '.$this->_limit;
 		}
 
 		return $query;
@@ -64,6 +80,8 @@ class Kohana_Database_Query_Builder_Delete extends Database_Query_Builder_Where 
 	{
 		$this->_table = NULL;
 		$this->_where = array();
+
+		$this->_parameters = array();
 
 		return $this;
 	}

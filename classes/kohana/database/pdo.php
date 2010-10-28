@@ -2,7 +2,8 @@
 /**
  * PDO database connection.
  *
- * @package    Database
+ * @package    Kohana/Database
+ * @category   Drivers
  * @author     Kohana Team
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    http://kohanaphp.com/license
@@ -11,6 +12,17 @@ class Kohana_Database_PDO extends Database {
 
 	// PDO uses no quoting for identifiers
 	protected $_identifier = '';
+
+	protected function __construct($name, array $config)
+	{
+		parent::__construct($name, $config);
+
+		if (isset($this->_config['identifier']))
+		{
+			// Allow the identifier to be overloaded per-connection
+			$this->_identifier = (string) $this->_config['identifier'];
+		}
+	}
 
 	public function connect()
 	{
@@ -37,8 +49,19 @@ class Kohana_Database_PDO extends Database {
 			$attrs[PDO::ATTR_PERSISTENT] = TRUE;
 		}
 
-		// Create a new PDO connection
-		$this->_connection = new PDO($dsn, $username, $password, $attrs);
+		try
+		{
+			// Create a new PDO connection
+			$this->_connection = new PDO($dsn, $username, $password, $attrs);
+		}
+		catch (PDOException $e)
+		{
+			throw new Database_Exception(':error', array(
+					':error' => $e->getMessage(),
+				),
+				$e->getCode(),
+				$e);
+		}
 
 		if ( ! empty($this->_config['charset']))
 		{
@@ -87,8 +110,13 @@ class Kohana_Database_PDO extends Database {
 				Profiler::delete($benchmark);
 			}
 
-			// Rethrow the exception
-			throw $e;
+			// Convert the exception in a database exception
+			throw new Database_Exception(':error [ :query ]', array(
+					':error' => $e->getMessage(),
+					':query' => $sql
+				),
+				$e->getCode(),
+				$e);
 		}
 
 		if (isset($benchmark))
@@ -114,7 +142,7 @@ class Kohana_Database_PDO extends Database {
 			{
 				$result->setFetchMode(PDO::FETCH_CLASS, 'stdClass');
 			}
-			
+
 			$result = $result->fetchAll();
 
 			// Return an iterator of results

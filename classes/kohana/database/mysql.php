@@ -2,7 +2,8 @@
 /**
  * MySQL database connection.
  *
- * @package    Database
+ * @package    Kohana/Database
+ * @category   Drivers
  * @author     Kohana Team
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    http://kohanaphp.com/license
@@ -37,8 +38,6 @@ class Kohana_Database_MySQL extends Database {
 		extract($this->_config['connection'] + array(
 			'database'   => '',
 			'hostname'   => '',
-			'port'       => NULL,
-			'socket'     => NULL,
 			'username'   => '',
 			'password'   => '',
 			'persistent' => FALSE,
@@ -49,15 +48,15 @@ class Kohana_Database_MySQL extends Database {
 
 		try
 		{
-			if (empty($persistent))
-			{
-				// Create a connection and force it to be a new link
-				$this->_connection = mysql_connect($hostname, $username, $password, TRUE);
-			}
-			else
+			if ($persistent)
 			{
 				// Create a persistent connection
 				$this->_connection = mysql_pconnect($hostname, $username, $password);
+			}
+			else
+			{
+				// Create a connection and force it to be a new link
+				$this->_connection = mysql_connect($hostname, $username, $password, TRUE);
 			}
 		}
 		catch (ErrorException $e)
@@ -65,7 +64,10 @@ class Kohana_Database_MySQL extends Database {
 			// No connection exists
 			$this->_connection = NULL;
 
-			throw $e;
+			throw new Database_Exception(':error', array(
+					':error' => mysql_error(),
+				),
+				mysql_errno());
 		}
 
 		// \xFF is a better delimiter, but the PHP driver uses underscore
@@ -108,13 +110,17 @@ class Kohana_Database_MySQL extends Database {
 
 			if (is_resource($this->_connection))
 			{
-				$status = mysql_close($this->_connection);
+				if ($status = mysql_close($this->_connection))
+				{
+					// Clear the connection
+					$this->_connection = NULL;
+				}
 			}
 		}
 		catch (Exception $e)
 		{
 			// Database is probably not disconnected
-			$status = is_resource($this->_connection);
+			$status = ! is_resource($this->_connection);
 		}
 
 		return $status;
@@ -308,6 +314,13 @@ class Kohana_Database_MySQL extends Database {
 					if (isset($length))
 					{
 						list($column['numeric_precision'], $column['numeric_scale']) = explode(',', $length);
+					}
+				break;
+				case 'int':
+					if (isset($length))
+					{
+						// MySQL attribute
+						$column['display'] = $length;
 					}
 				break;
 				case 'string':
