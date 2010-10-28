@@ -13,6 +13,9 @@ class Kohana_Database_PDO extends Database {
 	// PDO uses no quoting for identifiers
 	protected $_identifier = '';
 
+	// Sequence name for getting the last insert ID
+	protected $_sequence = NULL;
+
 	protected function __construct($name, array $config)
 	{
 		parent::__construct($name, $config);
@@ -87,6 +90,22 @@ class Kohana_Database_PDO extends Database {
 		$this->_connection->exec('SET NAMES '.$this->quote($charset));
 	}
 
+	/**
+	 * Set the sequence name for getting the last insert ID.
+	 *
+	 * [!!] This is only necessary when using Postgre.
+	 *
+	 * @param   string  new sequence name
+	 * @return  $this
+	 */
+	public function sequence($name = NULL)
+	{
+		// Set the new sequence name
+		$this->_sequence = $name;
+
+		return $this;
+	}
+
 	public function query($type, $sql, $as_object = FALSE, array $params = NULL)
 	{
 		// Make sure the database is connected
@@ -152,7 +171,7 @@ class Kohana_Database_PDO extends Database {
 		{
 			// Return a list of insert id and rows created
 			return array(
-				$this->_connection->lastInsertId(),
+				$this->_connection->lastInsertId($this->_sequence),
 				$result->rowCount(),
 			);
 		}
