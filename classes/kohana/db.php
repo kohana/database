@@ -76,7 +76,7 @@ class Kohana_DB {
 	 * @param   array   list of column names or array($column, $alias) or object
 	 * @return  Database_Query_Builder_Insert
 	 */
-	public static function insert($table, array $columns = NULL)
+	public static function insert($table = NULL, array $columns = NULL)
 	{
 		return new Database_Query_Builder_Insert($table, $columns);
 	}
@@ -90,7 +90,7 @@ class Kohana_DB {
 	 * @param   string  table to update
 	 * @return  Database_Query_Builder_Update
 	 */
-	public static function update($table)
+	public static function update($table = NULL)
 	{
 		return new Database_Query_Builder_Update($table);
 	}
@@ -104,7 +104,7 @@ class Kohana_DB {
 	 * @param   string  table to delete from
 	 * @return  Database_Query_Builder_Delete
 	 */
-	public static function delete($table)
+	public static function delete($table = NULL)
 	{
 		return new Database_Query_Builder_Delete($table);
 	}

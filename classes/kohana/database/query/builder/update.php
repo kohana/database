@@ -22,10 +22,13 @@ class Kohana_Database_Query_Builder_Update extends Database_Query_Builder_Where 
 	 * @param   mixed  table name or array($table, $alias) or object
 	 * @return  void
 	 */
-	public function __construct($table)
+	public function __construct($table = NULL)
 	{
-		// Set the inital table name
-		$this->_table = $table;
+		if ($table)
+		{
+			// Set the inital table name
+			$this->_table = $table;
+		}
 
 		// Start the query with no SQL
 		return parent::__construct(Database::UPDATE, '');
@@ -94,6 +97,12 @@ class Kohana_Database_Query_Builder_Update extends Database_Query_Builder_Where 
 			$query .= ' WHERE '.$this->_compile_conditions($db, $this->_where);
 		}
 
+		if ($this->_limit !== NULL)
+		{
+			// Add limiting
+			$query .= ' LIMIT '.$this->_limit;
+		}
+
 		return $query;
 	}
 
@@ -103,6 +112,8 @@ class Kohana_Database_Query_Builder_Update extends Database_Query_Builder_Where 
 
 		$this->_set   =
 		$this->_where = array();
+
+		$this->_limit = NULL;
 
 		$this->_parameters = array();
 

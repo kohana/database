@@ -479,6 +479,9 @@ abstract class Kohana_Database {
 		if (is_array($value))
 		{
 			$table =& $value[0];
+
+			// Attach table prefix to alias
+			$value[1] = $this->table_prefix().$value[1];
 		}
 		else
 		{
