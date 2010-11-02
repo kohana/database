@@ -238,12 +238,31 @@ abstract class Kohana_Database {
 	/**
 	 * Start a SQL transaction
 	 *
+	 *     // Start the transactions
+	 *     $db->begin();
+	 *
+	 *     try {
+	 *          DB::insert('users')->values($user1)...
+	 *          DB::insert('users')->values($user2)...
+	 *          // Insert successful commit the changes
+	 *          $db->commit();
+	 *     }
+	 *     catch (Database_Exception $e)
+	 *     {
+	 *          // Insert failed. Rolling back changes...
+	 *          $db->rollback();
+	 *      }
+	 *
+	 * @param string transaction mode
 	 * @return  boolean
 	 */
-	abstract public function begin();
+	abstract public function begin($mode = NULL);
 
 	/**
 	 * Commit the current transaction
+	 *
+	 *     // Commit the database changes
+	 *     $db->commit();
 	 *
 	 * @return  boolean
 	 */
@@ -251,6 +270,9 @@ abstract class Kohana_Database {
 
 	/**
 	 * Abort the current transaction
+	 *
+	 *     // Undo the changes
+	 *     $db->rollback();
 	 *
 	 * @return  boolean
 	 */
