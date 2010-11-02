@@ -163,6 +163,30 @@ class Kohana_Database_PDO extends Database {
 		}
 	}
 
+	public function begin()
+	{
+		// Make sure the database is connected
+		$this->_connection or $this->connect();
+
+		return $this->_connection->beginTransaction();
+	}
+
+	public function commit()
+	{
+		// Make sure the database is connected
+		$this->_connection or $this->connect();
+
+		return $this->_connection->commit();
+	}
+
+	public function rollback()
+	{
+		// Make sure the database is connected
+		$this->_connection or $this->connect();
+
+		return $this->_connection->rollBack();
+	}
+
 	public function list_tables($like = NULL)
 	{
 		throw new Kohana_Exception('Database method :method is not supported by :class',

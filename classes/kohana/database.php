@@ -236,6 +236,27 @@ abstract class Kohana_Database {
 	}
 
 	/**
+	 * Start a SQL transaction
+	 *
+	 * @return  boolean
+	 */
+	abstract public function begin();
+
+	/**
+	 * Commit the current transaction
+	 *
+	 * @return  boolean
+	 */
+	abstract public function commit();
+
+	/**
+	 * Abort the current transaction
+	 *
+	 * @return  boolean
+	 */
+	abstract public function rollback();
+
+	/**
 	 * Count the number of records in a table.
 	 *
 	 *     // Get the total number of records in the "users" table
