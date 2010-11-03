@@ -163,7 +163,7 @@ class Kohana_Database_PDO extends Database {
 		}
 	}
 
-	public function begin()
+	public function begin($mode = NULL)
 	{
 		// Make sure the database is connected
 		$this->_connection or $this->connect();
