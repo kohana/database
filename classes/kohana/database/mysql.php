@@ -256,6 +256,56 @@ class Kohana_Database_MySQL extends Database {
 		return parent::datatype($type);
 	}
 
+	/**
+	 * Start a SQL transaction
+	 *
+	 * @link http://dev.mysql.com/doc/refman/5.0/en/set-transaction.html
+	 *
+	 * @param string Isolation level
+	 * @return boolean
+	 */
+	public function begin($mode = NULL)
+	{
+		// Make sure the database is connected
+		$this->_connection or $this->connect();
+
+		if ($mode AND ! mysql_query("SET TRANSACTION ISOLATION LEVEL $mode", $this->_connection))
+		{
+			throw new Database_Exception(':error', array(':error' => mysql_error($this->_connection)),
+										 mysql_errno($this->_connection));
+		}
+
+		return (bool) mysql_query('START TRANSACTION', $this->_connection);
+	}
+
+	/**
+	 * Commit a SQL transaction
+	 *
+	 * @param string Isolation level
+	 * @return boolean
+	 */
+	public function commit()
+	{
+		// Make sure the database is connected
+		$this->_connection or $this->connect();
+
+		return (bool) mysql_query('COMMIT', $this->_connection);
+	}
+
+	/**
+	 * Rollback a SQL transaction
+	 *
+	 * @param string Isolation level
+	 * @return boolean
+	 */
+	public function rollback()
+	{
+		// Make sure the database is connected
+		$this->_connection or $this->connect();
+
+		return (bool) mysql_query('ROLLBACK', $this->_connection);
+	}
+
 	public function list_tables($like = NULL)
 	{
 		if (is_string($like))
