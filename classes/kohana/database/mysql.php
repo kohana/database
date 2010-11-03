@@ -22,6 +22,9 @@ class Kohana_Database_MySQL extends Database {
 	// MySQL uses a backtick for identifiers
 	protected $_identifier = '`';
 
+	// Transaction level
+	protected $_transaction_level = 0;
+
 	public function connect()
 	{
 		if ($this->_connection)
@@ -269,13 +272,24 @@ class Kohana_Database_MySQL extends Database {
 		// Make sure the database is connected
 		$this->_connection or $this->connect();
 
-		if ($mode AND ! mysql_query("SET TRANSACTION ISOLATION LEVEL $mode", $this->_connection))
+		// Run a normal transactions if we don't have any savepoints
+		if ($this->_transaction_level === 0)
 		{
-			throw new Database_Exception(':error', array(':error' => mysql_error($this->_connection)),
-										 mysql_errno($this->_connection));
+			if ($mode AND ! mysql_query("SET TRANSACTION ISOLATION LEVEL $mode", $this->_connection))
+			{
+				throw new Database_Exception(':error', array(':error' => mysql_error($this->_connection)),
+											 mysql_errno($this->_connection));
+			}
+			$return = (bool) mysql_query('START TRANSACTION', $this->_connection);
+		}
+		else
+		{
+			$return = (bool) mysql_query('SAVEPOINT transaction_'.$this->_transaction_level);
 		}
 
-		return (bool) mysql_query('START TRANSACTION', $this->_connection);
+		$this->_transaction_level++;
+
+		return $return;
 	}
 
 	/**
@@ -289,7 +303,13 @@ class Kohana_Database_MySQL extends Database {
 		// Make sure the database is connected
 		$this->_connection or $this->connect();
 
-		return (bool) mysql_query('COMMIT', $this->_connection);
+		$this->_transaction_level--;
+
+		// Commit the transaction or release the last savepoint
+		if ($this->_transaction_level === 0)
+			return (bool) mysql_query('COMMIT', $this->_connection);
+		else
+			return (bool) mysql_query('RELEASE SAVEPOINT transaction_'.$this->_transaction_level, $this->_connection);
 	}
 
 	/**
@@ -303,7 +323,17 @@ class Kohana_Database_MySQL extends Database {
 		// Make sure the database is connected
 		$this->_connection or $this->connect();
 
-		return (bool) mysql_query('ROLLBACK', $this->_connection);
+		$this->_transaction_level--;
+
+		// Rollback the database to the last savepoint or transaction
+		if ($this->_transaction_level === 0)
+		{
+			return (bool) mysql_query('ROLLBACK', $this->_connection);
+		}
+		else
+		{
+			return (bool) mysql_query('ROLLBACK TO SAVEPOINT transaction_'.$this->_transaction_level, $this->_connection);
+		}
 	}
 
 	public function list_tables($like = NULL)
