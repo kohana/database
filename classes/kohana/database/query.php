@@ -74,9 +74,16 @@ class Kohana_Database_Query {
 	 *
 	 * @param   integer  number of seconds to cache or null for default
 	 * @return  $this
+	 * @uses    Kohana::$cache_life
 	 */
 	public function cached($lifetime = NULL)
 	{
+		if ($lifetime === NULL)
+		{
+			// Use the global setting
+			$lifetime = Kohana::$cache_life;
+		}
+
 		$this->_lifetime = $lifetime;
 
 		return $this;
