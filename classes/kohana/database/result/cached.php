@@ -45,7 +45,7 @@ class Kohana_Database_Result_Cached extends Database_Result {
 	public function current()
 	{
 		// Return an array of the row
-		return $this->valid() ? $this->_result[$this->_current_row] : FALSE;
+		return $this->valid() ? $this->_result[$this->_current_row] : NULL;
 	}
 
 } // End Database_Result_Cached
