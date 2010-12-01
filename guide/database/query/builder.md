@@ -230,7 +230,7 @@ This will generate the following query:
 
 There are cases were you need a complex expression or other database functions, which you don't want the Query Builder to try and escape. In these cases, you will need to use a database expression created with [DB::expr].  **A database expression is taken as direct input and no escaping is performed.**
 
-    $query = DB::update('users')->set(array('login_count', DB::expr('login_count + 1')))->where('id', '=', $id);
+    $query = DB::update('users')->set(array('login_count' => DB::expr('login_count + 1')))->where('id', '=', $id);
 
 This will generate the following query, assuming `$id = 45`:
 
