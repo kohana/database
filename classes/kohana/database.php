@@ -187,12 +187,13 @@ abstract class Kohana_Database {
 	 *
 	 * @param   integer  Database::SELECT, Database::INSERT, etc
 	 * @param   string   SQL query
-	 * @param   mixed    result object class, TRUE for stdClass, FALSE for assoc array
+	 * @param   mixed    result object class string, TRUE for stdClass, FALSE for assoc array
+	 * @param   array    object construct parameters for result class
 	 * @return  object   Database_Result for SELECT queries
 	 * @return  array    list (insert id, row count) for INSERT queries
 	 * @return  integer  number of affected rows for all other queries
 	 */
-	abstract public function query($type, $sql, $as_object);
+	abstract public function query($type, $sql, $as_object = FALSE, array $params = NULL);
 
 	/**
 	 * Count the number of records in the last query, without LIMIT or OFFSET applied.
@@ -353,11 +354,15 @@ abstract class Kohana_Database {
 	 *     // Get all name-related columns
 	 *     $columns = $db->list_columns('users', '%name%');
 	 *
+	 *     // Get the columns from a table that doesn't use the table prefix
+	 *     $columns = $db->list_columns('users', NULL, FALSE);
+	 *
 	 * @param   string  table to get columns from
 	 * @param   string  column to search for
+	 * @param   boolean whether to add the table prefix automatically or not
 	 * @return  array
 	 */
-	abstract public function list_columns($table, $like = NULL);
+	abstract public function list_columns($table, $like = NULL, $add_prefix = TRUE);
 
 	/**
 	 * Extracts the text between parentheses, if any.

@@ -122,8 +122,14 @@ abstract class Kohana_Database_Query_Builder extends Database_Query {
 						$value = $db->quote($value);
 					}
 
+					if ($column)
+					{
+						// Apply proper quoting to the column
+						$column = $db->quote_identifier($column);
+					}
+
 					// Append the statement to the query
-					$sql .= $db->quote_identifier($column).' '.$op.' '.$value;
+					$sql .= trim($column.' '.$op.' '.$value);
 				}
 
 				$last_condition = $condition;
