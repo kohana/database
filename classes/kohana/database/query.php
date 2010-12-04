@@ -55,7 +55,7 @@ class Kohana_Database_Query {
 		}
 		catch (Exception $e)
 		{
-			return Kohana::exception_text($e);
+			return Kohana_Exception::text($e);
 		}
 	}
 
