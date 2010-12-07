@@ -1,6 +1,17 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
- * Database object creation helper methods.
+ * Provides a shortcut to get Database related objects for [making queries](../database/query).
+ *
+ * Shortcut     | Returned Object
+ * -------------|---------------
+ * [`DB::query()`](#query)   | [Database_Query]
+ * [`DB::insert()`](#insert) | [Database_Query_Builder_Insert]
+ * [`DB::select()`](#select),<br />[`DB::select_array()`](#select_array) | [Database_Query_Builder_Select]
+ * [`DB::update()`](#update) | [Database_Query_Builder_Update]
+ * [`DB::delete()`](#delete) | [Database_Query_Builder_Delete]
+ * [`DB::expr()`](#expr)     | [Database_Expression]
+ *
+ * You pass the same parameters to these functions as you pass to the objects they return.
  *
  * @package    Kohana/Database
  * @category   Base
