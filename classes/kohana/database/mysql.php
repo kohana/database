@@ -380,7 +380,6 @@ class Kohana_Database_MySQL extends Database {
 						case 'varbinary':
 							$column['character_maximum_length'] = $length;
 						break;
-
 						case 'char':
 						case 'varchar':
 							$column['character_maximum_length'] = $length;
@@ -390,7 +389,6 @@ class Kohana_Database_MySQL extends Database {
 						case 'longtext':
 							$column['collation_name'] = $row['Collation'];
 						break;
-
 						case 'enum':
 						case 'set':
 							$column['collation_name'] = $row['Collation'];
@@ -417,7 +415,7 @@ class Kohana_Database_MySQL extends Database {
 		// Make sure the database is connected
 		$this->_connection or $this->connect();
 
-		if (($value = mysql_real_escape_string((string) $value, $this->_connection)) === FALSE)
+		if (($value = mysql_real_escape_string( (string) $value, $this->_connection)) === FALSE)
 		{
 			throw new Database_Exception(':error',
 				array(':error' => mysql_errno($this->_connection)),
