@@ -223,8 +223,8 @@ abstract class Kohana_Database {
 			$result = $this->query
 			(
 				Database::SELECT,
-				'SELECT COUNT(*) AS '.$this->quote_identifier('total_rows').' '.
-				'FROM ('.$sql.') AS '.$this->quote_table('counted_results'),
+				'SELECT COUNT(*) AS '.$this->quote_identifier('total_rows').' '
+				.'FROM ('.$sql.') AS '.$this->quote_table('counted_results'),
 				TRUE
 			);
 
@@ -487,7 +487,7 @@ abstract class Kohana_Database {
 			else
 			{
 				// Convert the object to a string
-				return $this->quote((string) $value);
+				return $this->quote( (string) $value);
 			}
 		}
 		elseif (is_array($value))
