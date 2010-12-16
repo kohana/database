@@ -183,7 +183,7 @@ abstract class Kohana_Database_Query_Builder extends Database_Query {
 		{
 			list ($column, $direction) = $group;
 
-			if ( ! empty($direction))
+			if ($direction)
 			{
 				// Make the direction uppercase
 				$direction = strtoupper($direction);
