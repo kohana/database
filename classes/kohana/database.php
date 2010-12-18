@@ -190,52 +190,6 @@ abstract class Kohana_Database {
 	abstract public function query($type, $sql, $as_object = FALSE, array $params = NULL);
 
 	/**
-	 * Count the number of records in the last query, without LIMIT or OFFSET applied.
-	 *
-	 *     // Get the total number of records that match the last query
-	 *     $count = $db->count_last_query();
-	 *
-	 * @return  integer
-	 */
-	public function count_last_query()
-	{
-		if ($sql = $this->last_query)
-		{
-			$sql = trim($sql);
-			if (stripos($sql, 'SELECT') !== 0)
-			{
-				return FALSE;
-			}
-
-			if (stripos($sql, 'LIMIT') !== FALSE)
-			{
-				// Remove LIMIT from the SQL
-				$sql = preg_replace('/\sLIMIT\s+[^a-z]+/i', ' ', $sql);
-			}
-
-			if (stripos($sql, 'OFFSET') !== FALSE)
-			{
-				// Remove OFFSET from the SQL
-				$sql = preg_replace('/\sOFFSET\s+\d+/i', '', $sql);
-			}
-
-			// Get the total rows from the last query executed
-			$result = $this->query
-			(
-				Database::SELECT,
-				'SELECT COUNT(*) AS '.$this->quote_identifier('total_rows').' '
-				.'FROM ('.$sql.') AS '.$this->quote_table('counted_results'),
-				TRUE
-			);
-
-			// Return the total number of rows from the query
-			return (int) $result->current()->total_rows;
-		}
-
-		return FALSE;
-	}
-
-	/**
 	 * Start a SQL transaction
 	 *
 	 *     // Start the transactions
