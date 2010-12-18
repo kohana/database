@@ -195,6 +195,7 @@ abstract class Kohana_Database {
 	 *     // Get the total number of records that match the last query
 	 *     $count = $db->count_last_query();
 	 *
+	 * @deprecated  since v3.0.9
 	 * @return  integer
 	 */
 	public function count_last_query()
