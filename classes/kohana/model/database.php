@@ -2,7 +2,7 @@
 /**
  * Database Model base class.
  *
- * @package    Kohana
+ * @package    Kohana/Database
  * @category   Models
  * @author     Kohana Team
  * @copyright  (c) 2008-2010 Kohana Team
