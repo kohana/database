@@ -1,8 +1,14 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
- * Database connection wrapper. All database object instances are referenced
- * by a name. Queries are typically handled by [Database_Query], rather than
- * using the database object directly.
+ * Database connection wrapper/helper.
+ *
+ * You may get a database instance using `Database::instance('name')` where
+ * name is the [config](database/config) group. 
+ *
+ * This class provides connection instance management via Database Drivers, as
+ * well as quoting, escaping and other related functions. Querys are done using
+ * [Database_Query] and [Database_Query_Builder] objects, which can be easily
+ * created using the [DB] helper class.
  *
  * @package    Kohana/Database
  * @category   Base
