@@ -125,6 +125,8 @@ class Kohana_DB {
 	 * is the only way to use SQL functions within query builders.
 	 *
 	 *     $expression = DB::expr('COUNT(users.id)');
+	 *     $query = DB::update('users')->set(array('login_count' => DB::expr('login_count + 1')))->where('id', '=', $id);
+	 *     $users = ORM::factory('user')->where(DB::expr("BINARY `hash`"), '=', $hash)->find();
 	 *
 	 * @param   string  expression
 	 * @return  Database_Expression
