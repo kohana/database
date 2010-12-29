@@ -14,7 +14,7 @@ class Kohana_Database_Query {
 	protected $_type;
 
 	// Cache lifetime
-	protected $_lifetime;
+	protected $_lifetime = NULL;
 
 	// SQL statement
 	protected $_sql;
@@ -72,7 +72,7 @@ class Kohana_Database_Query {
 	/**
 	 * Enables the query to be cached for a specified amount of time.
 	 *
-	 * @param   integer  number of seconds to cache or null for default
+	 * @param   integer  number of seconds to cache
 	 * @return  $this
 	 */
 	public function cached($lifetime = NULL)
@@ -202,7 +202,7 @@ class Kohana_Database_Query {
 		// Compile the SQL query
 		$sql = $this->compile($db);
 
-		if ( ! empty($this->_lifetime) AND $this->_type === Database::SELECT)
+		if ($this->_lifetime !== NULL AND $this->_type === Database::SELECT)
 		{
 			// Set the cache key based on the database instance name and SQL
 			$cache_key = 'Database::query("'.$db.'", "'.$sql.'")';
