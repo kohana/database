@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
- * Database query wrapper.
+ * Database query wrapper.  See [Prepared Statements](database/query/prepared) for usage and examples.
  *
  * @package    Kohana/Database
  * @category   Query
@@ -24,6 +24,9 @@ class Kohana_Database_Query {
 
 	// Return results as associative arrays or objects
 	protected $_as_object = FALSE;
+
+	// Parameters for __construct when using object results
+	protected $_object_params = array();
 
 	/**
 	 * Creates a new SQL query of the specified type.
@@ -71,9 +74,16 @@ class Kohana_Database_Query {
 	 *
 	 * @param   integer  number of seconds to cache or null for default
 	 * @return  $this
+	 * @uses    Kohana::$cache_life
 	 */
 	public function cached($lifetime = NULL)
 	{
+		if ($lifetime === NULL)
+		{
+			// Use the global setting
+			$lifetime = Kohana::$cache_life;
+		}
+
 		$this->_lifetime = $lifetime;
 
 		return $this;
@@ -88,6 +98,8 @@ class Kohana_Database_Query {
 	{
 		$this->_as_object = FALSE;
 
+		$this->_object_params = array();
+
 		return $this;
 	}
 
@@ -97,9 +109,15 @@ class Kohana_Database_Query {
 	 * @param   string  classname or TRUE for stdClass
 	 * @return  $this
 	 */
-	public function as_object($class = TRUE)
+	public function as_object($class = TRUE, array $params = NULL)
 	{
 		$this->_as_object = $class;
+
+		if ($params)
+		{
+			// Add object parameters
+			$this->_object_params = $params;
+		}
 
 		return $this;
 	}
@@ -199,12 +217,12 @@ class Kohana_Database_Query {
 			if ($result = Kohana::cache($cache_key, NULL, $this->_lifetime))
 			{
 				// Return a cached result
-				return new Database_Result_Cached($result, $sql, $this->_as_object);
+				return new Database_Result_Cached($result, $sql, $this->_as_object, $this->_object_params);
 			}
 		}
 
 		// Execute the query
-		$result = $db->query($this->_type, $sql, $this->_as_object);
+		$result = $db->query($this->_type, $sql, $this->_as_object, $this->_object_params);
 
 		if (isset($cache_key))
 		{

@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
- * Database result wrapper.
+ * Database result wrapper.  See [Results](/database/results) for usage and examples.
  *
  * @package    Kohana/Database
  * @category   Query/Result
@@ -23,6 +23,9 @@ abstract class Kohana_Database_Result implements Countable, Iterator, SeekableIt
 	// Return rows as an object or associative array
 	protected $_as_object;
 
+	// Parameters for __construct when using object results
+	protected $_object_params = NULL;
+
 	/**
 	 * Sets the total number of rows and stores the result locally.
 	 *
@@ -30,7 +33,7 @@ abstract class Kohana_Database_Result implements Countable, Iterator, SeekableIt
 	 * @param   string  SQL query
 	 * @return  void
 	 */
-	public function __construct($result, $sql, $as_object)
+	public function __construct($result, $sql, $as_object = FALSE, array $params = NULL)
 	{
 		// Store the result locally
 		$this->_result = $result;
@@ -46,6 +49,12 @@ abstract class Kohana_Database_Result implements Countable, Iterator, SeekableIt
 
 		// Results as objects or associative arrays
 		$this->_as_object = $as_object;
+
+		if ($params)
+		{
+			// Object constructor params
+			$this->_object_params = $params;
+		}
 	}
 
 	/**

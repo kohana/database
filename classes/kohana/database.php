@@ -1,8 +1,14 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
- * Database connection wrapper. All database object instances are referenced
- * by a name. Queries are typically handled by [Database_Query], rather than
- * using the database object directly.
+ * Database connection wrapper/helper.
+ *
+ * You may get a database instance using `Database::instance('name')` where
+ * name is the [config](database/config) group. 
+ *
+ * This class provides connection instance management via Database Drivers, as
+ * well as quoting, escaping and other related functions. Querys are done using
+ * [Database_Query] and [Database_Query_Builder] objects, which can be easily
+ * created using the [DB] helper class.
  *
  * @package    Kohana/Database
  * @category   Base
@@ -181,12 +187,13 @@ abstract class Kohana_Database {
 	 *
 	 * @param   integer  Database::SELECT, Database::INSERT, etc
 	 * @param   string   SQL query
-	 * @param   mixed    result object class, TRUE for stdClass, FALSE for assoc array
+	 * @param   mixed    result object class string, TRUE for stdClass, FALSE for assoc array
+	 * @param   array    object construct parameters for result class
 	 * @return  object   Database_Result for SELECT queries
 	 * @return  array    list (insert id, row count) for INSERT queries
 	 * @return  integer  number of affected rows for all other queries
 	 */
-	abstract public function query($type, $sql, $as_object);
+	abstract public function query($type, $sql, $as_object = FALSE, array $params = NULL);
 
 	/**
 	 * Count the number of records in the last query, without LIMIT or OFFSET applied.
@@ -194,6 +201,7 @@ abstract class Kohana_Database {
 	 *     // Get the total number of records that match the last query
 	 *     $count = $db->count_last_query();
 	 *
+	 * @deprecated  since v3.0.9
 	 * @return  integer
 	 */
 	public function count_last_query()
@@ -222,8 +230,8 @@ abstract class Kohana_Database {
 			$result = $this->query
 			(
 				Database::SELECT,
-				'SELECT COUNT(*) AS '.$this->quote_identifier('total_rows').' '.
-				'FROM ('.$sql.') AS '.$this->quote_table('counted_results'),
+				'SELECT COUNT(*) AS '.$this->quote_identifier('total_rows').' '
+				.'FROM ('.$sql.') AS '.$this->quote_table('counted_results'),
 				TRUE
 			);
 
@@ -347,11 +355,15 @@ abstract class Kohana_Database {
 	 *     // Get all name-related columns
 	 *     $columns = $db->list_columns('users', '%name%');
 	 *
+	 *     // Get the columns from a table that doesn't use the table prefix
+	 *     $columns = $db->list_columns('users', NULL, FALSE);
+	 *
 	 * @param   string  table to get columns from
 	 * @param   string  column to search for
+	 * @param   boolean whether to add the table prefix automatically or not
 	 * @return  array
 	 */
-	abstract public function list_columns($table, $like = NULL);
+	abstract public function list_columns($table, $like = NULL, $add_prefix = TRUE);
 
 	/**
 	 * Extracts the text between parentheses, if any.
@@ -439,7 +451,7 @@ abstract class Kohana_Database {
 			else
 			{
 				// Convert the object to a string
-				return $this->quote((string) $value);
+				return $this->quote( (string) $value);
 			}
 		}
 		elseif (is_array($value))
@@ -534,7 +546,7 @@ abstract class Kohana_Database {
 			else
 			{
 				// Convert the object to a string
-				return $this->quote_identifier((string) $value);
+				return $this->quote_identifier( (string) $value);
 			}
 		}
 		elseif (is_array($value))
