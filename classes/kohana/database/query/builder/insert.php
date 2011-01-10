@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
- * Database query builder for INSERT statements.
+ * Database query builder for INSERT statements. See [Query Builder](/database/query/builder) for usage and examples.
  *
  * @package    Kohana/Database
  * @category   Query

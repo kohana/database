@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
- * Database query builder.
+ * Database query builder. See [Query Builder](/database/query/builder) for usage and examples.
  *
  * @package    Kohana/Database
  * @category   Query
@@ -183,13 +183,19 @@ abstract class Kohana_Database_Query_Builder extends Database_Query {
 		{
 			list ($column, $direction) = $group;
 
-			if ( ! empty($direction))
+			if ($direction)
 			{
 				// Make the direction uppercase
-				$direction = ' '.strtoupper($direction);
+				$direction = strtoupper($direction);
 			}
 
-			$sort[] = $db->quote_column($column).$direction;
+			if ($column)
+			{
+				// Quote the column, if it has a value
+				$column = $db->quote_column($column);
+			}
+
+			$sort[] = trim($column.' '.$direction);
 		}
 
 		return 'ORDER BY '.implode(', ', $sort);

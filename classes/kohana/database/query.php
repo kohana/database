@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
- * Database query wrapper.
+ * Database query wrapper.  See [Prepared Statements](database/query/prepared) for usage and examples.
  *
  * @package    Kohana/Database
  * @category   Query
@@ -74,9 +74,16 @@ class Kohana_Database_Query {
 	 *
 	 * @param   integer  number of seconds to cache
 	 * @return  $this
+	 * @uses    Kohana::$cache_life
 	 */
 	public function cached($lifetime = NULL)
 	{
+		if ($lifetime === NULL)
+		{
+			// Use the global setting
+			$lifetime = Kohana::$cache_life;
+		}
+
 		$this->_lifetime = $lifetime;
 
 		return $this;
