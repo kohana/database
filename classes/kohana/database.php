@@ -489,61 +489,58 @@ abstract class Kohana_Database {
 			list($column, $alias) = $column;
 		}
 
-		if ( ! is_string($column))
+		if ($column instanceof Database_Query)
 		{
-			if ($column instanceof Database_Query)
-			{
-				// Create a sub-query
-				return '('.$column->compile($this).')';
-			}
-			elseif ($column instanceof Database_Expression)
-			{
-				// Use a raw expression
-				return $column->value();
-			}
-			else
-			{
-				// Convert to a string
-				$column = (string) $column;
-			}
+			// Create a sub-query
+			$column = '('.$column->compile($this).')';
 		}
-
-		if ($column === '*')
+		elseif ($column instanceof Database_Expression)
 		{
-			return $column;
-		}
-		elseif (strpos($column, '"') !== FALSE)
-		{
-			// Quote the column in FUNC("column") identifiers
-			$column = preg_replace('/"(.+?)"/e', '$this->quote_column("$1")', $column);
-		}
-		elseif (strpos($column, '.') !== FALSE)
-		{
-			$parts = explode('.', $column);
-
-			if ($prefix = $this->table_prefix())
-			{
-				// Get the offset of the table name, 2nd-to-last part
-				$offset = count($parts) - 2;
-
-				// Add the table prefix to the table name
-				$parts[$offset] = $prefix.$parts[$offset];
-			}
-
-			foreach ($parts as & $part)
-			{
-				if ($part !== '*')
-				{
-					// Quote each of the parts
-					$part = $this->_identifier.$part.$this->_identifier;
-				}
-			}
-
-			$column = implode('.', $parts);
+			// Use a raw expression
+			$column = $column->value();
 		}
 		else
 		{
-			$column = $this->_identifier.$column.$this->_identifier;
+			// Convert to a string
+			$column = (string) $column;
+
+			if ($column === '*')
+			{
+				return $column;
+			}
+			elseif (strpos($column, '"') !== FALSE)
+			{
+				// Quote the column in FUNC("column") identifiers
+				$column = preg_replace('/"(.+?)"/e', '$this->quote_column("$1")', $column);
+			}
+			elseif (strpos($column, '.') !== FALSE)
+			{
+				$parts = explode('.', $column);
+
+				if ($prefix = $this->table_prefix())
+				{
+					// Get the offset of the table name, 2nd-to-last part
+					$offset = count($parts) - 2;
+
+					// Add the table prefix to the table name
+					$parts[$offset] = $prefix.$parts[$offset];
+				}
+
+				foreach ($parts as & $part)
+				{
+					if ($part !== '*')
+					{
+						// Quote each of the parts
+						$part = $this->_identifier.$part.$this->_identifier;
+					}
+				}
+
+				$column = implode('.', $parts);
+			}
+			else
+			{
+				$column = $this->_identifier.$column.$this->_identifier;
+			}
 		}
 
 		if (isset($alias))
@@ -571,50 +568,47 @@ abstract class Kohana_Database {
 			list($table, $alias) = $table;
 		}
 
-		if ( ! is_string($table))
+		if ($table instanceof Database_Query)
 		{
-			if ($table instanceof Database_Query)
-			{
-				// Create a sub-query
-				return '('.$table->compile($this).')';
-			}
-			elseif ($table instanceof Database_Expression)
-			{
-				// Use a raw expression
-				return $table->value();
-			}
-			else
-			{
-				// Convert to a string
-				$table = (string) $table;
-			}
+			// Create a sub-query
+			$table = '('.$table->compile($this).')';
 		}
-
-		if (strpos($table, '.') !== FALSE)
+		elseif ($table instanceof Database_Expression)
 		{
-			$parts = explode('.', $table);
-
-			if ($prefix = $this->table_prefix())
-			{
-				// Get the offset of the table name, last part
-				$offset = count($parts) - 1;
-
-				// Add the table prefix to the table name
-				$parts[$offset] = $prefix.$parts[$offset];
-			}
-
-			foreach ($parts as & $part)
-			{
-				// Quote each of the parts
-				$part = $this->_identifier.$part.$this->_identifier;
-			}
-
-			$table = implode('.', $parts);
+			// Use a raw expression
+			$table = $table->value();
 		}
 		else
 		{
-			// Add the table prefix
-			$table = $this->_identifier.$this->table_prefix().$table.$this->_identifier;
+			// Convert to a string
+			$table = (string) $table;
+
+			if (strpos($table, '.') !== FALSE)
+			{
+				$parts = explode('.', $table);
+
+				if ($prefix = $this->table_prefix())
+				{
+					// Get the offset of the table name, last part
+					$offset = count($parts) - 1;
+
+					// Add the table prefix to the table name
+					$parts[$offset] = $prefix.$parts[$offset];
+				}
+
+				foreach ($parts as & $part)
+				{
+					// Quote each of the parts
+					$part = $this->_identifier.$part.$this->_identifier;
+				}
+
+				$table = implode('.', $parts);
+			}
+			else
+			{
+				// Add the table prefix
+				$table = $this->_identifier.$this->table_prefix().$table.$this->_identifier;
+			}
 		}
 
 		if (isset($alias))
@@ -644,40 +638,37 @@ abstract class Kohana_Database {
 			list($value, $alias) = $value;
 		}
 
-		if ( ! is_string($value))
+		if ($value instanceof Database_Query)
 		{
-			if ($value instanceof Database_Query)
-			{
-				// Create a sub-query
-				return '('.$value->compile($this).')';
-			}
-			elseif ($value instanceof Database_Expression)
-			{
-				// Use a raw expression
-				return $value->value();
-			}
-			else
-			{
-				// Convert the object to a string
-				return $this->quote_identifier( (string) $value);
-			}
+			// Create a sub-query
+			$value = '('.$value->compile($this).')';
 		}
-
-		if (strpos($value, '.') !== FALSE)
+		elseif ($value instanceof Database_Expression)
 		{
-			$parts = explode('.', $value);
-
-			foreach ($parts as & $part)
-			{
-				// Quote each of the parts
-				$part = $this->_identifier.$part.$this->_identifier;
-			}
-
-			$value = implode('.', $parts);
+			// Use a raw expression
+			$value = $value->value();
 		}
 		else
 		{
-			$value = $this->_identifier.$value.$this->_identifier;
+			// Convert to a string
+			$value = (string) $value;
+
+			if (strpos($value, '.') !== FALSE)
+			{
+				$parts = explode('.', $value);
+
+				foreach ($parts as & $part)
+				{
+					// Quote each of the parts
+					$part = $this->_identifier.$part.$this->_identifier;
+				}
+
+				$value = implode('.', $parts);
+			}
+			else
+			{
+				$value = $this->_identifier.$value.$this->_identifier;
+			}
 		}
 
 		if (isset($alias))
