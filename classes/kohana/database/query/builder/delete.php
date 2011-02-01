@@ -73,7 +73,9 @@ class Kohana_Database_Query_Builder_Delete extends Database_Query_Builder_Where 
 			$query .= ' LIMIT '.$this->_limit;
 		}
 
-		return $query;
+		$this->_sql = $query;
+
+		return parent::compile($db);
 	}
 
 	public function reset()
@@ -82,6 +84,8 @@ class Kohana_Database_Query_Builder_Delete extends Database_Query_Builder_Where 
 		$this->_where = array();
 
 		$this->_parameters = array();
+
+		$this->_sql = NULL;
 
 		return $this;
 	}

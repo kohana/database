@@ -64,10 +64,10 @@ class Kohana_Database_MySQL extends Database {
 			// No connection exists
 			$this->_connection = NULL;
 
-			throw new Database_Exception(':error', array(
+			throw new Database_Exception('[:code] :error', array(
+					':code' => mysql_errno(),
 					':error' => mysql_error(),
-				),
-				mysql_errno());
+				));
 		}
 
 		// \xFF is a better delimiter, but the PHP driver uses underscore
@@ -93,9 +93,10 @@ class Kohana_Database_MySQL extends Database {
 		if ( ! mysql_select_db($database, $this->_connection))
 		{
 			// Unable to select database
-			throw new Database_Exception(':error',
-				array(':error' => mysql_error($this->_connection)),
-				mysql_errno($this->_connection));
+			throw new Database_Exception('[:code] :error', array(
+				':code' => mysql_errno($this->_connection),
+				':error' => mysql_error($this->_connection),
+			));
 		}
 
 		Database_MySQL::$_current_databases[$this->_connection_id] = $database;
@@ -144,9 +145,10 @@ class Kohana_Database_MySQL extends Database {
 
 		if ($status === FALSE)
 		{
-			throw new Database_Exception(':error',
-				array(':error' => mysql_error($this->_connection)),
-				mysql_errno($this->_connection));
+			throw new Database_Exception('[:code] :error', array(
+				':code' => mysql_errno($this->_connection),
+				':error' => mysql_error($this->_connection),
+			));
 		}
 	}
 
@@ -176,9 +178,11 @@ class Kohana_Database_MySQL extends Database {
 				Profiler::delete($benchmark);
 			}
 
-			throw new Database_Exception(':error [ :query ]',
-				array(':error' => mysql_error($this->_connection), ':query' => $sql),
-				mysql_errno($this->_connection));
+			throw new Database_Exception('[:code] :error ( :query )', array(
+				':code' => mysql_errno($this->_connection),
+				':error' => mysql_error($this->_connection),
+				':query' => $sql,
+			));
 		}
 
 		if (isset($benchmark))
@@ -417,9 +421,10 @@ class Kohana_Database_MySQL extends Database {
 
 		if (($value = mysql_real_escape_string( (string) $value, $this->_connection)) === FALSE)
 		{
-			throw new Database_Exception(':error',
-				array(':error' => mysql_errno($this->_connection)),
-				mysql_error($this->_connection));
+			throw new Database_Exception('[:code] :error', array(
+				':code' => mysql_errno($this->_connection),
+				':error' => mysql_error($this->_connection),
+			));
 		}
 
 		// SQL standard is to use single-quotes for all values

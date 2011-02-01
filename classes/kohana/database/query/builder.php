@@ -95,30 +95,24 @@ abstract class Kohana_Database_Query_Builder extends Database_Query {
 						// BETWEEN always has exactly two arguments
 						list($min, $max) = $value;
 
-						if (is_string($min) AND array_key_exists($min, $this->_parameters))
+						if ((is_string($min) AND array_key_exists($min, $this->_parameters)) === FALSE)
 						{
-							// Set the parameter as the minimum
-							$min = $this->_parameters[$min];
+							// Quote the value, it is not a parameter
+							$min = $db->quote($min);
 						}
 
-						if (is_string($max) AND array_key_exists($max, $this->_parameters))
+						if ((is_string($max) AND array_key_exists($max, $this->_parameters)) === FALSE)
 						{
-							// Set the parameter as the maximum
-							$max = $this->_parameters[$max];
+							// Quote the value, it is not a parameter
+							$max = $db->quote($max);
 						}
 
 						// Quote the min and max value
-						$value = $db->quote($min).' AND '.$db->quote($max);
+						$value = $min.' AND '.$max;
 					}
-					else
+					elseif ((is_string($value) AND array_key_exists($value, $this->_parameters)) === FALSE)
 					{
-						if (is_string($value) AND array_key_exists($value, $this->_parameters))
-						{
-							// Set the parameter as the value
-							$value = $this->_parameters[$value];
-						}
-
-						// Quote the entire value normally
+						// Quote the value, it is not a parameter
 						$value = $db->quote($value);
 					}
 
@@ -157,13 +151,13 @@ abstract class Kohana_Database_Query_Builder extends Database_Query {
 			// Quote the column name
 			$column = $db->quote_column($column);
 
-			if (is_string($value) AND array_key_exists($value, $this->_parameters))
+			if ((is_string($value) AND array_key_exists($value, $this->_parameters)) === FALSE)
 			{
-				// Use the parameter value
-				$value = $this->_parameters[$value];
+				// Quote the value, it is not a parameter
+				$value = $db->quote($value);
 			}
 
-			$set[$column] = $column.' = '.$db->quote($value);
+			$set[$column] = $column.' = '.$value;
 		}
 
 		return implode(', ', $set);
