@@ -361,7 +361,9 @@ class Kohana_Database_Query_Builder_Select extends Database_Query_Builder_Where 
 			$query .= ' OFFSET '.$this->_offset;
 		}
 
-		return $query;
+		$this->_sql = $query;
+
+		return parent::compile($db);
 	}
 
 	public function reset()
@@ -381,6 +383,8 @@ class Kohana_Database_Query_Builder_Select extends Database_Query_Builder_Where 
 		$this->_last_join = NULL;
 
 		$this->_parameters = array();
+
+		$this->_sql = NULL;
 
 		return $this;
 	}
