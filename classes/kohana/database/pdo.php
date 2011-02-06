@@ -56,10 +56,10 @@ class Kohana_Database_PDO extends Database {
 		}
 		catch (PDOException $e)
 		{
-			throw new Database_Exception('[:code] :error', array(
+			throw new Database_Exception($e->getCode(), '[:code] :error', array(
 				':code' => $e->getMessage(),
 				':error' => $e->getCode(),
-			));
+			), $e->getCode());
 		}
 
 		if ( ! empty($this->_config['charset']))
@@ -110,11 +110,11 @@ class Kohana_Database_PDO extends Database {
 			}
 
 			// Convert the exception in a database exception
-			throw new Database_Exception('[:code] :error ( :query )', array(
+			throw new Database_Exception($e->getCode(), '[:code] :error ( :query )', array(
 				':code' => $e->getMessage(),
 				':error' => $e->getCode(),
 				':query' => $sql,
-			));
+			), $e->getCode());
 		}
 
 		if (isset($benchmark))

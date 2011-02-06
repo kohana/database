@@ -64,7 +64,7 @@ class Kohana_Database_MySQL extends Database {
 			// No connection exists
 			$this->_connection = NULL;
 
-			throw new Database_Exception('[:code] :error', array(
+			throw new Database_Exception(mysql_errno(), '[:code] :error', array(
 					':code' => mysql_errno(),
 					':error' => mysql_error(),
 				));
@@ -93,7 +93,7 @@ class Kohana_Database_MySQL extends Database {
 		if ( ! mysql_select_db($database, $this->_connection))
 		{
 			// Unable to select database
-			throw new Database_Exception('[:code] :error', array(
+			throw new Database_Exception(mysql_errno($this->_connection), '[:code] :error', array(
 				':code' => mysql_errno($this->_connection),
 				':error' => mysql_error($this->_connection),
 			));
@@ -145,7 +145,7 @@ class Kohana_Database_MySQL extends Database {
 
 		if ($status === FALSE)
 		{
-			throw new Database_Exception('[:code] :error', array(
+			throw new Database_Exception(mysql_errno($this->_connection), '[:code] :error', array(
 				':code' => mysql_errno($this->_connection),
 				':error' => mysql_error($this->_connection),
 			));
@@ -178,7 +178,7 @@ class Kohana_Database_MySQL extends Database {
 				Profiler::delete($benchmark);
 			}
 
-			throw new Database_Exception('[:code] :error ( :query )', array(
+			throw new Database_Exception(mysql_errno($this->_connection), '[:code] :error ( :query )', array(
 				':code' => mysql_errno($this->_connection),
 				':error' => mysql_error($this->_connection),
 				':query' => $sql,
@@ -371,7 +371,7 @@ class Kohana_Database_MySQL extends Database {
 
 		if (($value = mysql_real_escape_string( (string) $value, $this->_connection)) === FALSE)
 		{
-			throw new Database_Exception('[:code] :error', array(
+			throw new Database_Exception(mysql_errno($this->_connection), '[:code] :error', array(
 				':code' => mysql_errno($this->_connection),
 				':error' => mysql_error($this->_connection),
 			));
