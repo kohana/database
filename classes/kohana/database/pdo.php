@@ -74,7 +74,7 @@ class Kohana_Database_PDO extends Database {
 		// Destroy the PDO object
 		$this->_connection = NULL;
 
-		return TRUE;
+		return parent::disconnect();
 	}
 
 	public function set_charset($charset)

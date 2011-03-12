@@ -115,6 +115,9 @@ class Kohana_Database_MySQL extends Database {
 				{
 					// Clear the connection
 					$this->_connection = NULL;
+
+					// Clear the instance
+					parent::disconnect();
 				}
 			}
 		}
