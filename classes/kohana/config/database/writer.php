@@ -26,19 +26,13 @@ class Kohana_Config_Database_Writer extends Config_Database_Reader implements Co
 	{
 		$config = serialize($config);
 
-		$query = DB::update($this->_table_name)
-			->value('config_value', $config)
-			->where('group_name', '=', $group)
-			->where('config_key', '=', $key)
+		$query = DB::query(Database::INSERT, 'REPLACE INTO `'.$this->_table_name.'`(`group_name`, `config_key`, `config_value`) VALUES(:group_name, :config_key, :config_value)')
+			->parameters(array(
+				':group_name'   => $group,
+				':config_key'   => $key,
+				':config_value' => $config
+			))
 			->execute($this->_db_instance);
-
-		// If this config option DNX
-		if ($query === 0)
-		{
-			DB::insert($this->_table_name, array('group_name', 'config_key', 'config_value'))
-				->values(array($group, $key, $config))
-				->execute($this->_db_instance);
-		}
 
 		return TRUE;
 	}
