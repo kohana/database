@@ -64,9 +64,8 @@ class Kohana_Database_MySQL extends Database {
 			// No connection exists
 			$this->_connection = NULL;
 
-			throw new Database_Exception(':error', array(
-					':error' => mysql_error(),
-				),
+			throw new Database_Exception(':error',
+				array(':error' => mysql_error()),
 				mysql_errno());
 		}
 
@@ -371,8 +370,8 @@ class Kohana_Database_MySQL extends Database {
 		if (($value = mysql_real_escape_string( (string) $value, $this->_connection)) === FALSE)
 		{
 			throw new Database_Exception(':error',
-				array(':error' => mysql_errno($this->_connection)),
-				mysql_error($this->_connection));
+				array(':error' => mysql_error($this->_connection)),
+				mysql_errno($this->_connection));
 		}
 
 		// SQL standard is to use single-quotes for all values
