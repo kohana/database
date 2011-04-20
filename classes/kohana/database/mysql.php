@@ -273,8 +273,9 @@ class Kohana_Database_MySQL extends Database {
 
 		if ($mode AND ! mysql_query("SET TRANSACTION ISOLATION LEVEL $mode", $this->_connection))
 		{
-			throw new Database_Exception(mysql_errno($this->_connection), ':error', array(':error' => mysql_error($this->_connection)),
-										 mysql_errno($this->_connection));
+			throw new Database_Exception(':error',
+				array(':error' => mysql_error($this->_connection)),
+				mysql_errno($this->_connection));
 		}
 
 		return (bool) mysql_query('START TRANSACTION', $this->_connection);
