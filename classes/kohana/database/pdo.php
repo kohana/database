@@ -56,10 +56,9 @@ class Kohana_Database_PDO extends Database {
 		}
 		catch (PDOException $e)
 		{
-			throw new Database_Exception($e->getCode(), '[:code] :error', array(
-				':code' => $e->getMessage(),
-				':error' => $e->getCode(),
-			), $e->getCode());
+			throw new Database_Exception(':error',
+				array(':error' => $e->getMessage()),
+				$e->getCode());
 		}
 
 		if ( ! empty($this->_config['charset']))
@@ -74,7 +73,7 @@ class Kohana_Database_PDO extends Database {
 		// Destroy the PDO object
 		$this->_connection = NULL;
 
-		return TRUE;
+		return parent::disconnect();
 	}
 
 	public function set_charset($charset)
@@ -110,11 +109,12 @@ class Kohana_Database_PDO extends Database {
 			}
 
 			// Convert the exception in a database exception
-			throw new Database_Exception($e->getCode(), '[:code] :error ( :query )', array(
-				':code' => $e->getMessage(),
-				':error' => $e->getCode(),
-				':query' => $sql,
-			), $e->getCode());
+			throw new Database_Exception(':error [ :query ]',
+				array(
+					':error' => $e->getMessage(),
+					':query' => $sql
+				),
+				$e->getCode());
 		}
 
 		if (isset($benchmark))
