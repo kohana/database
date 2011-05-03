@@ -180,16 +180,10 @@ abstract class Kohana_Database_Query_Builder extends Database_Query {
 			if ($direction)
 			{
 				// Make the direction uppercase
-				$direction = strtoupper($direction);
+				$direction = ' '.strtoupper($direction);
 			}
 
-			if ($column)
-			{
-				// Quote the column, if it has a value
-				$column = $db->quote_column($column);
-			}
-
-			$sort[] = trim($column.' '.$direction);
+			$sort[] = $db->quote_identifier($column).$direction;
 		}
 
 		return 'ORDER BY '.implode(', ', $sort);
