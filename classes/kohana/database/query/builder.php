@@ -183,7 +183,7 @@ abstract class Kohana_Database_Query_Builder extends Database_Query {
 				$direction = ' '.strtoupper($direction);
 			}
 
-			$sort[] = $db->quote_identifier($column).$direction;
+			$sort[] = $db->quote_column($column).$direction;
 		}
 
 		return 'ORDER BY '.implode(', ', $sort);
