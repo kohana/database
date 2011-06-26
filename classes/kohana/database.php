@@ -62,7 +62,7 @@ abstract class Kohana_Database {
 			if ($config === NULL)
 			{
 				// Load the configuration for this database
-				$config = Kohana::config('database')->$name;
+				$config = Kohana::$config->load('database')->$name;
 			}
 
 			if ( ! isset($config['type']))
