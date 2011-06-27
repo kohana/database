@@ -28,7 +28,7 @@ In this example, we loop through an array of whitelisted input fields and for ea
 	$count = $pagination_query->select('COUNT("*") AS mycount')->execute()->get('mycount');
 	
 	//pass the total item count to Pagination
-	$config = Kohana::config('pagination');
+	$config = Kohana::$config->load('pagination');
 	$pagination = Pagination::factory(array(
 		'total_items' => $count,
 		'current_page'   => array('source' => 'route', 'key' => 'page'), 

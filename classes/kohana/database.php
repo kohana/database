@@ -62,7 +62,7 @@ abstract class Kohana_Database {
 			if ($config === NULL)
 			{
 				// Load the configuration for this database
-				$config = Kohana::config('database')->$name;
+				$config = Kohana::$config->load('database')->$name;
 			}
 
 			if ( ! isset($config['type']))
@@ -158,12 +158,18 @@ abstract class Kohana_Database {
 
 	/**
 	 * Disconnect from the database. This is called automatically by [Database::__destruct].
+	 * Clears the database instance from [Database::$instances].
 	 *
 	 *     $db->disconnect();
 	 *
 	 * @return  boolean
 	 */
-	abstract public function disconnect();
+	public function disconnect()
+	{
+		unset(Database::$instances[$this->_instance]);
+
+		return TRUE;
+	}
 
 	/**
 	 * Set the connection character set. This is called automatically by [Database::connect].
