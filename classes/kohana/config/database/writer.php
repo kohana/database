@@ -100,9 +100,9 @@ class Kohana_Config_Database_Writer extends Config_Database_Reader implements Ko
 	protected function _update($group, $key, $config)
 	{
 		DB::update($this->_table_name)
-			->set('config_value', $config)
-			->where('group_name', $group)
-			->where('config_key', $key)
+			->set(array('config_value' => $config))
+			->where('group_name', '=', $group)
+			->where('config_key', '=', $key)
 			->execute($this->_db_instance);
 
 		return $this;
