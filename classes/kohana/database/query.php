@@ -13,6 +13,9 @@ class Kohana_Database_Query {
 	// Query type
 	protected $_type;
 
+	// Execute the query during a cache hit
+	protected $_force_execute = FALSE;
+
 	// Cache lifetime
 	protected $_lifetime = NULL;
 
@@ -72,11 +75,12 @@ class Kohana_Database_Query {
 	/**
 	 * Enables the query to be cached for a specified amount of time.
 	 *
-	 * @param   integer  number of seconds to cache
+	 * @param   integer  number of seconds to cache, 0 deletes it from the cache
+	 * @param   boolean  whether or not to execute the query during a cache hit
 	 * @return  $this
 	 * @uses    Kohana::$cache_life
 	 */
-	public function cached($lifetime = NULL)
+	public function cached($lifetime = NULL, $force = FALSE)
 	{
 		if ($lifetime === NULL)
 		{
@@ -84,6 +88,7 @@ class Kohana_Database_Query {
 			$lifetime = Kohana::$cache_life;
 		}
 
+		$this->_force_execute = $force;
 		$this->_lifetime = $lifetime;
 
 		return $this;
@@ -214,7 +219,9 @@ class Kohana_Database_Query {
 			// Set the cache key based on the database instance name and SQL
 			$cache_key = 'Database::query("'.$db.'", "'.$sql.'")';
 
-			if ($result = Kohana::cache($cache_key, NULL, $this->_lifetime))
+			// Read the cache first to delete a possible hit with lifetime <= 0
+			if ($result = Kohana::cache($cache_key, NULL, $this->_lifetime)
+				AND ! $this->_force_execute)
 			{
 				// Return a cached result
 				return new Database_Result_Cached($result, $sql, $this->_as_object, $this->_object_params);
@@ -224,7 +231,7 @@ class Kohana_Database_Query {
 		// Execute the query
 		$result = $db->query($this->_type, $sql, $this->_as_object, $this->_object_params);
 
-		if (isset($cache_key))
+		if (isset($cache_key) AND $this->_lifetime > 0)
 		{
 			// Cache the result array
 			Kohana::cache($cache_key, $result->as_array(), $this->_lifetime);
