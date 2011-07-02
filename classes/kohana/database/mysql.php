@@ -79,6 +79,18 @@ class Kohana_Database_MySQL extends Database {
 			// Set the character set
 			$this->set_charset($this->_config['charset']);
 		}
+
+		if ( ! empty($this->_config['connection']['variables']))
+		{
+			// Set session variables
+			foreach ($this->_config['connection']['variables'] as $variable => $value)
+			{
+				mysql_query(
+					'SET SESSION '.$variable.' = '.$this->quote($value),
+					$this->_connection
+				);
+			}
+		}
 	}
 
 	/**
