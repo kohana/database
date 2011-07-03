@@ -147,12 +147,12 @@ abstract class Kohana_Database_Query_Builder_Where extends Database_Query_Builde
 	/**
 	 * Return up to "LIMIT ..." results
 	 *
-	 * @param   integer  maximum results to return
+	 * @param   integer  maximum results to return or NULL to reset
 	 * @return  $this
 	 */
 	public function limit($number)
 	{
-		$this->_limit = (int) $number;
+		$this->_limit = $number;
 
 		return $this;
 	}

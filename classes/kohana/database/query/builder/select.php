@@ -308,12 +308,12 @@ class Kohana_Database_Query_Builder_Select extends Database_Query_Builder_Where 
 	/**
 	 * Start returning results after "OFFSET ..."
 	 *
-	 * @param   integer   starting result number
+	 * @param   integer   starting result number or NULL to reset
 	 * @return  $this
 	 */
 	public function offset($number)
 	{
-		$this->_offset = (int) $number;
+		$this->_offset = $number;
 
 		return $this;
 	}
@@ -442,4 +442,3 @@ class Kohana_Database_Query_Builder_Select extends Database_Query_Builder_Where 
 	}
 
 } // End Database_Query_Select
-
