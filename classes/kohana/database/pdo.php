@@ -68,6 +68,51 @@ class Kohana_Database_PDO extends Database {
 		}
 	}
 
+	/**
+	 * Create or redefine a SQL aggregate function.
+	 *
+	 * [!!] Works only with SQLite
+	 *
+	 * @link http://php.net/manual/function.pdo-sqlitecreateaggregate
+	 *
+	 * @param   string      $name       Name of the SQL function to be created or redefined
+	 * @param   callback    $step       Called for each row of a result set
+	 * @param   callback    $final      Called after all rows of a result set have been processed
+	 * @param   integer     $arguments  Number of arguments that the SQL function takes
+	 *
+	 * @return  boolean
+	 */
+	public function create_aggregate($name, $step, $final, $arguments = -1)
+	{
+		$this->_connection or $this->connect();
+
+		return $this->_connection->sqliteCreateAggregate(
+			$name, $step, $final, $arguments
+		);
+	}
+
+	/**
+	 * Create or redefine a SQL function.
+	 *
+	 * [!!] Works only with SQLite
+	 *
+	 * @link http://php.net/manual/function.pdo-sqlitecreatefunction
+	 *
+	 * @param   string      $name       Name of the SQL function to be created or redefined
+	 * @param   callback    $callback   Callback which implements the SQL function
+	 * @param   integer     $arguments  Number of arguments that the SQL function takes
+	 *
+	 * @return  boolean
+	 */
+	public function create_function($name, $callback, $arguments = -1)
+	{
+		$this->_connection or $this->connect();
+
+		return $this->_connection->sqliteCreateFunction(
+			$name, $callback, $arguments
+		);
+	}
+
 	public function disconnect()
 	{
 		// Destroy the PDO object
