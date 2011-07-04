@@ -233,7 +233,7 @@ class Kohana_Database_Query {
 			$cache_key = 'Database::query("'.$db.'", "'.$sql.'")';
 
 			// Read the cache first to delete a possible hit with lifetime <= 0
-			if ($result = Kohana::cache($cache_key, NULL, $this->_lifetime)
+			if (($result = Kohana::cache($cache_key, NULL, $this->_lifetime)) !== NULL
 				AND ! $this->_force_execute)
 			{
 				// Return a cached result
