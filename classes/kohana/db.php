@@ -129,11 +129,12 @@ class Kohana_DB {
 	 *     $users = ORM::factory('user')->where(DB::expr("BINARY `hash`"), '=', $hash)->find();
 	 *
 	 * @param   string  expression
+	 * @param   array   parameters
 	 * @return  Database_Expression
 	 */
-	public static function expr($string)
+	public static function expr($string, $parameters = array())
 	{
-		return new Database_Expression($string);
+		return new Database_Expression($string, $parameters);
 	}
 
 } // End DB
