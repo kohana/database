@@ -214,7 +214,7 @@ class Kohana_Database_Query {
 			// Set the cache key based on the database instance name and SQL
 			$cache_key = 'Database::query("'.$db.'", "'.$sql.'")';
 
-			if ($result = Kohana::cache($cache_key, NULL, $this->_lifetime))
+			if (($result = Kohana::cache($cache_key, NULL, $this->_lifetime)) !== NULL)
 			{
 				// Return a cached result
 				return new Database_Result_Cached($result, $sql, $this->_as_object, $this->_object_params);
