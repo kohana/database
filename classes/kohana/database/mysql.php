@@ -83,13 +83,14 @@ class Kohana_Database_MySQL extends Database {
 		if ( ! empty($this->_config['connection']['variables']))
 		{
 			// Set session variables
-			foreach ($this->_config['connection']['variables'] as $variable => $value)
+			$variables = array();
+
+			foreach ($this->_config['connection']['variables'] as $var => $val)
 			{
-				mysql_query(
-					'SET SESSION '.$variable.' = '.$this->quote($value),
-					$this->_connection
-				);
+				$variables[] = 'SESSION '.$var.' = '.$this->quote($val);
 			}
+
+			mysql_query('SET '.implode(', ', $variables), $this->_connection);
 		}
 	}
 
