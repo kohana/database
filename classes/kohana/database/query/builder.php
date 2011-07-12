@@ -120,8 +120,8 @@ abstract class Kohana_Database_Query_Builder extends Database_Query {
 					{
 						if (is_array($column))
 						{
-							// Use the column alias
-							$column = $db->quote_identifier(end($column));
+							// Use the column name
+							$column = $db->quote_identifier(reset($column));
 						}
 						else
 						{
