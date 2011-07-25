@@ -372,8 +372,8 @@ class Kohana_Database_Query_Builder_Select extends Database_Query_Builder_Where 
 
 		if ( ! empty($this->_group_by))
 		{
-			// Add sorting
-			$query .= ' GROUP BY '.implode(', ', array_map($quote_column, $this->_group_by));
+			// Add grouping
+			$query .= ' '.$this->_compile_group_by($db, $this->_group_by);
 		}
 
 		if ( ! empty($this->_having))

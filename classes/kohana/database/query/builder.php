@@ -118,8 +118,16 @@ abstract class Kohana_Database_Query_Builder extends Database_Query {
 
 					if ($column)
 					{
-						// Apply proper quoting to the column
-						$column = $db->quote_column($column);
+						if (is_array($column))
+						{
+							// Use the column name
+							$column = $db->quote_identifier(reset($column));
+						}
+						else
+						{
+							// Apply proper quoting to the column
+							$column = $db->quote_column($column);
+						}
 					}
 
 					// Append the statement to the query
@@ -164,6 +172,36 @@ abstract class Kohana_Database_Query_Builder extends Database_Query {
 	}
 
 	/**
+	 * Compiles an array of GROUP BY columns into an SQL partial.
+	 *
+	 * @param   object  Database instance
+	 * @param   array   columns
+	 * @return  string
+	 */
+	protected function _compile_group_by(Database $db, array $columns)
+	{
+		$group = array();
+
+		foreach ($columns as $column)
+		{
+			if (is_array($column))
+			{
+				// Use the column alias
+				$column = $db->quote_identifier(end($column));
+			}
+			else
+			{
+				// Apply proper quoting to the column
+				$column = $db->quote_column($column);
+			}
+
+			$group[] = $column;
+		}
+
+		return 'GROUP BY '.implode(', ', $group);
+	}
+
+	/**
 	 * Compiles an array of ORDER BY statements into an SQL partial.
 	 *
 	 * @param   object  Database instance
@@ -177,19 +215,24 @@ abstract class Kohana_Database_Query_Builder extends Database_Query {
 		{
 			list ($column, $direction) = $group;
 
-			if ($direction)
+			if (is_array($column))
 			{
-				// Make the direction uppercase
-				$direction = strtoupper($direction);
+				// Use the column alias
+				$column = $db->quote_identifier(end($column));
 			}
-
-			if ($column)
+			else
 			{
-				// Quote the column, if it has a value
+				// Apply proper quoting to the column
 				$column = $db->quote_column($column);
 			}
 
-			$sort[] = trim($column.' '.$direction);
+			if ($direction)
+			{
+				// Make the direction uppercase
+				$direction = ' '.strtoupper($direction);
+			}
+
+			$sort[] = $column.$direction;
 		}
 
 		return 'ORDER BY '.implode(', ', $sort);
