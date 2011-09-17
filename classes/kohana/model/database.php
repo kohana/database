@@ -17,8 +17,8 @@ abstract class Kohana_Model_Database extends Model {
 	 *
 	 *     $model = Model::factory($name);
 	 *
-	 * @param   string   model name
-	 * @param   mixed    Database instance object or string
+	 * @param   string   $name  model name
+	 * @param   mixed    $db    Database instance object or string
 	 * @return  Model
 	 */
 	public static function factory($name, $db = NULL)
@@ -37,7 +37,7 @@ abstract class Kohana_Model_Database extends Model {
 	 *
 	 *     $model = new Foo_Model($db);
 	 *
-	 * @param   mixed  Database instance object or string
+	 * @param   mixed  $db  Database instance object or string
 	 * @return  void
 	 */
 	public function __construct($db = NULL)

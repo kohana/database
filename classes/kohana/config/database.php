@@ -11,5 +11,5 @@
  */
 class Kohana_Config_Database extends Kohana_Config_Database_Writer
 {
-	
+
 }
