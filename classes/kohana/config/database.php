@@ -40,8 +40,8 @@ class Kohana_Config_Database extends Config_Reader {
 	 * Query the configuration table for all values for this group and
 	 * unserialize each of the values.
 	 *
-	 * @param   string  group name
-	 * @param   array   configuration array
+	 * @param   string  $group   group name
+	 * @param   array   $config  configuration array
 	 * @return  $this   clone of the current object
 	 */
 	public function load($group, array $config = NULL)
@@ -68,8 +68,8 @@ class Kohana_Config_Database extends Config_Reader {
 	 * Overload setting offsets to insert or update the database values as
 	 * changes occur.
 	 *
-	 * @param   string   array key
-	 * @param   mixed    new value
+	 * @param   string   $key    array key
+	 * @param   mixed    $value  new value
 	 * @return  mixed
 	 */
 	public function offsetSet($key, $value)
