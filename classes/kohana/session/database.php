@@ -47,7 +47,7 @@ class Kohana_Session_Database extends Session {
 		if ( ! isset($config['group']))
 		{
 			// Use the default group
-			$config['group'] = 'default';
+			$config['group'] = Database::$default;
 		}
 
 		// Load the database

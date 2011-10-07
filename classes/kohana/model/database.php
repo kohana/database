@@ -30,7 +30,7 @@ abstract class Kohana_Model_Database extends Model {
 	}
 
 	// Database instance
-	protected $_db = 'default';
+	protected $_db;
 
 	/**
 	 * Loads the database.
@@ -46,6 +46,11 @@ abstract class Kohana_Model_Database extends Model {
 		{
 			// Set the database instance name
 			$this->_db = $db;
+		}
+		
+		if ($this->_db === NULL)
+		{
+			$this->_db = Database::$default;
 		}
 
 		if (is_string($this->_db))
