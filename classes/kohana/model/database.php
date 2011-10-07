@@ -42,14 +42,14 @@ abstract class Kohana_Model_Database extends Model {
 	 */
 	public function __construct($db = NULL)
 	{
-		if ($db !== NULL)
+		if ($db)
 		{
-			// Set the database instance name
+			// Set the instance or name
 			$this->_db = $db;
 		}
-		
-		if ($this->_db === NULL)
+		elseif ( ! $this->_db)
 		{
+			// Use the default name
 			$this->_db = Database::$default;
 		}
 
