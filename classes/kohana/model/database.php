@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 /**
  * Database Model base class.
  *
@@ -30,7 +30,7 @@ abstract class Kohana_Model_Database extends Model {
 	}
 
 	// Database instance
-	protected $_db = 'default';
+	protected $_db;
 
 	/**
 	 * Loads the database.
@@ -42,10 +42,15 @@ abstract class Kohana_Model_Database extends Model {
 	 */
 	public function __construct($db = NULL)
 	{
-		if ($db !== NULL)
+		if ($db)
 		{
-			// Set the database instance name
+			// Set the instance or name
 			$this->_db = $db;
+		}
+		elseif ( ! $this->_db)
+		{
+			// Use the default name
+			$this->_db = Database::$default;
 		}
 
 		if (is_string($this->_db))
