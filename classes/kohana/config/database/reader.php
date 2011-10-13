@@ -11,7 +11,7 @@
  */
 class Kohana_Config_Database_Reader implements Kohana_Config_Reader
 {
-	protected $_db_instance = 'default';
+	protected $_db_instance;
 
 	protected $_table_name  = 'config';
 
@@ -25,6 +25,10 @@ class Kohana_Config_Database_Reader implements Kohana_Config_Reader
 		if (isset($config['instance']))
 		{
 			$this->_db_instance = $config['instance'];
+		}
+		elseif ($this->_db_instance === NULL)
+		{
+			$this->_db_instance = Database::$default;
 		}
 
 		if (isset($config['table_name']))
