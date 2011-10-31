@@ -47,11 +47,15 @@ class Kohana_Config_Database_Reader implements Kohana_Config_Reader
 	 */
 	public function load($group)
 	{
-		$query = DB::select('config_key', 'config_value')
-			->from($this->_table_name)
-			->where('group_name', '=', $group)
-			->execute($this->_db_instance);
+		if ($group !== 'database') {
+			$query = DB::select('config_key', 'config_value')
+				->from($this->_table_name)
+				->where('group_name', '=', $group)
+				->execute($this->_db_instance);
 
-		return count($query) ? array_map('unserialize', $query->as_array('config_key', 'config_value')) : FALSE;
+			return count($query) ? array_map('unserialize', $query->as_array('config_key', 'config_value')) : FALSE;
+		}
+		
+		return FALSE;
 	}
 }
