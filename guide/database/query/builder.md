@@ -38,7 +38,7 @@ By default, [DB::select] will select all columns (`SELECT * ...`), but you can a
 
 Now take a minute to look at what this method chain is doing. First, we create a new selection object using the [DB::select] method. Next, we set table(s) using the `from()` method. Last, we search for a specific records using the `where()` method. We can display the SQL that will be executed by casting the query to a string:
 
-    echo Kohana::debug((string) $query);
+    echo Debug::vars((string) $query);
     // Should display:
     // SELECT `username`, `password` FROM `users` WHERE `username` = 'john'
 
