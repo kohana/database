@@ -9,7 +9,6 @@ The database configuration file contains an array of configuration groups. The s
         'connection'   => array CONNECTION_ARRAY,
         'table_prefix' => string TABLE_PREFIX,
         'charset'      => string CHARACTER_SET,
-        'profiling'    => boolean QUERY_PROFILING,
     ),
 	
 Understanding each of these settings is important.
@@ -26,8 +25,6 @@ CONNECTION_ARRAY
 TABLE_PREFIX
 :  Prefix that will be added to all table names by the [query builder](#query_building). Prepared statements will **not** use the table prefix.
 
-QUERY_PROFILING
-:  Enables [profiling](../kohana/profiling) of database queries.  This is useful for seeing how many queries each page is using, and which are taking the longest.  You must enable the profiler the view these stats.
 
 ## Example
 
@@ -47,7 +44,6 @@ The example file below shows 2 MySQL connections, one local and one remote.
             ),
             'table_prefix' => '',
             'charset'      => 'utf8',
-            'profiling'    => TRUE,
         ),
         'remote' => array(
             'type'       => 'mysql',
@@ -60,7 +56,6 @@ The example file below shows 2 MySQL connections, one local and one remote.
             ),
             'table_prefix' => '',
             'charset'      => 'utf8',
-            'profiling'    => TRUE,
         ),
     );
 
