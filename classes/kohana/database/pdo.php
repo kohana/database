@@ -60,12 +60,6 @@ class Kohana_Database_PDO extends Database {
 				array(':error' => $e->getMessage()),
 				$e->getCode());
 		}
-
-		if ( ! empty($this->_config['charset']))
-		{
-			// Set the character set
-			$this->set_charset($this->_config['charset']);
-		}
 	}
 
 	/**
@@ -124,9 +118,9 @@ class Kohana_Database_PDO extends Database {
 	public function set_charset($charset)
 	{
 		// Make sure the database is connected
-		$this->_connection or $this->connect();
+		$this->_connection OR $this->connect();
 
-		// Execute a raw SET NAMES query
+		// This SQL-92 syntax is not supported by all drivers
 		$this->_connection->exec('SET NAMES '.$this->quote($charset));
 	}
 

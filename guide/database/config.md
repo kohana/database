@@ -111,4 +111,6 @@ Type      | Option     |  Description               | Default value
 `string`  | password   | Database password          | `NULL`
 `boolean` | persistent | Persistent connections     | `FALSE`
 
+The connection character set should be configured using the DSN string or `options` array.
+
 [!!] If you are using PDO and are not sure what to use for the `dsn` option, review [PDO::__construct](http://php.net/pdo.construct).
