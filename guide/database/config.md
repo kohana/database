@@ -106,6 +106,7 @@ A [PDO database](http://php.net/manual/en/book.pdo.php) can accept these options
 Type      | Option     |  Description               | Default value
 ----------|------------|----------------------------| -------------------------
 `string`  | dsn        | PDO data source identifier | `localhost`
+`array`   | options    | Driver-specific options    | none
 `string`  | username   | Database username          | `NULL`
 `string`  | password   | Database password          | `NULL`
 `boolean` | persistent | Persistent connections     | `FALSE`
