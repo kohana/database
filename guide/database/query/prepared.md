@@ -50,9 +50,9 @@ The only difference between `param()` and `bind()` is that `bind()` passes the v
 
 ## Display the raw query
 
-If you want to display the SQL that will be executed, simply cast the object to a string:
+If you want to display the SQL that will be executed, you can simply echo the query:
 
-    echo Debug::vars((string) $query);
+    echo $query;
     // Should display:
     // SELECT * FROM users WHERE username = 'john'
 
