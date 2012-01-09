@@ -85,11 +85,17 @@ class Kohana_Database_Query_Builder_Join extends Database_Query_Builder {
 	/**
 	 * Compile the SQL partial for a JOIN statement and return it.
 	 *
-	 * @param   object  $db  Database instance
+	 * @param   mixed  $db  Database instance or name of instance
 	 * @return  string
 	 */
-	public function compile(Database $db)
+	public function compile($db = NULL)
 	{
+		if ( ! is_object($db))
+		{
+			// Get the database instance
+			$db = Database::instance($db);
+		}
+
 		if ($this->_type)
 		{
 			$sql = strtoupper($this->_type).' JOIN';
