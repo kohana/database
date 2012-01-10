@@ -385,7 +385,7 @@ abstract class Kohana_Database {
 		}
 
 		// Closing parenthesis
-		$close = strpos($type, ')', $open);
+		$close = strrpos($type, ')', $open);
 
 		// Length without parentheses
 		$length = substr($type, $open + 1, $close - 1 - $open);
