@@ -6,7 +6,7 @@
  * @package    Kohana/Database
  * @category   Configuration
  * @author     Kohana Team
- * @copyright  (c) 2011 Kohana Team
+ * @copyright  (c) 2012 Kohana Team
  * @license    http://kohanaframework.org/license
  */
 class Kohana_Config_Database_Reader implements Kohana_Config_Reader
