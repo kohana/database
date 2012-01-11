@@ -1,6 +1,6 @@
-# Prepared Statements
+# Parameterized Statements
 
-Using prepared statements allows you to write SQL queries manually while still escaping the query values automatically to prevent [SQL injection](http://wikipedia.org/wiki/SQL_Injection). Creating a query is simple:
+Using parameterized statements allows you to write SQL queries manually while still escaping the query values automatically to prevent [SQL injection](http://wikipedia.org/wiki/SQL_Injection). Creating a query is simple:
 
     $query = DB::query(Database::SELECT, 'SELECT * FROM users WHERE username = :user');
 
