@@ -23,7 +23,7 @@ CONNECTION_ARRAY
 :  Specific driver options for connecting to your database. (Driver options are explained [below](#connection-settings).)
 
 TABLE_PREFIX
-:  Prefix that will be added to all table names by the [query builder](#query_building). Prepared statements will **not** use the table prefix.
+:  Prefix that will be added to all table names by the [query builder](#query_building).
 
 
 ## Example
