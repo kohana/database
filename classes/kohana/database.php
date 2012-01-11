@@ -113,6 +113,11 @@ abstract class Kohana_Database {
 		// Store the config locally
 		$this->_config = $config;
 
+		if (empty($this->_config['table_prefix']))
+		{
+			$this->_config['table_prefix'] = '';
+		}
+
 		// Store the database instance
 		Database::$instances[$name] = $this;
 	}
