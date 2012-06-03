@@ -75,7 +75,10 @@ abstract class Kohana_Database {
 			$driver = 'Database_'.ucfirst($config['type']);
 
 			// Create the database connection instance
-			new $driver($name, $config);
+			$driver = new $driver($name, $config);
+
+			// Store the database instance
+			Database::$instances[$name] = $driver;
 		}
 
 		return Database::$instances[$name];
@@ -105,7 +108,7 @@ abstract class Kohana_Database {
 	 *
 	 * @return  void
 	 */
-	protected function __construct($name, array $config)
+	public function __construct($name, array $config)
 	{
 		// Set the instance name
 		$this->_instance = $name;
@@ -117,9 +120,6 @@ abstract class Kohana_Database {
 		{
 			$this->_config['table_prefix'] = '';
 		}
-
-		// Store the database instance
-		Database::$instances[$name] = $this;
 	}
 
 	/**
@@ -133,7 +133,7 @@ abstract class Kohana_Database {
 	 *
 	 * @return  void
 	 */
-	final public function __destruct()
+	public function __destruct()
 	{
 		$this->disconnect();
 	}
