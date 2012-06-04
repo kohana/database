@@ -145,7 +145,7 @@ abstract class Kohana_Database {
 	 *
 	 * @return  string
 	 */
-	final public function __toString()
+	public function __toString()
 	{
 		return $this->_instance;
 	}

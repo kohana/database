@@ -49,7 +49,7 @@ class Kohana_Database_Query {
 	 *
 	 * @return  string
 	 */
-	final public function __toString()
+	public function __toString()
 	{
 		try
 		{
