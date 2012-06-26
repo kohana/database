@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 /**
  * Database-based configuration loader.
  *
@@ -17,7 +17,7 @@
  */
 class Kohana_Config_Database extends Config_Reader {
 
-	protected $_database_instance = 'default';
+	protected $_database_instance;
 
 	protected $_database_table = 'config';
 
@@ -26,6 +26,10 @@ class Kohana_Config_Database extends Config_Reader {
 		if (isset($config['instance']))
 		{
 			$this->_database_instance = $config['instance'];
+		}
+		elseif ($this->_database_instance === NULL)
+		{
+			$this->_database_instance = Database::$default;
 		}
 
 		if (isset($config['table']))
@@ -40,8 +44,8 @@ class Kohana_Config_Database extends Config_Reader {
 	 * Query the configuration table for all values for this group and
 	 * unserialize each of the values.
 	 *
-	 * @param   string  group name
-	 * @param   array   configuration array
+	 * @param   string  $group   group name
+	 * @param   array   $config  configuration array
 	 * @return  $this   clone of the current object
 	 */
 	public function load($group, array $config = NULL)
@@ -68,8 +72,8 @@ class Kohana_Config_Database extends Config_Reader {
 	 * Overload setting offsets to insert or update the database values as
 	 * changes occur.
 	 *
-	 * @param   string   array key
-	 * @param   mixed    new value
+	 * @param   string   $key    array key
+	 * @param   mixed    $value  new value
 	 * @return  mixed
 	 */
 	public function offsetSet($key, $value)

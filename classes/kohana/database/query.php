@@ -1,6 +1,6 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 /**
- * Database query wrapper.  See [Prepared Statements](database/query/prepared) for usage and examples.
+ * Database query wrapper.  See [Parameterized Statements](database/query/parameterized) for usage and examples.
  *
  * @package    Kohana/Database
  * @category   Query
@@ -31,8 +31,8 @@ class Kohana_Database_Query {
 	/**
 	 * Creates a new SQL query of the specified type.
 	 *
-	 * @param   integer  query type: Database::SELECT, Database::INSERT, etc
-	 * @param   string   query string
+	 * @param   integer  $type  query type: Database::SELECT, Database::INSERT, etc
+	 * @param   string   $sql   query string
 	 * @return  void
 	 */
 	public function __construct($type, $sql)
@@ -72,7 +72,7 @@ class Kohana_Database_Query {
 	/**
 	 * Enables the query to be cached for a specified amount of time.
 	 *
-	 * @param   integer  number of seconds to cache
+	 * @param   integer  $lifetime  number of seconds to cache
 	 * @return  $this
 	 * @uses    Kohana::$cache_life
 	 */
@@ -106,7 +106,8 @@ class Kohana_Database_Query {
 	/**
 	 * Returns results as objects
 	 *
-	 * @param   string  classname or TRUE for stdClass
+	 * @param   string  $class  classname or TRUE for stdClass
+	 * @param   array   $params
 	 * @return  $this
 	 */
 	public function as_object($class = TRUE, array $params = NULL)
@@ -125,8 +126,8 @@ class Kohana_Database_Query {
 	/**
 	 * Set the value of a parameter in the query.
 	 *
-	 * @param   string   parameter key to replace
-	 * @param   mixed    value to use
+	 * @param   string   $param  parameter key to replace
+	 * @param   mixed    $value  value to use
 	 * @return  $this
 	 */
 	public function param($param, $value)
@@ -140,8 +141,8 @@ class Kohana_Database_Query {
 	/**
 	 * Bind a variable to a parameter in the query.
 	 *
-	 * @param   string  parameter key to replace
-	 * @param   mixed   variable to use
+	 * @param   string  $param  parameter key to replace
+	 * @param   mixed   $var    variable to use
 	 * @return  $this
 	 */
 	public function bind($param, & $var)
@@ -155,7 +156,7 @@ class Kohana_Database_Query {
 	/**
 	 * Add multiple parameters to the query.
 	 *
-	 * @param   array  list of parameters
+	 * @param   array  $params  list of parameters
 	 * @return  $this
 	 */
 	public function parameters(array $params)
@@ -170,7 +171,7 @@ class Kohana_Database_Query {
 	 * Compile the SQL query and return it. Replaces any parameters with their
 	 * given values.
 	 *
-	 * @param   object  Database instance
+	 * @param   object  $db  Database instance
 	 * @return  string
 	 */
 	public function compile(Database $db)
@@ -193,7 +194,7 @@ class Kohana_Database_Query {
 	/**
 	 * Execute the current query on the given database.
 	 *
-	 * @param   mixed    Database instance or name of instance
+	 * @param   mixed    $db  Database instance or name of instance
 	 * @return  object   Database_Result for SELECT queries
 	 * @return  mixed    the insert id for INSERT queries
 	 * @return  integer  number of affected rows for all other queries
