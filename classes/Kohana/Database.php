@@ -485,8 +485,7 @@ abstract class Kohana_Database {
 	 *
 	 * You can also use SQL methods within identifiers.
 	 *
-	 *     // The value of "column" will be quoted
-	 *     $column = $db->quote_column('COUNT("column")');
+	 *     $column = $db->quote_column(DB::expr('COUNT(`column`)'));
 	 *
 	 * Objects passed to this function will be converted to strings.
 	 * [Database_Expression] objects will be compiled.
