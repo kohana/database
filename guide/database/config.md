@@ -25,6 +25,21 @@ CONNECTION_ARRAY
 TABLE_PREFIX
 :  Prefix that will be added to all table names by the [query builder](#query_building).
 
+CHARACTER_SET
+:  The character set to use for the connection with the database.
+
+[!!] Setting Character Set won't work for PDO based connections because of incompatibility with PHP prior to 5.3.6. Use the DSN or options config instead. Example Below:
+
+    return array
+    (
+        'default' => array
+        (
+            'type'       => 'PDO',
+            'connection' => array(
+                 'options' => array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"),
+            ),
+        ),
+    );
 
 ## Example
 
