@@ -8,7 +8,7 @@
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-class Kohana_Database_Query_Builder_Update extends Database_Query_Builder_Where {
+class Database_Query_Builder_Update extends Database_Query_Builder_Where {
 
 	// UPDATE ...
 	protected $_table;

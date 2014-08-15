@@ -8,7 +8,7 @@
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-class Kohana_Database_MySQL extends Database {
+class Database_MySQL extends Database {
 
 	// Database in use by each connection
 	protected static $_current_databases = array();

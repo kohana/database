@@ -8,4 +8,4 @@
  * @copyright  (c) 2009 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-class Kohana_Database_Exception extends Kohana_Exception {}
+class Database_Exception extends Exception {}

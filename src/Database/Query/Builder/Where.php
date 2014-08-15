@@ -8,7 +8,7 @@
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-abstract class Kohana_Database_Query_Builder_Where extends Database_Query_Builder {
+abstract class Database_Query_Builder_Where extends Database_Query_Builder {
 
 	// WHERE ...
 	protected $_where = array();

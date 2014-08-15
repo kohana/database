@@ -16,7 +16,7 @@
  * @copyright  (c) 2009 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-class Kohana_Database_Expression {
+class Database_Expression {
 
 	// Unquoted parameters
 	protected $_parameters;

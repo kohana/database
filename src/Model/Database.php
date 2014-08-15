@@ -8,7 +8,7 @@
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    http://kohanaframework.org/license
  */
-abstract class Kohana_Model_Database extends Model {
+abstract class Model_Database extends Model {
 
 	/**
 	 * Create a new model instance. A [Database] instance or configuration

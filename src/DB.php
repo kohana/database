@@ -19,7 +19,7 @@
  * @copyright  (c) 2009 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-class Kohana_DB {
+class DB {
 
 	/**
 	 * Create a new [Database_Query] of the given type.
