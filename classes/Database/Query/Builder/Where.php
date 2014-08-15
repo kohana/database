@@ -2,7 +2,7 @@
 /**
  * Database query builder for WHERE statements. See [Query Builder](/database/query/builder) for usage and examples.
  *
- * @package    Kohana/Database
+ * @package    Ohanzee/Database
  * @category   Query
  * @author     Kohana Team
  * @copyright  (c) 2008-2009 Kohana Team

@@ -2,7 +2,7 @@
 /**
  * MySQL database connection.
  *
- * @package    Kohana/Database
+ * @package    Ohanzee/Database
  * @category   Drivers
  * @author     Kohana Team
  * @copyright  (c) 2008-2009 Kohana Team

@@ -13,7 +13,7 @@
  *
  * You pass the same parameters to these functions as you pass to the objects they return.
  *
- * @package    Kohana/Database
+ * @package    Ohanzee/Database
  * @category   Base
  * @author     Kohana Team
  * @copyright  (c) 2009 Kohana Team

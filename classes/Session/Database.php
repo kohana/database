@@ -12,7 +12,7 @@
  *         INDEX ( `last_active` )
  *     ) ENGINE = MYISAM ;
  *
- * @package    Kohana/Database
+ * @package    Ohanzee/Database
  * @category   Session
  * @author     Kohana Team
  * @copyright  (c) 2008-2009 Kohana Team

@@ -10,7 +10,7 @@
  *
  * More examples are available on the [Query Builder](database/query/builder#database-expressions) page
  * 
- * @package    Kohana/Database
+ * @package    Ohanzee/Database
  * @category   Base
  * @author     Kohana Team
  * @copyright  (c) 2009 Kohana Team

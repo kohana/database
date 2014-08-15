@@ -10,7 +10,7 @@
  * [Database_Query] and [Database_Query_Builder] objects, which can be easily
  * created using the [DB] helper class.
  *
- * @package    Kohana/Database
+ * @package    Ohanzee/Database
  * @category   Base
  * @author     Kohana Team
  * @copyright  (c) 2008-2012 Kohana Team

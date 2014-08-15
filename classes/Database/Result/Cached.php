@@ -2,7 +2,7 @@
 /**
  * Object used for caching the results of select queries.  See [Results](/database/results#select-cached) for usage and examples.
  *
- * @package    Kohana/Database
+ * @package    Ohanzee/Database
  * @category   Query/Result
  * @author     Kohana Team
  * @copyright  (c) 2009 Kohana Team

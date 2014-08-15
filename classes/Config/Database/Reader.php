@@ -3,7 +3,7 @@
 /**
  * Database reader for the kohana config system
  *
- * @package    Kohana/Database
+ * @package    Ohanzee/Database
  * @category   Configuration
  * @author     Kohana Team
  * @copyright  (c) 2012 Kohana Team

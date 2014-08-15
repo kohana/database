@@ -2,7 +2,7 @@
 /**
  * Database result wrapper.  See [Results](/database/results) for usage and examples.
  *
- * @package    Kohana/Database
+ * @package    Ohanzee/Database
  * @category   Query/Result
  * @author     Kohana Team
  * @copyright  (c) 2008-2009 Kohana Team
