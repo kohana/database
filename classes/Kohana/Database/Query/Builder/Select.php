@@ -404,13 +404,14 @@ class Kohana_Database_Query_Builder_Select extends Database_Query_Builder_Where 
 
 		if ( ! empty($this->_union))
 		{
+			$query = '('.$query.')';
 			foreach ($this->_union as $u) {
 				$query .= ' UNION ';
 				if ($u['all'] === TRUE)
 				{
 					$query .= 'ALL ';
 				}
-				$query .= $u['select']->compile($db);
+				$query .= '('.$u['select']->compile($db).')';
 			}
 		}
 
