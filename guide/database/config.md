@@ -10,6 +10,7 @@ The database configuration file contains an array of configuration groups. The s
         'table_prefix' => string TABLE_PREFIX,
         'charset'      => string CHARACTER_SET,
     ),
+
 	
 Understanding each of these settings is important.
 
@@ -17,7 +18,7 @@ INSTANCE_NAME
 :  Connections can be named anything you want, but you should always have at least one connection called "default".
 
 DATABASE_TYPE
-:  One of the installed database drivers. Kohana comes with "mysql" and "pdo" drivers.  Drivers must extend the Database class.
+:  One of the installed database drivers. Kohana comes with "MySQL" and "PDO" drivers.  Drivers must extend the Database class. This parameter is case sensitive.
 
 CONNECTION_ARRAY
 :  Specific driver options for connecting to your database. (Driver options are explained [below](#connection-settings).)
@@ -49,7 +50,7 @@ The example file below shows 2 MySQL connections, one local and one remote.
     (
         'default' => array
         (
-            'type'       => 'mysql',
+            'type'       => 'MySQL',
             'connection' => array(
                 'hostname'   => 'localhost',
                 'username'   => 'dbuser',
@@ -61,7 +62,7 @@ The example file below shows 2 MySQL connections, one local and one remote.
             'charset'      => 'utf8',
         ),
         'remote' => array(
-            'type'       => 'mysql',
+            'type'       => 'MySQL',
             'connection' => array(
                 'hostname'   => '55.55.55.55',
                 'username'   => 'remote_user',
@@ -73,6 +74,8 @@ The example file below shows 2 MySQL connections, one local and one remote.
             'charset'      => 'utf8',
         ),
     );
+
+[!!] Note that the 'type' parameter is case sensitive (eg 'MySQL', 'PDO').
 
 ## Connections and Instances
 
