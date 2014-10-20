@@ -39,7 +39,7 @@ return array
 			 * string   password    database password
 			 * boolean  persistent  use persistent connections?
 			 */
-			'dsn'        => 'mysql:host=localhost;dbname=kohana',
+			'dsn'        => 'mysql:host=localhost;dbname=kohana;charset=utf8',
 			'username'   => 'root',
 			'password'   => 'r00tdb',
 			'persistent' => FALSE,
