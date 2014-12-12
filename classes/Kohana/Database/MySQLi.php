@@ -42,6 +42,7 @@ class Kohana_Database_MySQLi extends Database {
 			'password' => '',
 			'socket'   => '',
 			'port'     => 3306,
+			'ssl'      => NULL,
 		));
 
 		// Prevent this information from showing up in traces
@@ -49,7 +50,22 @@ class Kohana_Database_MySQLi extends Database {
 
 		try
 		{
-			$this->_connection = new mysqli($hostname, $username, $password, $database, $port, $socket);
+			if(is_array($ssl))
+			{
+				$this->_connection = mysqli_init();
+				$this->_connection->ssl_set(
+					$ssl['ssl_client_key_file'],
+					$ssl['ssl_client_cert_file'],
+					$ssl['ca_cert_file'],
+					NULL,
+					NULL
+				);
+				$this->_connection->real_connect($hostname, $username, $password, $database, $port, $socket, MYSQLI_CLIENT_SSL);
+			}
+			else
+			{
+				$this->_connection = new mysqli($hostname, $username, $password, $database, $port, $socket);
+			}
 		}
 		catch (Exception $e)
 		{
