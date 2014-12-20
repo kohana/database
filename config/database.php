@@ -28,6 +28,34 @@ return array
 		'charset'      => 'utf8',
 		'caching'      => FALSE,
 	),
+	'mysqli' => array
+	(
+	'type'       => 'MySQLi',
+		'connection' => array(
+			/**
+			 * The following options are available for MySQLi:
+			 *
+			 * string   hostname     server hostname, or socket
+			 * string   database     database name
+			 * string   username     database username
+			 * string   password     database password
+			 * boolean  persistent   use persistent connections?
+			 * array    ssl          ssl_client_key_file, ssl_client_cert_file, ca_cert_file
+			 * array    variables    system variables as "key => value" pairs
+			 *
+			 * Ports and sockets may be appended to the hostname.
+			 */
+			'hostname'   => 'localhost',
+			'database'   => 'kohana',
+			'username'   => FALSE,
+			'password'   => FALSE,
+			'persistent' => FALSE,
+			'ssl'        => NULL,
+		),
+		'table_prefix' => '',
+		'charset'      => 'utf8',
+		'caching'      => FALSE,
+	),
 	'alternate' => array(
 		'type'       => 'PDO',
 		'connection' => array(
