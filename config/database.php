@@ -28,9 +28,9 @@ return array
 		'charset'      => 'utf8',
 		'caching'      => FALSE,
 	),
-	'mysqli' => array
+	'alternate_' => array
 	(
-	'type'       => 'MySQLi',
+		'type'       => 'MySQLi',
 		'connection' => array(
 			/**
 			 * The following options are available for MySQLi:
@@ -40,7 +40,8 @@ return array
 			 * string   username     database username
 			 * string   password     database password
 			 * boolean  persistent   use persistent connections?
-			 * array    ssl          ssl_client_key_file, ssl_client_cert_file, ca_cert_file
+			 * array    ssl          ssl parameters as "key => value" pairs.
+			 *                       Available keys: client_key_path, client_cert_path, ca_cert_path, ca_dir_path, cipher
 			 * array    variables    system variables as "key => value" pairs
 			 *
 			 * Ports and sockets may be appended to the hostname.
