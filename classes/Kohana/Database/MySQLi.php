@@ -54,11 +54,11 @@ class Kohana_Database_MySQLi extends Database {
 			{
 				$this->_connection = mysqli_init();
 				$this->_connection->ssl_set(
-					Arr::get($ssl, 'ssl_client_key_file', ''),
-					Arr::get($ssl, 'ssl_client_cert_file', ''),
-					Arr::get($ssl, 'ca_cert_file', ''),
-					NULL,
-					NULL
+					Arr::get($ssl, 'client_key_path'),
+					Arr::get($ssl, 'client_cert_path'),
+					Arr::get($ssl, 'ca_cert_path'),
+					Arr::get($ssl, 'ca_dir_path'),
+					Arr::get($ssl, 'cipher')
 				);
 				$this->_connection->real_connect($hostname, $username, $password, $database, $port, $socket, MYSQLI_CLIENT_SSL);
 			}
