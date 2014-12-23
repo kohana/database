@@ -18,7 +18,7 @@ INSTANCE_NAME
 :  Connections can be named anything you want, but you should always have at least one connection called "default".
 
 DATABASE_TYPE
-:  One of the installed database drivers. Kohana comes with "MySQL" and "PDO" drivers.  Drivers must extend the Database class. This parameter is case sensitive.
+:  One of the installed database drivers. Kohana comes with "MySQL", "MySQLi", and "PDO" drivers. Drivers must extend the Database class. This parameter is case sensitive. Note the mysql php extension used by the MySQL driver is deprecated as of PHP 5.5 and you should look to use an alternative driver.
 
 CONNECTION_ARRAY
 :  Specific driver options for connecting to your database. (Driver options are explained [below](#connection-settings).)
@@ -116,6 +116,24 @@ Type      | Option     |  Description               | Default value
 `string`  | password   | Database password          | `NULL`
 `boolean` | persistent | Persistent connections     | `FALSE`
 `string`  | database   | Database name              | `kohana`
+
+### MySQLi
+
+A [MySQL database](http://php.net/manual/en/book.mysqli.php) can accept the following options in the `connection` array:
+
+Type      | Option     |  Description               | Default value
+----------|------------|----------------------------| -------------------------
+`string`  | hostname   | Hostname of the database   | `localhost`
+`integer` | port       | Port number                | `NULL`
+`string`  | socket     | UNIX socket                | `NULL`
+`string`  | username   | Database username          | `NULL`
+`string`  | password   | Database password          | `NULL`
+`boolean` | persistent | Persistent connections     | `FALSE`
+`string`  | database   | Database name              | `kohana`
+`array`   | ssl        | SSL parameters             | `NULL`
+
+SSL parameters should be specified as `key` => `value` pairs.
+Available keys: client_key_path, client_cert_path, ca_cert_path, ca_dir_path, cipher
 
 ### PDO
 
