@@ -43,6 +43,7 @@ class Kohana_Database_MySQLi extends Database {
 			'socket'   => '',
 			'port'     => 3306,
 			'ssl'      => NULL,
+			'flags'    => NULL,
 		));
 
 		// Prevent this information from showing up in traces
@@ -60,7 +61,7 @@ class Kohana_Database_MySQLi extends Database {
 					Arr::get($ssl, 'ca_dir_path'),
 					Arr::get($ssl, 'cipher')
 				);
-				$this->_connection->real_connect($hostname, $username, $password, $database, $port, $socket, MYSQLI_CLIENT_SSL);
+				$this->_connection->real_connect($hostname, $username, $password, $database, $port, $socket, MYSQLI_CLIENT_SSL | $flags);
 			}
 			else
 			{
